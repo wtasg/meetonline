@@ -1,0 +1,10 @@
+FROM docker.io/library/postgres:latest
+
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=password
+ENV POSTGRES_DB=meetonline
+
+EXPOSE 5432
+VOLUME ["/var/lib/postgresql/data"]
+
+CMD ["postgres"]
