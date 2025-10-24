@@ -1,5 +1,5 @@
-import './App.css'
-import { Top } from './features/Top'
+import './App.css';
+import { Top } from './features/Top';
 
 function App() {
 
@@ -7,7 +7,7 @@ function App() {
         <>
             <Top />
         </>
-    )
+    );
 }
 
-export default App
+export default App;
