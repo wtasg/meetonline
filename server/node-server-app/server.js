@@ -1,40 +1,32 @@
 import express from 'express';
-import cors from 'cors';
+import dotenv from 'dotenv';
+import pkg from 'pg';
+const { Pool } = pkg;
 
-const app = express()
+dotenv.config({ path: '../../database/.env' }); 
 
-// Environment-specific origins
-const allowedOrigins = [
-    'http://localhost:5173',
-    'https://localhost:5173'
-];
+const app = express();
+const port = 9006;
 
-const corsOptions = {
-    origin: function (origin, callback) {
-        // Allow requests with no origin (mobile apps, etc.)
-        if (!origin) return callback(null, true);
+// PostgreSQL connection pool
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+});
 
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-};
+// Test DB connection
+pool.connect()
+  .then(() => console.log('Connected to DB successfully'))
+  .catch(err => console.error('DB connection error:', err));
 
-app.use(cors(corsOptions));
-
-const SERVER_PORT = 9006
-
+// Test route
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+  res.send('Server is working!');
 });
-app.get('/cel', (req, res) => {
-    res.send('Engine Check Light is OFF!')
-});
-app.listen(SERVER_PORT, () => {
-    console.log(`Example app listening on port ${SERVER_PORT}`)
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
 });
