@@ -25,7 +25,6 @@ export default defineConfig([
         rules: {
             semi: ["error", "always"],
             'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
-
         },
     },
 ]);
