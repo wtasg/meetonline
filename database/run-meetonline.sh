@@ -7,9 +7,10 @@ cd "$(dirname "$0")"
 podman rm -f meetonline || true
 
 podman volume rm pgdata || true
+podman volume create pgdata
 
 dos2unix entrypoint.sh
-chmod +x entrypoint.sh
+chmod u+x entrypoint.sh
 
 podman build --no-cache -t meetonline .
 
@@ -20,5 +21,6 @@ podman run \
   -v pgdata:/var/lib/postgresql/data \
   --detach localhost/meetonline:latest
 
-podman ps
-podman logs meetonline
+echo "MeetOnline database container is running on port 54321"
+podman ps --filter "name=meetonline"
+echo "To connect: psql -h localhost -p 54321 -U <username> -d <database>"

@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y dos2unix \
 
 WORKDIR /var/lib/postgresql/data
 
-EXPOSE 5432
+EXPOSE 54321
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
