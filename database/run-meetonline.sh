@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -euxo pipefail
 
 cd "$(dirname "$0")"
@@ -11,13 +13,12 @@ chmod +x entrypoint.sh
 
 podman build --no-cache -t meetonline .
 
-
-podman run -d \
+podman run \
   --name meetonline \
   --env-file local.env \
-  -p 5432:5432 \
+  -p 54321:5432 \
   -v pgdata:/var/lib/postgresql/data \
-  localhost/meetonline:latest
+  --detach localhost/meetonline:latest
 
 podman ps
 podman logs meetonline
