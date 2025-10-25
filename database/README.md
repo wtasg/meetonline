@@ -7,16 +7,29 @@
 ## Database setup
 
 ```bash
-podman build -f Dockerfile -t meetonline-db .
+# create volume if not created
+# podman volume create pgdata
+
+podman build --no-cache --tag meetonline .
+
+podman run \
+  --name meetonline \
+  --env-file local.env \
+  --publish 54321:5432 \
+  --volume pgdata:/var/lib/postgresql/data \
+  --detach localhost/meetonline:latest
+
+podman logs --follow meetonline
 ```
 
-Run the container while passing the `.env` with Podman:
+Run psql locally in the container
 
 ```bash
-podman run \
-	--name meetonline-db \
-	--env-file .env \
-	--publish 54321:5432 \
-	--volume meetonline-db-data:/var/lib/postgresql/data \
-	--detach meetonline-db
+podman exec --interactive --tty meetonline \
+    psql \
+    --host=localhost \
+    --port=5432 \
+    --dbname=meetonline \
+    --username myuser \
+    --password
 ```
