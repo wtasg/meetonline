@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
-const app = express()
+const app = express();
 
 // Environment-specific origins
 const allowedOrigins = [
@@ -27,14 +27,14 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-const SERVER_PORT = 9006
+const SERVER_PORT = 9006;
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Hello World!');
 });
 app.get('/cel', (req, res) => {
-    res.send('Engine Check Light is OFF!')
+    res.send('Engine Check Light is OFF!');
 });
 app.listen(SERVER_PORT, () => {
-    console.log(`Example app listening on port ${SERVER_PORT}`)
+    console.log(`Example app listening on port ${SERVER_PORT}`);
 });
