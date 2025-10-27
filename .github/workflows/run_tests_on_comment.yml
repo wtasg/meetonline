@@ -1,0 +1,65 @@
+name: Run FE / BE tests on comment (or manual)
+
+on:
+  workflow_dispatch:           # manual run
+  issue_comment:
+    types: [created]           # run on new comment
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Determine which tests to run
+        id: determine
+        run: |
+          COMMENT="${{ github.event.comment.body || '' }}"
+          if echo "$COMMENT" | grep -q "/test_all"; then
+            echo "run=all" >> $GITHUB_OUTPUT
+          elif echo "$COMMENT" | grep -q "/test_fe"; then
+            echo "run=fe" >> $GITHUB_OUTPUT
+          elif echo "$COMMENT" | grep -q "/test_be"; then
+            echo "run=be" >> $GITHUB_OUTPUT
+          else
+            echo "run=manual" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run frontend tests
+        if: ${{ steps.determine.outputs.run == 'fe' || steps.determine.outputs.run == 'all' || github.event_name == 'workflow_dispatch' }}
+        run: |
+          cd client/react-client-app
+          npm ci
+          npm run test || exit 1
+
+      - name: Run backend tests
+        if: ${{ steps.determine.outputs.run == 'be' || steps.determine.outputs.run == 'all' || github.event_name == 'workflow_dispatch' }}
+        run: |
+          cd server/node-server-app
+          npm ci
+          npm test || exit 1
+
+      - name: Post result back to PR
+        if: ${{ github.event_name == 'issue_comment' }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const runId = process.env.GITHUB_RUN_ID;
+            const conclusion = '✅ Tests completed successfully.';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `${conclusion}\nSee run: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}`
+            });
