@@ -4,12 +4,12 @@
   "types": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "lint": "eslint",
     "lint:fix": "eslint . --fix",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "./node_modules/.bin/jasmine --config=jasmine.mjs",
+    "start": "node src/server.js"
   },
   "keywords": [],
   "author": "wtasg",
@@ -21,7 +21,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.38.0",
+    "@types/jasmine": "^5.1.12",
+    "@types/node": "^24.9.1",
     "eslint": "^9.38.0",
-    "globals": "^16.4.0"
+    "globals": "^16.4.0",
+    "jasmine": "^5.12.0"
   }
 }
