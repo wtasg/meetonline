@@ -1,4 +1,4 @@
-import { SERVER_PORT } from "./server.js";
+import { SERVER_PORT } from "../src/server.js";
 
 describe("server", () => {
     it("servers traffic on port 9006", () => {
