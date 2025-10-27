@@ -2,12 +2,11 @@ import './App.css';
 import { Top } from './features/Top';
 
 function App() {
-
-    return (
+    return(
         <>
             <Top />
         </>
-    );
+    )
 }
 
 export default App;
