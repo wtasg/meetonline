@@ -33,23 +33,4 @@ podman exec --interactive --tty meetonline \
     --username myuser \
     --password
 ```
-# how to run
-```
-- open powershell as admin
-- wsl --install -d Ubuntu
 
-- if wsl is already installed
-- wsl --list --online
-- choose preferred version
-
---install podman
--- sudo apt update -y
--- sudo apt install -y podman
--- podman --version
-
---go to file
--- cd /mnt/d/meet-online/meetonline/database
--- wsl --list --online
--- ./run-meetonline.sh
-
-```
