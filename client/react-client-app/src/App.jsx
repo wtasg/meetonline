@@ -6,7 +6,7 @@ function App() {
         <>
             <Top />
         </>
-    )
+    );
 }
 
 export default App;
