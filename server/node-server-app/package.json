@@ -10,7 +10,7 @@
     "lint:fix": "eslint . --fix",
     "test": "./node_modules/.bin/jasmine --config=jasmine.mjs",
     "test:ava": "./node_modules/.bin/ava tests-ava/**/*.js",
-    "coverage": "nyc npm run test:ava",
+    "coverage": "nyc npm run test",
     "start": "node src/server.js"
   },
   "keywords": [],
@@ -23,7 +23,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.38.0",
-    "@types/express": "^5.0.4",
     "@types/jasmine": "^5.1.12",
     "@types/node": "^24.9.1",
     "ava": "^6.4.1",

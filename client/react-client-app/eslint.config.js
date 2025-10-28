@@ -3,11 +3,9 @@ import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import { defineConfig, globalIgnores } from 'eslint/config';
-import vitestGlobals from 'eslint-plugin-vitest-globals';
-
 
 export default defineConfig([
-    globalIgnores(['dist', "coverage"]),
+    globalIgnores(['dist']),
     {
         files: ['**/*.{js,jsx}'],
         extends: [
@@ -15,15 +13,9 @@ export default defineConfig([
             reactHooks.configs['recommended-latest'],
             reactRefresh.configs.vite,
         ],
-        plugins: {
-            "vitest-globals": vitestGlobals
-        },
         languageOptions: {
             ecmaVersion: 2020,
-            globals: {
-                ...globals.browser,
-                ...vitestGlobals.environments.env.globals,
-            },
+            globals: globals.browser,
             parserOptions: {
                 ecmaVersion: 'latest',
                 ecmaFeatures: { jsx: true },
@@ -33,6 +25,7 @@ export default defineConfig([
         rules: {
             semi: ["error", "always"],
             'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+
         },
     },
 ]);

@@ -5,20 +5,12 @@ on:
   issue_comment:
     types: [created]           # run on new comment
 
-permissions:
-  issues: write                # needed to comment back
-  contents: read
-
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-
-    if: >
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.issue.pull_request &&
-       (contains(github.event.comment.body, '/test_fe') ||
-        contains(github.event.comment.body, '/test_be') ||
-        contains(github.event.comment.body, '/test_all')))
+    permissions:
+      issues: write
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -29,13 +21,13 @@ jobs:
         run: |
           COMMENT="${{ github.event.comment.body || '' }}"
           if echo "$COMMENT" | grep -q "/test_all"; then
-            echo "run=all" >> "$GITHUB_OUTPUT"
+            echo "run=all" >> $GITHUB_OUTPUT
           elif echo "$COMMENT" | grep -q "/test_fe"; then
-            echo "run=fe" >> "$GITHUB_OUTPUT"
+            echo "run=fe" >> $GITHUB_OUTPUT
           elif echo "$COMMENT" | grep -q "/test_be"; then
-            echo "run=be" >> "$GITHUB_OUTPUT"
+            echo "run=be" >> $GITHUB_OUTPUT
           else
-            echo "run=manual" >> "$GITHUB_OUTPUT"
+            echo "run=manual" >> $GITHUB_OUTPUT
           fi
 
       - name: Setup Node.js
@@ -48,14 +40,14 @@ jobs:
         run: |
           cd client/react-client-app
           npm ci
-          npm test
+          npm run test || exit 1
 
       - name: Run backend tests
         if: ${{ steps.determine.outputs.run == 'be' || steps.determine.outputs.run == 'all' || github.event_name == 'workflow_dispatch' }}
         run: |
           cd server/node-server-app
           npm ci
-          npm test
+          npm test || exit 1
 
       - name: Post result back to PR
         if: ${{ github.event_name == 'issue_comment' }}
@@ -63,15 +55,11 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { owner, repo } = context.repo;
-            const issue_number = context.issue.number;
-            const runUrl = `${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
-            const result = '${{ job.status }}' === 'success'
-              ? '✅ Tests completed successfully.'
-              : '❌ Tests failed.';
+            const runId = process.env.GITHUB_RUN_ID;
+            const conclusion = '✅ Tests completed successfully.';
             await github.rest.issues.createComment({
-              owner,
-              repo,
-              issue_number,
-              body: `${result}\nSee run details: ${runUrl}`
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `${conclusion}\nSee run: ${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}`
             });
