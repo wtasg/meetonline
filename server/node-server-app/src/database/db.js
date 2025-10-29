@@ -15,6 +15,7 @@ const envPath = resolve(__dirname, envRel);
 if (!existsSync(envPath)) {
     throw new Error(`Environment file not found at path: ${envPath}`);
 }
+
 dotenvConfig({ path: envPath });
 
 const config = {
@@ -29,10 +30,30 @@ const pool = new Pool(config);
 
 // console.log({ pool });
 
-pool.connect().then(() => {
+pool.connect()
+  .then((client) => {
     console.log("Connected to the database successfully.");
-}).catch((err) => {
+    client.release();
+  })
+  .catch((err) => {
     console.error("Failed to connect to the database:", err);
-});
+  });
+
+
+export async function dbClose() {
+  console.log('[DB] Closing PostgreSQL pool...');
+
+  try {
+    console.log(`[DB] Active: ${pool.totalCount},
+        Idle: ${pool.idleCount},
+        Waiting: ${pool.waitingCount}`);
+
+    await pool.end();
+    console.log('[DB] PostgreSQL pool closed successfully.');
+  } catch (err) {
+    console.error('[DB] Error closing pool:', err);
+    throw err;
+  }
+}
 
 export { pool };

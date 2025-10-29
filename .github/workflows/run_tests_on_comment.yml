@@ -67,8 +67,8 @@ jobs:
             const issue_number = context.issue.number;
             const runUrl = `${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
             const result = '${{ job.status }}' === 'success'
-              ? '✅ Tests completed successfully.'
-              : '❌ Tests failed.';
+              ? ' Tests completed successfully.'
+              : ' Tests failed.';
             await github.rest.issues.createComment({
               owner,
               repo,
