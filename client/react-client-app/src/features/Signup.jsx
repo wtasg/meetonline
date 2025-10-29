@@ -19,7 +19,7 @@ function Signup({ onsignup }) {
     }
 
     async function onSignup() {
-        await onsignup({ username: signup_username, password: signup_password })
+        await onsignup({ username: signup_username, password: signup_password });
         set_signup_password("");
         set_signup_username("");
     }
@@ -32,4 +32,4 @@ function Signup({ onsignup }) {
     </>);
 }
 
-export { Signup }
+export { Signup };
