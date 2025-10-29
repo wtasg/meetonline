@@ -35,4 +35,13 @@ pool.connect().then(() => {
     console.error("Failed to connect to the database:", err);
 });
 
+export async function closeDb() {
+  try {
+    await pool.end();
+    console.log("Connection pool closed successfully.");
+  } catch (err) {
+    console.error("Error while closing pool:", err);
+  }
+}
+
 export { pool };
