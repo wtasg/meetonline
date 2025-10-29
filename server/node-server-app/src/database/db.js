@@ -26,22 +26,26 @@ const config = {
 };
 
 const pool = new Pool(config);
-
-// console.log({ pool });
-
-pool.connect().then(() => {
-    console.log("Connected to the database successfully.");
-}).catch((err) => {
-    console.error("Failed to connect to the database:", err);
+pool.on('error', (err) => {
+    console.error(err);
+    process.exit(-1);
 });
 
-export async function closeDb() {
-  try {
-    await pool.end();
-    console.log("Connection pool closed successfully.");
-  } catch (err) {
-    console.error("Error while closing pool:", err);
-  }
+pool.connect()
+    .then((client) => {
+        console.log("DB connected.");
+        client.release();
+    }).catch(console.error);
+
+async function dbClose() {
+    try {
+        if (!pool.ended && !pool.ending) {
+            await pool.end();
+        }
+        console.log("DB Disconnected.");
+    } catch (err) {
+        console.error(err);
+    }
 }
 
-export { pool };
+export { pool, dbClose };
