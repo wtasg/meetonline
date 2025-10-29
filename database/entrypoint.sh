@@ -2,16 +2,16 @@
 
 set -euxo pipefail
 
-ENV_FILE_PATHS="./local.env /local.env .env"
+ENV_FILE_PATHS=".env local.env docker.env"
 
 for f in $ENV_FILE_PATHS; do
-  if [ -f "$f" ]; then
-    echo "Found env file: $f"
-    set -a
-    . "$f"
-    set +a
-    break
-  fi
+    if [ -f "$f" ]; then
+        echo "Found env file: $f"
+        set -a
+        . "$f"
+        set +a
+        # break
+    fi
 done
 
 echo "Loaded environment:"
