@@ -1,4 +1,5 @@
-import { createUserAccount } from "../database/user_account.js";
+import { createUserAccount, getUserAccountByUsername } from "../database/user_account.js";
+import { hashWithSalt, saltWithRounds } from "../utils/hash.js";
 
 /**
  *
@@ -23,14 +24,14 @@ function signupHandlerGET(_, res) {
     res.send("GET /signup says hello!");
 }
 
-function signupHandlerPOST(req, res) {
+async function signupHandlerPOST(req, res) {
     console.log("Received signup request:", req.body);
     const { token, username, password } = req.body;
     if (!token || !username || !password) {
         return res.status(400).send("Missing token, username or password");
     }
-    const salt = "salt"; // todo: Generate a proper salt
-    const hashedPassword = password + salt; // todo: Use a proper hashing function
+    const salt = await saltWithRounds(); // todo: Generate a proper salt
+    const hashedPassword = await hashWithSalt(password, salt);
     console.log(`Username: ${username}, Hashed Password: ${hashedPassword}, Salt: ${salt}`);
     createUserAccount(username, hashedPassword, salt).then(() => {
         res.send("User registered successfully!");
@@ -44,13 +45,37 @@ function loginHandlerGET(_, res) {
     res.send("GET /login says hello!");
 }
 
-function loginHandlerPOST(req, res) {
-    const { username, password } = req.body;
-    if (!username || !password) {
-        return res.status(400).send("Missing username or password");
+async function loginHandlerPOST(req, res) {
+    const { token, username: candidateUsername, password: candidatePassword } = req.body;
+    if (!token || !candidateUsername || !candidatePassword) {
+        return res.status(400).send("Missing token, username or password");
     }
-    console.log(`Username: ${username}, Password: ${password}`);
+    console.log(`Username: ${candidateUsername}, Password: ${candidatePassword}`);
+    let dbuser = null;
+    // get from database
+    dbuser = await getUserAccountByUsername(candidateUsername);
+    console.log("Fetched user from database:", dbuser);
+    if (dbuser.__isDefault || dbuser.__isNull || !dbuser.isActive || dbuser.isDeleted || dbuser.isBlocked) {
+        return res.status(401).send("Account not found or active.");
+    }
+
+    let { salt, password } = dbuser;
+    try {
+        const hashedInputPassword = await hashWithSalt(candidatePassword, salt);
+        if (hashedInputPassword !== password) {
+            return res.status(401).send("Invalid credentials.");
+        }
+    } catch (error) {
+        console.error("Error hashing input password:", error);
+        return res.status(500).send("Internal server error");
+    }
+
+    console.log(`User ${candidateUsername} authenticated successfully.`);
+    // @todo: setup session
+    // @todo: setup cookies
+    // @todo: setup JWT token
     res.send("User logged in successfully!");
+
 }
 
 export { setupAuthHandlers };

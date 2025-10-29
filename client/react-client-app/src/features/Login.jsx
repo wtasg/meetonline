@@ -32,4 +32,4 @@ function Login({ onlogin }) {
     </>);
 }
 
-export { Login }
+export { Login };

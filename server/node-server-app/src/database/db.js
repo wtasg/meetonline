@@ -1,9 +1,8 @@
-import { Pool } from 'pg';
-
-import { config as dotenvConfig } from 'dotenv'
+import { config as dotenvConfig } from 'dotenv';
+import { dirname, resolve } from 'path';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+import { Pool } from 'pg';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

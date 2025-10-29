@@ -1,11 +1,22 @@
-import { fromDatabaseFormat } from "../models/userModel.js";
+import { UserAccountModel } from "../models/userModel.js";
 import { pool } from "./db.js";
 
+/**
+ *
+ * @param username {string}  The username received from client
+ * @returns UserAccount information
+ */
 async function getUserAccountByUsername(username) {
-    const query = 'SELECT * FROM user_account WHERE username = $1';
-    const values = [username];
-    const res = await pool.query(query, values);
-    return fromDatabaseFormat(res.rows[0]);
+    try {
+        const query = 'SELECT * FROM user_account WHERE username = $1';
+        const values = [username];
+        const res = await pool.query(query, values);
+        return UserAccountModel.fromDatabaseRow(res.rows[0]);
+    }
+    catch (error) {
+        console.error("Error fetching user account by username:", error);
+        return UserAccountModel.default();
+    }
 }
 
 async function createUserAccount(username, password, salt) {
@@ -15,7 +26,7 @@ async function createUserAccount(username, password, salt) {
         RETURNING *`;
     const values = [username, password, salt];
     const res = await pool.query(query, values);
-    return fromDatabaseFormat(res.rows[0]);
+    return UserAccountModel.fromDatabaseRow(res.rows[0]);
 }
 
 async function updateUserAccountStatus(userId, updates) {
@@ -37,7 +48,7 @@ async function updateUserAccountStatus(userId, updates) {
         RETURNING *`;
 
     const res = await pool.query(query, values);
-    return fromDatabaseFormat(res.rows[0]);
+    return UserAccountModel.fromDatabaseRow(res.rows[0]);
 }
 
 async function deleteUserAccount(userId) {
@@ -59,5 +70,5 @@ async function unblockUserAccount(userId) {
 }
 
 
-export { getUserAccountByUsername, createUserAccount, updateUserAccountStatus, deleteUserAccount };
+export { getUserAccountByUsername, createUserAccount, updateUserAccountStatus, deleteUserAccount, blockUserAccount, unblockUserAccount };
 
