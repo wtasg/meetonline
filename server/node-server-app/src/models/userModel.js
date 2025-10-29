@@ -76,4 +76,3 @@ class UserAccountModel {
 }
 
 export { updateUserAccount, toDatabaseFormat, UserAccountModel };
-

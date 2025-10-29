@@ -6,8 +6,8 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "./node_modules/.bin/eslint .",
+    "lint:fix": "./node_modules/.bin/eslint . --fix",
     "test": "./node_modules/.bin/jasmine --config=jasmine.mjs",
     "test:ava": "./node_modules/.bin/ava tests-ava/**/*.js",
     "coverage": "nyc npm run test:ava",
