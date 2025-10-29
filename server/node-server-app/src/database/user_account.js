@@ -69,6 +69,4 @@ async function unblockUserAccount(userId) {
     await pool.query(query, values);
 }
 
-
 export { getUserAccountByUsername, createUserAccount, updateUserAccountStatus, deleteUserAccount, blockUserAccount, unblockUserAccount };
-
