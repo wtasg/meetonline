@@ -6,7 +6,7 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "lint": "eslint",
+    "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "./node_modules/.bin/jasmine --config=jasmine.mjs",
     "test:ava": "./node_modules/.bin/ava tests-ava/**/*.js",
