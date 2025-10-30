@@ -1,16 +1,16 @@
 # meetonline server
 
 
-## podman
+## docker
 
 ```bash
-# podman network create meetonline-network
+# docker network create meetonline-network
 
-podman build \
+docker build \
     --tag meetonline-server \
     --file Dockerfile .
 
-podman run \
+docker run \
     --name meetonline-server \
     --publish 9006:9006 \
     --env-file local.env \

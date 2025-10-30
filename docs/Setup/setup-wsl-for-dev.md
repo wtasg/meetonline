@@ -4,7 +4,7 @@
 - `wsl.exe --install debian`
 - `debian` : Run the debian app
 - `sudo apt update && sudo apt upgrade --yes`
-- `sudo apt install --yes vim curl git wget nmap podman tmux`
+- `sudo apt install --yes vim curl git wget nmap tmux`
 - `ssh-keygen -t ed25519`
 - `cat ~/.ssh/id_ed25519.pub` # put this in github ssh keys
 - `eval "$(ssh-agent -s)"` # Everytime the
