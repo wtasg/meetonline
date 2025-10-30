@@ -1,5 +1,5 @@
 # build stage
-FROM node:20-bullseye AS builder
+FROM node:25-bullseye AS builder
 
 WORKDIR /usr/src/app
 
@@ -15,7 +15,7 @@ COPY . .
 
 # use builder
 
-FROM node:20-slim
+FROM node:25-slim
 
 WORKDIR /usr/src/app
 
