@@ -1,32 +1,45 @@
 services:
-    server:
-        build:
-            context: ./server/node-server-app
-            dockerfile: Dockerfile
-        image: meetonline-server:latest
-        container_name: meetonline-server
-        env_file:
-            - ./server/node-server-app/docker.env
-        ports:
-            - "9006:9006"
-        depends_on:
-            - database
-        restart: no
+  server:
+    build:
+      context: ./server/node-server-app
+      dockerfile: Dockerfile
+    image: meetonline-server:latest
+    container_name: meetonline-server
+    env_file:
+      - ./server/node-server-app/docker.env
+    ports:
+      - "9006:9006"
+    depends_on:
+      - database
+    restart: no
 
-    database:
-        build:
-            context: ./database
-            dockerfile: Dockerfile
-        image: meetonline-database:latest
-        container_name: meetonline-database
-        env_file:
-            - ./database/docker.env
-        ports:
-            - "54321:5432"
-        volumes:
-            - db_data:/var/lib/postgresql/data:Z
-        restart: no
+  database:
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    image: meetonline-database:latest
+    container_name: meetonline-database
+    env_file:
+      - ./database/docker.env
+    ports:
+      - "54321:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data:Z
+    restart: no
+
+  client:
+    build:
+      context: ./client/react-client-app
+      dockerfile: Dockerfile
+    image: meetonline-client:latest
+    container_name: meetonline-client
+    env_file:
+      - ./client/react-client-app/docker.env
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+    restart: no
 
 volumes:
-    db_data:
-
+  db_data:
