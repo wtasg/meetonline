@@ -7,6 +7,7 @@ on:
 
 permissions:
   issues: write                # needed to comment back
+  pull-requests: write
   contents: read
 
 jobs:
