@@ -1,4 +1,18 @@
 services:
+  client:
+    build:
+      context: ./client/react-client-app
+      dockerfile: Dockerfile
+    image: meetonline-client:latest
+    container_name: meetonline-client
+    env_file:
+      - ./client/react-client-app/docker.env
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+    restart: no
+
   server:
     build:
       context: ./server/node-server-app
@@ -24,21 +38,7 @@ services:
     ports:
       - "54321:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data:Z
-    restart: no
-
-  client:
-    build:
-      context: ./client/react-client-app
-      dockerfile: Dockerfile
-    image: meetonline-client:latest
-    container_name: meetonline-client
-    env_file:
-      - ./client/react-client-app/docker.env
-    ports:
-      - "5173:5173"
-    depends_on:
-      - server
+      - db_data:/var/lib/postgresql:Z
     restart: no
 
 volumes:
