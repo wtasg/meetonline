@@ -1,6 +1,6 @@
 # database
 
-+ PostgreSql via Docker/Podman
++ PostgreSql via Docker
 + Create tables...
 
 
@@ -8,24 +8,24 @@
 
 ```bash
 # create volume if not created
-# podman volume create pgdata
+# docker volume create pgdata
 
-podman build --no-cache --tag meetonline-database .
+docker build --no-cache --tag meetonline-database .
 
-podman run \
+docker run \
     --name meetonline-database \
     --env-file local.env \
     --publish 54321:5432 \
     --volume pgdata:/var/lib/postgresql/data \
     --detach localhost/meetonline-database:latest
 
-podman logs --follow meetonline-database
+docker logs --follow meetonline-database
 ```
 
 Run psql locally in the container
 
 ```bash
-podman exec --interactive --tty meetonline-database \
+docker exec --interactive --tty meetonline-database \
     psql \
     --host=localhost \
     --port=5432 \
