@@ -17,6 +17,7 @@ jobs:
     if: >
       github.event_name == 'workflow_dispatch' ||
       (github.event.issue.pull_request &&
+      github.event.issue.state == 'open' &&
        (contains(github.event.comment.body, '/test_fe') ||
         contains(github.event.comment.body, '/test_be') ||
         contains(github.event.comment.body, '/test_all')))
@@ -24,6 +25,26 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Comment - Tests Started
+        if: ${{ github.event_name == 'issue_comment' }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.MEETONLINE_PAT }}
+          script: |
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const comment = context.payload.comment.body;
+            let which = "tests";
+            if (comment.includes("/test_fe")) which = "Frontend tests";
+            else if (comment.includes("/test_be")) which = "Backend tests";
+            else if (comment.includes("/test_all")) which = "All tests";
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number,
+              body: ` ${which} started... please wait.`
+            });
 
       - name: Determine which tests to run
         id: determine
@@ -44,12 +65,26 @@ jobs:
         with:
           node-version: 20
 
+      - name: Lint Frontend
+        if: contains(github.event.comment.body, '/test_fe') || contains(github.event.comment.body, '/test_all')
+        run: |
+          cd client/react-client-app
+          npm ci
+          npm run lint
+
       - name: Run frontend tests
         if: ${{ steps.determine.outputs.run == 'fe' || steps.determine.outputs.run == 'all' || github.event_name == 'workflow_dispatch' }}
         run: |
           cd client/react-client-app
           npm ci
           npm test
+
+      - name: Lint Backend
+        if: contains(github.event.comment.body, '/test_be') || contains(github.event.comment.body, '/test_all')
+        run: |
+          cd server/node-server-app
+          npm ci
+          npm run lint
 
       - name: Run backend tests
         if: ${{ steps.determine.outputs.run == 'be' || steps.determine.outputs.run == 'all' || github.event_name == 'workflow_dispatch' }}
@@ -58,8 +93,8 @@ jobs:
           npm ci
           npm test
 
-      - name: Post result back to PR
-        if: ${{ github.event_name == 'issue_comment' }}
+      - name: Comment - Tests Completed
+        if: always() && github.event_name == 'issue_comment'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.MEETONLINE_PAT }}
@@ -67,12 +102,16 @@ jobs:
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
             const runUrl = `${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
-            const result = '${{ job.status }}' === 'success'
-              ? '✅ Tests completed successfully.'
-              : '❌ Tests failed.';
+            const conclusion = '${{ job.status }}';
+            const emoji = conclusion === 'success' ? '✅' : '❌';
+            const message =
+              conclusion === 'success'
+                ? `${emoji} All tests completed successfully!`
+                : `${emoji} Some tests failed. Please check logs below.`;
             await github.rest.issues.createComment({
               owner,
               repo,
               issue_number,
-              body: `${result}\nSee run details: ${runUrl}`
+              body: `${message}\n🔗 [View run details](${runUrl})`
             });
+
