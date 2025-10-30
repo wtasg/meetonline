@@ -1,5 +1,9 @@
 # Documentation home
 
+## Rules
+
+- [Rules](./rules.md)
+
 ## Setup
 
 - [Set up WSL for dev](./Setup/setup-wsl-for-dev.md)
