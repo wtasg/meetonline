@@ -7,6 +7,7 @@ on:
 
 permissions:
   issues: write                # needed to comment back
+  pull-requests: write
   contents: read
 
 jobs:
@@ -61,7 +62,7 @@ jobs:
         if: ${{ github.event_name == 'issue_comment' }}
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.MEETONLINE_PAT }}
           script: |
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
