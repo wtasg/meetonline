@@ -34,7 +34,7 @@ if docker ps --filter name=meetonline-database --format "{{.Names}}" | grep -w m
         --name meetonline-database \
         --env-file local.env \
         --publish 54321:5432 \
-        --volume pgdata:/var/lib/postgresql/data \
+        --volume pgdata:/var/lib/postgresql \
         --detach localhost/meetonline-database:latest
 fi
 

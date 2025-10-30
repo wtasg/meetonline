@@ -1,4 +1,4 @@
-create table public.user_account
+create table if not exists public.user_account
 (
     id           bigserial                           not null,
     username     varchar(64)                         not null,
@@ -18,4 +18,3 @@ create unique index user_account_username_uindex
 alter table public.user_account
     add constraint user_account_pk
         primary key (username);
-

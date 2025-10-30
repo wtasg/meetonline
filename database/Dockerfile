@@ -6,9 +6,11 @@ RUN apt-get update && apt-get install -y dos2unix \
     && dos2unix /usr/local/bin/entrypoint.sh \
     && chmod +x /usr/local/bin/entrypoint.sh
 
-WORKDIR /var/lib/postgresql/data
+COPY init/ /docker-entrypoint-initdb.d/
 
-EXPOSE 54321
+WORKDIR /var/lib/postgresql
+
+EXPOSE 5432
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
