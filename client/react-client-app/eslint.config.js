@@ -12,11 +12,12 @@ export default defineConfig([
         files: ['**/*.{js,jsx}'],
         extends: [
             js.configs.recommended,
-            reactHooks.configs['recommended-latest'],
+            // reactHooks.configs['recommended-latest'],
             reactRefresh.configs.vite,
         ],
         plugins: {
-            "vitest-globals": vitestGlobals
+            "vitest-globals": vitestGlobals,
+            reactHooks: reactHooks
         },
         languageOptions: {
             ecmaVersion: 2020,
