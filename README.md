@@ -8,4 +8,4 @@ Documentation is available in `docs/`. Visit [Documentation Home](./docs/Home.md
 
 ## LICENSE
 
-Read associated file.
+[Read associated file: LICENSE](./LICENSE)
