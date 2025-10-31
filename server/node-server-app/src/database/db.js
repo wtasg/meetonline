@@ -1,22 +1,7 @@
-import { config as dotenvConfig } from 'dotenv';
-import { dirname, resolve } from 'path';
-import { existsSync, readdirSync as nodeReadDir } from 'node:fs';
-import { fileURLToPath } from 'url';
+import { loadEnv } from '../utils/env.js';
 import { Pool } from 'pg';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const envRel = `../../${process.env.NODE_ENV === 'production' ? '.env' : 'local.env'}`;
-const envPath = resolve(__dirname, envRel);
-
-console.log({ envRel, envPath });
-console.log(nodeReadDir(resolve(__dirname, "../../")));
-
-if (!existsSync(envPath)) {
-    console.error(`Environment file not found at path: ${envPath}`, { envRel, envPath });
-}
-dotenvConfig({ path: envPath });
+loadEnv();
 
 const config = {
     user: process.env.DB_USER,
