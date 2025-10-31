@@ -40,6 +40,12 @@ async function signupHandlerPOST(req, res) {
     const hashedPassword = await hashWithSalt(password, salt);
     console.log(`Username: ${username}, Hashed Password: ${hashedPassword}, Salt: ${salt}`);
     createUserAccount(username, hashedPassword, salt).then(() => {
+        res.cookies("session-1", "sha256-session-string", {
+            sameSite: "strict",
+            httpOnly: true,
+            secure: false,
+            maxAge: 36 * 60 * 60 * 1000
+        });
         res.send("User registered successfully!");
     }).catch((err) => {
         console.error("Error creating user account:", err);
@@ -82,9 +88,16 @@ async function loginHandlerPOST(req, res) {
         return res.status(500).send("Internal server error");
     }
 
+
     console.log(`User ${candidateUsername} authenticated successfully.`);
     // @todo: setup session
     // @todo: setup cookies
+    res.cookies("session-1", "sha256-session-string", {
+        sameSite: "strict",
+        httpOnly: true,
+        secure: false,
+        maxAge: 36 * 60 * 60 * 1000
+    });
     // @todo: setup JWT token
     res.send("User logged in successfully!");
 
