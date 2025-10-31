@@ -40,7 +40,7 @@ async function signupHandlerPOST(req, res) {
     const hashedPassword = await hashWithSalt(password, salt);
     console.log(`Username: ${username}, Hashed Password: ${hashedPassword}, Salt: ${salt}`);
     createUserAccount(username, hashedPassword, salt).then(() => {
-        res.cookies("session-1", "sha256-session-string", {
+        res.cookie("session-1", "sha256-session-string", {
             sameSite: "strict",
             httpOnly: true,
             secure: false,
@@ -88,11 +88,10 @@ async function loginHandlerPOST(req, res) {
         return res.status(500).send("Internal server error");
     }
 
-
     console.log(`User ${candidateUsername} authenticated successfully.`);
     // @todo: setup session
     // @todo: setup cookies
-    res.cookies("session-1", "sha256-session-string", {
+    res.cookie("session-1", "sha256-session-string", {
         sameSite: "strict",
         httpOnly: true,
         secure: false,
