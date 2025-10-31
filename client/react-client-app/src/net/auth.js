@@ -1,9 +1,11 @@
 import { CONF } from "./net-conf.js";
 
 function login({ username, password }) {
-    return fetch(`${CONF.SERVER}/login`, {
+    return fetch(`${CONF.SERVER}/${CONF.URLS.LOGIN}`, {
+        credentials: "include",
         method: "POST",
         headers: {
+            "Accept": "application/json",
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password, token: "token" }),
@@ -11,9 +13,11 @@ function login({ username, password }) {
 }
 
 function signup({ username, password }) {
-    return fetch(`${CONF.SERVER}/signup`, {
+    return fetch(`${CONF.SERVER}/${CONF.URLS.SIGNUP}`, {
+        credentials: "include",
         method: "POST",
         headers: {
+            "Accept": "application/json",
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password, token: "token" }),
