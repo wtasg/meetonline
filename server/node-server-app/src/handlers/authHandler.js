@@ -14,10 +14,13 @@ function setupAuthHandlers(app) {
 
 /**
  *
- * @param {Express.Request} _
+ * @param {Express.Request} req
  * @param {Express.Response} res
  */
-function signupHandlerGET(_, res) {
+function signupHandlerGET(req, res) {
+    const { cookies, signedCookies } = req;
+    console.log({ cookies, signedCookies });
+
     /* todo: Generate a token here and send it.
      * This token will be consumed by POST /signup endpoint.
      */
@@ -25,6 +28,9 @@ function signupHandlerGET(_, res) {
 }
 
 async function signupHandlerPOST(req, res) {
+    const { cookies, signedCookies } = req;
+    console.log({ cookies, signedCookies });
+
     console.log("Received signup request:", req.body);
     const { token, username, password } = req.body;
     if (!token || !username || !password) {
@@ -41,11 +47,17 @@ async function signupHandlerPOST(req, res) {
     });
 }
 
-function loginHandlerGET(_, res) {
+function loginHandlerGET(req, res) {
+    const { cookies, signedCookies } = req;
+    console.log({ cookies, signedCookies });
+
     res.send("GET /login says hello!");
 }
 
 async function loginHandlerPOST(req, res) {
+    const { cookies, signedCookies } = req;
+    console.log({ cookies, signedCookies });
+
     const { token, username: candidateUsername, password: candidatePassword } = req.body;
     if (!token || !candidateUsername || !candidatePassword) {
         return res.status(400).send("Missing token, username or password");
