@@ -1,23 +1,33 @@
 import { config as dotenvConfig } from 'dotenv';
-import { dirname, resolve } from 'path';
-import { existsSync, readdirSync as nodeReadDir } from 'node:fs';
-import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'node:path';
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { exit } from 'node:process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-function loadEnv() {
-    const envRel = `../../${process.env.NODE_ENV === 'production' ? '.env' : 'local.env'}`;
-    const envPath = resolve(__dirname, envRel);
+/**
+ * Loads correct environment file based on current stage of execution.
+ *
+ * @param {string} stage
+ */
+function loadEnv(stage = "development") {
+    const envRel = `../../${stage === 'production' ? '.env' : 'local.env'}`;
 
-    console.log({ envRel, envPath });
-    console.log(nodeReadDir(resolve(__dirname, "../../")));
+    try {
+        const envPath = resolve(__dirname, envRel);
 
-    if (!existsSync(envPath)) {
-        console.error(`Environment file not found at path: ${envPath}`, { envRel, envPath });
+        if (!existsSync(envPath)) {
+            console.error(`Environment file not found at path: ${envPath}`, { envRel, envPath });
+        }
+
+        dotenvConfig({ path: envPath });
+        return { envRel, envPath };
+    } catch (e) {
+        console.error(`EXITING: ${e}`);
+        exit(1);
     }
-
-    dotenvConfig({ path: envPath });
 }
 
-export  { loadEnv };
+export { loadEnv };
