@@ -8,9 +8,13 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint .",
     "lint:fix": "./node_modules/.bin/eslint . --fix",
-    "test": "./node_modules/.bin/jasmine --config=jasmine.mjs",
-    "test:ava": "./node_modules/.bin/ava tests-ava/**/*.js",
-    "coverage": "nyc npm run test:ava",
+    "test:jasmine": "./node_modules/.bin/jasmine --config=jasmine.mjs",
+    "test:jest": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --runInBand",
+    "test:ava": "./node_modules/.bin/ava \"tests-ava/**/*.js\"",
+    "test": "npm run test:jest",
+    "cover:nyc": "echo \"not working\"",
+    "cover:jest": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --runInBand --coverage",
+    "cover": "npm run cover:jest",
     "start": "NODE_ENV=production node src/server.js",
     "dev": "NODE_ENV=development node src/server.js"
   },
@@ -33,9 +37,10 @@
     "@types/node": "^24.9.2",
     "@types/pg": "^8.15.6",
     "ava": "^6.4.1",
-    "eslint": "^9.38.0",
-    "globals": "^16.4.0",
+    "eslint": "^9.39.0",
+    "globals": "^16.5.0",
     "jasmine": "^5.12.0",
+    "jest": "^30.2.0",
     "nyc": "^17.1.0"
   }
 }
