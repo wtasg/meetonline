@@ -1,7 +1,7 @@
 import { loadEnv } from '../utils/env.js';
 import { Pool } from 'pg';
 
-loadEnv();
+loadEnv(process.env.NODE_ENV);
 
 const config = {
     user: process.env.DB_USER,

@@ -9,11 +9,11 @@
     "lint": "./node_modules/.bin/eslint .",
     "lint:fix": "./node_modules/.bin/eslint . --fix",
     "test:jasmine": "./node_modules/.bin/jasmine --config=jasmine.mjs",
-    "test:jest": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --runInBand",
+    "test:jest": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" ./node_modules/.bin/jest --runInBand",
     "test:ava": "./node_modules/.bin/ava \"tests-ava/**/*.js\"",
     "test": "npm run test:jest",
     "cover:nyc": "echo \"not working\"",
-    "cover:jest": "NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --runInBand --coverage",
+    "cover:jest": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" ./node_modules/.bin/jest --runInBand --coverage",
     "cover": "npm run cover:jest",
     "start": "NODE_ENV=production node src/server.js",
     "dev": "NODE_ENV=development node src/server.js"
@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.38.0",
+    "@jest/globals": "^30.2.0",
     "@types/express": "^5.0.5",
     "@types/jasmine": "^5.1.12",
     "@types/node": "^24.9.2",

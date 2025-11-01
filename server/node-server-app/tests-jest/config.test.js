@@ -1,3 +1,5 @@
+import { test } from '@jest/globals';
+
 import { SERVER_PORT, DB_PORT, DB_USER, DB_PASS, DB_NAME, DB_HOST } from "../src/config";
 
 test("server port should be a number and correct value ", () => {
