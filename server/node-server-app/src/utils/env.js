@@ -1,8 +1,8 @@
-import { config as dotenvConfig } from 'dotenv';
-import { dirname, resolve } from 'node:path';
-import { existsSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { exit } from 'node:process';
+import { config as dotenvConfig } from "dotenv";
+import { dirname, resolve } from "node:path";
+import { existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { exit } from "node:process";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,7 +13,7 @@ const __dirname = dirname(__filename);
  * @param {string} stage
  */
 function loadEnv(stage = "development") {
-    const envRel = `../../${stage === 'production' ? '.env' : 'local.env'}`;
+    const envRel = `../../${stage === "production" ? ".env" : "local.env"}`;
 
     try {
         const envPath = resolve(__dirname, envRel);

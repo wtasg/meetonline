@@ -1,5 +1,5 @@
-import { loadEnv } from '../utils/env.js';
-import { Pool } from 'pg';
+import { loadEnv } from "../utils/env.js";
+import { Pool } from "pg";
 
 loadEnv(process.env.NODE_ENV);
 
@@ -12,7 +12,7 @@ const config = {
 };
 
 const pool = new Pool(config);
-pool.on('error', (err) => {
+pool.on("error", (err) => {
     console.error(err);
     process.exit(-1);
 });

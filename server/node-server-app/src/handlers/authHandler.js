@@ -117,7 +117,7 @@ function logoutHandlerPOST(req, res) {
     console.log({ username });
     // security bug
     user_sessions[username] = null;
-    res.clearCookie('session-1');
+    res.clearCookie("session-1");
     res.clearCookie(username);
     res.json({ ok: true, logout: true });
 }

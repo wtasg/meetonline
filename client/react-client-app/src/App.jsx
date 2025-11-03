@@ -1,5 +1,5 @@
-import './App.css';
-import { Top } from './features/Top';
+import "./App.css";
+import { Top } from "./features/Top";
 
 function App() {
     return(

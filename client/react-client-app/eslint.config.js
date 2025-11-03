@@ -1,23 +1,24 @@
-import js from '@eslint/js';
-import globals from 'globals';
-import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
-import { defineConfig, globalIgnores } from 'eslint/config';
-import vitestGlobals from 'eslint-plugin-vitest-globals';
-
+import js from "@eslint/js";
+import globals from "globals";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
+import { defineConfig, globalIgnores } from "eslint/config";
+import vitestGlobals from "eslint-plugin-vitest-globals";
+import stylistic from "@stylistic/eslint-plugin";
 
 export default defineConfig([
-    globalIgnores(['dist', "coverage"]),
+    globalIgnores(["dist", "coverage"]),
     {
-        files: ['**/*.{js,jsx}'],
+        files: ["**/*.{js,jsx}"],
         extends: [
             js.configs.recommended,
             // reactHooks.configs['recommended-latest'],
-            reactRefresh.configs.vite,
+            reactRefresh.configs.vite
         ],
         plugins: {
             "vitest-globals": vitestGlobals,
-            reactHooks: reactHooks
+            reactHooks: reactHooks,
+            "@stylistic": stylistic
         },
         languageOptions: {
             ecmaVersion: 2020,
@@ -26,14 +27,15 @@ export default defineConfig([
                 ...vitestGlobals.environments.env.globals,
             },
             parserOptions: {
-                ecmaVersion: 'latest',
+                ecmaVersion: "latest",
                 ecmaFeatures: { jsx: true },
-                sourceType: 'module',
+                sourceType: "module",
             },
         },
         rules: {
             semi: ["error", "always"],
-            'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+            "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
+            "@stylistic/quotes": ["error", "double"]
         },
     },
 ]);

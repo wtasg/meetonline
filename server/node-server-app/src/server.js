@@ -1,11 +1,11 @@
-import express from 'express';
-import * as cookieParserPkg from 'cookie-parser';
+import express from "express";
+import * as cookieParserPkg from "cookie-parser";
 
-import { SERVER_PORT } from './config.js';
-import { setupCorsMiddleware } from './middlewares/corsMiddleware.js';
-import { setupRootHandlers } from './handlers/rootHandler.js';
-import { setupAuthHandlers } from './handlers/authHandler.js';
-import { setupGracefulShutdown } from './utils/gracefulSetup.js';
+import { SERVER_PORT } from "./config.js";
+import { setupCorsMiddleware } from "./middlewares/corsMiddleware.js";
+import { setupRootHandlers } from "./handlers/rootHandler.js";
+import { setupAuthHandlers } from "./handlers/authHandler.js";
+import { setupGracefulShutdown } from "./utils/gracefulSetup.js";
 
 const app = express();
 const cookieParser = cookieParserPkg.default;

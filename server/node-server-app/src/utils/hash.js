@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 const { genSalt: gensSalt, hash: bcryptHash, compare: bcryptCompare } = bcrypt;
 
 async function saltWithRounds(rounds = 12) {

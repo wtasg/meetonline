@@ -59,10 +59,10 @@ class UserAccountModel {
 
     static default() {
         const instance = new UserAccountModel();
-        instance.id = 'default-user-id';
-        instance.username = 'defaultuser';
-        instance.password = 'default-hashed-password';
-        instance.salt = 'default-salt';
+        instance.id = "default-user-id";
+        instance.username = "defaultuser";
+        instance.password = "default-hashed-password";
+        instance.salt = "default-salt";
         instance.isActive = true;
         instance.isDeleted = false;
         instance.isBlocked = false;
