@@ -1,4 +1,4 @@
-import { CONF } from './net-conf';
+import { CONF } from "./net-conf";
 
 
 async function checkEngineLight() {

@@ -1,4 +1,4 @@
-import { dbClose } from '../database/db.js';
+import { dbClose } from "../database/db.js";
 
 function setupGracefulShutdown(server) {
     async function shutdown() {

@@ -1,4 +1,4 @@
-import { test } from '@jest/globals';
+import { test } from "@jest/globals";
 
 import { SERVER_PORT, DB_PORT, DB_USER, DB_PASS, DB_NAME, DB_HOST } from "../src/config";
 

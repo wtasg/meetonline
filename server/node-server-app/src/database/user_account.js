@@ -8,7 +8,7 @@ import { pool } from "./db.js";
  */
 async function getUserAccountByUsername(username) {
     try {
-        const query = 'SELECT * FROM user_account WHERE username = $1';
+        const query = "SELECT * FROM user_account WHERE username = $1";
         const values = [username];
         const res = await pool.query(query, values);
         return UserAccountModel.fromDatabaseRow(res.rows[0]);
@@ -43,7 +43,7 @@ async function updateUserAccountStatus(userId, updates) {
 
     const query = `
         UPDATE user_account
-        SET ${fields.join(', ')}, modified_at = NOW()
+        SET ${fields.join(", ")}, modified_at = NOW()
         WHERE id = $${index}
         RETURNING *`;
 
@@ -52,19 +52,19 @@ async function updateUserAccountStatus(userId, updates) {
 }
 
 async function deleteUserAccount(userId) {
-    const query = 'UPDATE user_account SET is_deleted = true, modified_at = NOW() WHERE id = $1';
+    const query = "UPDATE user_account SET is_deleted = true, modified_at = NOW() WHERE id = $1";
     const values = [userId];
     await pool.query(query, values);
 }
 
 async function blockUserAccount(userId) {
-    const query = 'UPDATE user_account SET is_blocked = true, modified_at = NOW() WHERE id = $1';
+    const query = "UPDATE user_account SET is_blocked = true, modified_at = NOW() WHERE id = $1";
     const values = [userId];
     await pool.query(query, values);
 }
 
 async function unblockUserAccount(userId) {
-    const query = 'UPDATE user_account SET is_blocked = false, modified_at = NOW() WHERE id = $1';
+    const query = "UPDATE user_account SET is_blocked = false, modified_at = NOW() WHERE id = $1";
     const values = [userId];
     await pool.query(query, values);
 }
