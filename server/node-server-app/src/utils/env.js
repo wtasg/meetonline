@@ -22,7 +22,7 @@ function loadEnv(stage = "development") {
             console.error(`Environment file not found at path: ${envPath}`, { envRel, envPath });
         }
 
-        dotenvConfig({ path: envPath });
+        dotenvConfig({ path: envPath, quiet: true });
         return { envRel, envPath };
     } catch (e) {
         console.error(`EXITING: ${e}`);
