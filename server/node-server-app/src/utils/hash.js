@@ -12,20 +12,13 @@ async function hashWithSalt(password, salt) {
     return hashedPassword;
 }
 
-async function compareHashes(candidateHash, knownHash) {
-    const isMatch = await bcryptCompare(candidateHash, knownHash);
-    return isMatch;
-}
-
 async function comparePassword(candidatePassword, knownSalt, hashedPassword) {
     const candidateHash = await hashWithSalt(candidatePassword, knownSalt);
-    const isMatch = await compareHashes(candidateHash, hashedPassword);
-    return isMatch;
+    return candidateHash === hashedPassword;
 }
 
 export {
     hashWithSalt,
-    compareHashes,
     saltWithRounds,
     comparePassword
 };
