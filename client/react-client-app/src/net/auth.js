@@ -24,4 +24,21 @@ function signup({ username, password }) {
     }).then((res) => res.text());
 }
 
-export { login, signup };
+async function logout({ username }) {
+    const result = await fetch(`${CONF.SERVER}/${CONF.URLS.LOGOUT}`, {
+        credentials: "include",
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ username })
+    });
+    if (result.ok) {
+        return result;
+    } else {
+        throw new Error("logout error");
+    }
+}
+
+export { login, signup, logout };
