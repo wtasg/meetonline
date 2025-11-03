@@ -2,14 +2,43 @@ import { Welcome } from "../components/Welcome";
 import { CheckEngineLight } from "../components/CheckEngineLight";
 import { Login } from "./Login";
 import { Signup } from "./Signup";
-import { loginAction, signupAction } from "../actions/authActions";
+import { loginAction, signupAction, logoutAction } from "../actions/authActions";
+import { Logout } from "./Logout";
+import { user_session } from "../session";
+import { hasUserSession } from "../utils/session";
+import { useState } from "react";
 
 function Top() {
+    const [showLogoutButton, setShowLogoutButton] = useState(hasUserSession());
+    async function onLogout() {
+        await logoutAction();
+        setShowLogoutButton(false);
+    }
+
+    async function onLogin({ username, password }) {
+        await loginAction({ username, password });
+        setShowLogoutButton(true);
+    }
+
+    async function onSignup({ username, password }) {
+        await signupAction({ username, password });
+        setShowLogoutButton(false);
+    }
     return <>
         <Welcome />
         <CheckEngineLight />
-        <Login onlogin={loginAction} />
-        <Signup onsignup={signupAction} />
+        {
+            !showLogoutButton &&
+            <Login onlogin={onLogin} />
+        }
+        {
+            !showLogoutButton &&
+            <Signup onsignup={onSignup} />
+        }
+        {
+            showLogoutButton &&
+            <Logout onlogout={onLogout} username={() => user_session["username"]} />
+        }
     </>;
 }
 

@@ -3,6 +3,7 @@ const CONF = {
     URLS: {
         LOGIN: "login",
         SIGNUP: "signup",
+        LOGOUT: "logout",
     }
 };
 
