@@ -1,5 +1,5 @@
 import { createUserAccount, getUserAccountByUsername } from "../database/user_account.js";
-import { hashWithSalt, saltWithRounds } from "../utils/hash.js";
+import { comparePassword, hashWithSalt, saltWithRounds } from "../utils/hash.js";
 import { user_sessions } from "../utils/session.js";
 
 /**
@@ -81,8 +81,7 @@ async function loginHandlerPOST(req, res) {
 
     let { salt, password } = dbuser;
     try {
-        const hashedInputPassword = await hashWithSalt(candidatePassword, salt);
-        if (hashedInputPassword !== password) {
+        if (!comparePassword(candidatePassword, salt, password)) {
             return res.status(401).json({ ok: false, error: "Invalid credentials.", login: false });
         }
     } catch (error) {
