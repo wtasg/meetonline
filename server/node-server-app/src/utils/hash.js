@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-const { genSalt: gensSalt, hash: bcryptHash, compare: bcryptCompare } = bcrypt;
+const { genSalt: gensSalt, hash: bcryptHash } = bcrypt;
 
 async function saltWithRounds(rounds = 12) {
     const salt = await gensSalt(rounds);
