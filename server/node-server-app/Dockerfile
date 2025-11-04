@@ -22,6 +22,9 @@ WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app .
 
+RUN mkdir -p /usr/src/app/uploads && \
+    chown -R node:node /usr/src/app/uploads && \
+    chmod -R 755 /usr/src/app/uploads
 
 ENV NODE_ENV=production
 
