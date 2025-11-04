@@ -1,22 +1,21 @@
-import fs from "node:fs";
-import path from "node:path";
+
+import { dirname, resolve, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 
-const ROOT_DIR = path.resolve(__dirname, "../../");
+const ROOT_DIR = resolve(__dirname, "../../");
+const UPLOAD_DIR = join(ROOT_DIR, "uploads");
+const CERTS_DIR = join(ROOT_DIR, "certs");
 
-const UPLOAD_DIR = path.join(ROOT_DIR, "uploads");
-const CERTS_DIR = path.join(ROOT_DIR, "certs");
-
-function setupDirectories() {
+function setupDirectories({ exists, mkdir }) {
     try {
         const directories = [UPLOAD_DIR, CERTS_DIR];
 
         directories.forEach((dir) => {
-            if (!fs.existsSync(dir)) {
-                fs.mkdirSync(dir, { recursive: true });
+            if (!exists(dir)) {
+                mkdir(dir, { recursive: true });
                 console.log(`[setupDirectories] Created directory: ${dir}`);
             }
         });

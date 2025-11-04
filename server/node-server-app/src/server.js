@@ -1,6 +1,8 @@
+import { existsSync, mkdirSync } from "node:fs";
+import { resolve as pathResolve } from "node:path";
+
 import express from "express";
 import * as cookieParserPkg from "cookie-parser";
-import path from "node:path";
 
 import { SERVER_PORT } from "./config.js";
 import { setupCorsMiddleware } from "./middlewares/corsMiddleware.js";
@@ -13,13 +15,13 @@ import { setupDirectories } from "./utils/fs.js";
 const app = express();
 const cookieParser = cookieParserPkg.default;
 
-setupDirectories();
+setupDirectories({ exists: existsSync, mkdir: mkdirSync });
 /* Middlewares */
 app.use(express.json());
 app.use(cookieParser());
 setupCorsMiddleware(app);
 
-app.use("/uploads", express.static(path.resolve(process.cwd(), "server/node-server-app/uploads")));
+app.use("/uploads", express.static(pathResolve(process.cwd(), "server/node-server-app/uploads")));
 
 /* Endpoint Handlers */
 setupRootHandlers(app);
