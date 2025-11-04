@@ -1,0 +1,23 @@
+name: DO NOT MERGE
+
+on:
+  pull_request:
+    types: [opened, labeled, unlabeled, synchronize, reopened]
+
+jobs:
+  do-not-merge:
+    runs-on: ubuntu-latest
+    if: contains(join(github.event.pull_request.labels.*.name, ','), 'DO_NOT_MERGE')
+    steps:
+      - name: Fail if PR is blocked
+        run: |
+          echo "❌ This PR is currently blocked due to 'DO_NOT_MERGE' label."
+          exit 1
+  ready-to-merge:
+    runs-on: ubuntu-latest
+    if: contains(join(github.event.pull_request.labels.*.name, ','), 'READY_TO_MERGE')
+    steps:
+      - name: PASS if ready to MERGE
+        run: |
+          echo "Ready to merge."
+          exit 0
