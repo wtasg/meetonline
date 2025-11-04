@@ -1,6 +1,7 @@
 import multer from "multer";
-import path from "path";
-import fs from "fs";
+import path from "node:path";
+import fs from "node:fs";
+import { getFormattedDate } from "../utils/date.js";
 
 const uploadFolder = path.resolve(process.cwd(), "uploads");
 
@@ -13,7 +14,7 @@ const storage = multer.diskStorage({
         cb(null, uploadFolder);
     },
     filename: (req, file, cb) => {
-        const uniqueName = `${Date.now()}-${file.originalname}`;
+        const uniqueName = `${getFormattedDate()}_${file.originalname}`;
         cb(null, uniqueName);
     },
 });
