@@ -12,6 +12,7 @@
     "test:jest": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" ./node_modules/.bin/jest --runInBand",
     "test:ava": "./node_modules/.bin/ava \"tests-ava/**/*.js\"",
     "test": "npm run test:jest",
+    "test:jest:watch": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" ./node_modules/.bin/jest --runInBand --watch",
     "cover:nyc": "echo \"not working\"",
     "cover:jest": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" ./node_modules/.bin/jest --runInBand --coverage",
     "cover": "npm run cover:jest",

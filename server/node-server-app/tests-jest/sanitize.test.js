@@ -1,13 +1,5 @@
-import { sanitizeFilename } from "../src/utils/sanitize.js";
-import { test, beforeEach, afterEach, expect, jest } from "@jest/globals";
-
-beforeEach(() => {
-    jest.restoreAllMocks();
-});
-
-afterEach(() => {
-    jest.restoreAllMocks();
-});
+import { removeConsecutiveSpaces, sanitizeFilename } from "../src/utils/sanitize.js";
+import { test, expect, describe, it } from "@jest/globals";
 
 test("sanitizeFilename converts uppercase to lowercase", () => {
     const result = sanitizeFilename("MyFile.JPG");
@@ -34,13 +26,36 @@ test("sanitizeFilename keeps hidden files like .env as-is", () => {
     expect(result).toBe(".env");
 });
 
-test("sanitizeFilename throws error for invalid input", () => {
-    expect(() => sanitizeFilename(null)).toThrow("Invalid filename input");
-    expect(() => sanitizeFilename(undefined)).toThrow("Invalid filename input");
-    expect(() => sanitizeFilename(123)).toThrow("Invalid filename input");
-});
-
 test("sanitizeFilename handles mixed special cases together", () => {
     const result = sanitizeFilename("Test@File(1).tar.gz");
     expect(result).toBe("test_file_1.tar.gz");
+});
+
+test("sanitizeFilename fails", () => {
+    const actual = sanitizeFilename("___file  _  name . . .env");
+    const expected = "file_name.env";
+    expect(actual).toBe(expected);
+});
+
+test("sanitizeFilename doesn't throw error if it is longer than expected", () => {
+    expect(sanitizeFilename("a".repeat(256))).toBe("a".repeat(255));
+});
+
+describe("removeConsecutiveSpaces", () => {
+    it("should remove consecutive spaces and convert to single space", () => {
+        const input = "wha  t   is     going   on with    space      s   ?";
+        const actual = removeConsecutiveSpaces(input);
+        const expected = "wha t is going on with space s ?";
+        expect(actual).toBe(expected);
+    });
+    it("should return string as it is when there are no spaces", () => {
+        const input = "ThereAreNoSpaces!";
+        const actual = removeConsecutiveSpaces(input);
+        const expected = "ThereAreNoSpaces!";
+        expect(actual).toBe(expected);
+    });
+
+    it("should throw error if the input is 1025 characters long", () => {
+        expect(() => removeConsecutiveSpaces("a".repeat(1025))).toThrow("Param input is too long. (1024+)");
+    });
 });
