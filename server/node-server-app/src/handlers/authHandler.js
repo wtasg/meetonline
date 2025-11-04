@@ -81,7 +81,7 @@ async function loginHandlerPOST(req, res) {
 
     let { salt, password } = dbuser;
     try {
-        if (!comparePassword(candidatePassword, salt, password)) {
+        if (!(await comparePassword(candidatePassword, salt, password))) {
             return res.status(401).json({ ok: false, error: "Invalid credentials.", login: false });
         }
     } catch (error) {

@@ -2,18 +2,26 @@ import { login, signup, logout } from "../net/auth";
 import { user_session } from "../session";
 import { hasUserSession } from "../utils/session";
 
+/**
+ * POST /login action
+ * @param {{username: string, password: string}} credentials
+ * @returns {Promise<true|false>}
+ */
 async function loginAction({ username, password }) {
     if (!username || !password) {
         return Promise.reject("Username and password are required");
     }
     const result = JSON.parse(await login({ username, password }));
-    console.log({ result });
+
     if (result.ok) {
         user_session["username"] = username;
-    } else {
-        user_session["username"] = null;
+        return true;
     }
-    return result;
+
+    // failed login
+    user_session["username"] = null;
+    console.error(result.error);
+    return false;
 }
 
 async function signupAction({ username, password }) {

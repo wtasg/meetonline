@@ -16,8 +16,12 @@ function Top() {
     }
 
     async function onLogin({ username, password }) {
-        await loginAction({ username, password });
-        setShowLogoutButton(true);
+        const isLoggedIn = await loginAction({ username, password });
+        if (isLoggedIn) {
+            setShowLogoutButton(true);
+        } else {
+            setShowLogoutButton(false);
+        }
     }
 
     async function onSignup({ username, password }) {
