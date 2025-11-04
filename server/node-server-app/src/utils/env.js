@@ -9,8 +9,8 @@ const __dirname = dirname(__filename);
 
 /**
  * Loads correct environment file based on current stage of execution.
- *
  * @param {string} stage
+ * @returns {{envRel: string, envPath: string}}
  */
 function loadEnv(stage = "development") {
     const envRel = `../../${stage === "production" ? ".env" : "local.env"}`;

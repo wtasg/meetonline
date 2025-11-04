@@ -9,6 +9,10 @@ const ROOT_DIR = resolve(__dirname, "../../");
 const UPLOAD_DIR = join(ROOT_DIR, "uploads");
 const CERTS_DIR = join(ROOT_DIR, "certs");
 
+/**
+ * Generates directories for server
+ * @param {{exists: Function, mkdir: Function}} dependencies
+ */
 function setupDirectories({ exists, mkdir }) {
     try {
         const directories = [UPLOAD_DIR, CERTS_DIR];
