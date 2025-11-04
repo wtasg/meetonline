@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 function Signup({ onsignup }) {
-    const [signup_password, set_signup_password] = useState();
-    const [signup_username, set_signup_username] = useState();
+    const [signup_password, set_signup_password] = useState("");
+    const [signup_username, set_signup_username] = useState("");
 
     function updateSignupPassword(password) {
         if (!password) {
@@ -26,8 +26,8 @@ function Signup({ onsignup }) {
 
     return (<>
         <p>Signup</p>
-        <input type="text" id="signup_username" placeholder="signup_username" onChange={e => updateSignupUsername(e.target.value)} />
-        <input type="text" id="signup_password" placeholder="signup_password" onChange={e => updateSignupPassword(e.target.value)} />
+        <input type="text" id="signup_username" placeholder="signup_username" value={signup_username} onChange={e => updateSignupUsername(e.target.value)} />
+        <input type="text" id="signup_password" placeholder="signup_password" value={signup_password} onChange={e => updateSignupPassword(e.target.value)} />
         <button type="button" onClick={onSignup}>Signup</button>
     </>);
 }
