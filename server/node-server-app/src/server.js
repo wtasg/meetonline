@@ -1,6 +1,6 @@
 import express from "express";
 import * as cookieParserPkg from "cookie-parser";
-import path from "path";
+import path from "node:path";
 
 import { SERVER_PORT } from "./config.js";
 import { setupCorsMiddleware } from "./middlewares/corsMiddleware.js";
@@ -8,10 +8,12 @@ import { setupRootHandlers } from "./handlers/rootHandler.js";
 import { setupAuthHandlers } from "./handlers/authHandler.js";
 import { setupGracefulShutdown } from "./utils/gracefulSetup.js";
 import { setupUploadHandler } from "./handlers/uploadHandler.js";
+import { setupDirectories } from "./utils/fs.js";
 
 const app = express();
 const cookieParser = cookieParserPkg.default;
 
+setupDirectories();
 /* Middlewares */
 app.use(express.json());
 app.use(cookieParser());
