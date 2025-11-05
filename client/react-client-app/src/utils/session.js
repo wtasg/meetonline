@@ -4,5 +4,4 @@ function hasUserSession() {
     return user_session && user_session["username"] && user_session["username"] !== null;
 }
 
-
 export { hasUserSession };

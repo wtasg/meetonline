@@ -1,6 +1,14 @@
-import { login, signup, logout } from "../net/auth";
+import { login, signup, logout, prelogin, presignup } from "../net/auth";
 import { user_session } from "../session";
 import { hasUserSession } from "../utils/session";
+
+async function preLoginAction() {
+    await prelogin();
+}
+
+async function preSignupAction() {
+    await presignup();
+}
 
 /**
  * POST /login action
@@ -41,4 +49,4 @@ async function logoutAction() {
     return await logout({ username: user_session["username"] });
 }
 
-export { loginAction, signupAction, logoutAction };
+export { loginAction, signupAction, logoutAction, preLoginAction, preSignupAction };

@@ -1,7 +1,7 @@
 import { createUserAccount, getUserAccountByUsername } from "../database/user_account.js";
 import { comparePassword, hashWithSalt, saltWithRounds } from "../utils/hash.js";
 import { user_sessions } from "../utils/session.js";
-
+import { v4 as uuidv4 } from "uuid";
 /**
  *
  * @param {Express.Application} app
@@ -20,27 +20,30 @@ function setupAuthHandlers(app) {
  * @param {Express.Response} res
  */
 function signupHandlerGET(req, res) {
-    const { cookies, signedCookies } = req;
-    console.log({ cookies, signedCookies });
-
+    // const { cookies, signedCookies } = req;
+    const token = uuidv4();
+    user_sessions.register = { ...(user_sessions.register || {}), token };
+    res.cookie("signup_token", token, {
+        sameSite: "strict",
+        httpOnly: false,
+        secure: false,
+        maxAge: 2 * 60 * 1000
+    });
     /* todo: Generate a token here and send it.
      * This token will be consumed by POST /signup endpoint.
      */
-    res.send("GET /signup says hello!");
+    res.status(200).json({ ok: true, message: "GET /signup says hello!" });
 }
 
 async function signupHandlerPOST(req, res) {
-    const { cookies, signedCookies } = req;
-    console.log({ cookies, signedCookies });
+    // const { cookies, signedCookies } = req;
 
-    console.log("Received signup request:", req.body);
     const { token, username, password } = req.body;
     if (!token || !username || !password) {
-        return res.status(400).send("Missing token, username or password");
+        return res.status(400).json({ ok: false, message: "Missing token, username or password", signup: false });
     }
     const salt = await saltWithRounds(); // todo: Generate a proper salt
     const hashedPassword = await hashWithSalt(password, salt);
-    console.log(`Username: ${username}, Hashed Password: ${hashedPassword}, Salt: ${salt}`);
     createUserAccount(username, hashedPassword, salt).then(() => {
         res.cookie("session-1", "sha256-session-string", {
             sameSite: "strict",
@@ -56,25 +59,31 @@ async function signupHandlerPOST(req, res) {
 }
 
 function loginHandlerGET(req, res) {
-    const { cookies, signedCookies } = req;
-    console.log({ cookies, signedCookies });
-
-    res.send("GET /login says hello!");
+    // const { cookies, signedCookies } = req;
+    const token = uuidv4();
+    user_sessions.login = { ...(user_sessions.login || {}), token };
+    res.cookie("login_token", token, {
+        sameSite: "strict",
+        httpOnly: false,
+        secure: false,
+        maxAge: 2 * 60 * 1000
+    });
+    res.json({ ok: true, token });
 }
 
 async function loginHandlerPOST(req, res) {
     const { cookies, signedCookies } = req;
-    console.log("POST /login", { cookies, signedCookies });
-
+    console.log({ cookies, signedCookies });
     const { token, username: candidateUsername, password: candidatePassword } = req.body;
     if (!token || !candidateUsername || !candidatePassword) {
-        return res.status(400).send("Missing token, username or password");
+        return res.status(400).json({ ok: false, message: "Missing token, username or password", login: false });
     }
-    console.log(`Username: ${candidateUsername}, Password: ${candidatePassword}`);
+    if (cookies["login_token"] !== token) {
+        return res.status(403).json({ ok: false, message: "Invalid login token.", login: false });
+    }
     let dbuser = null;
-    // get from database
+    // get user from database
     dbuser = await getUserAccountByUsername(candidateUsername);
-    console.log("Fetched user from database:", dbuser);
     if (dbuser.__isDefault || dbuser.__isNull || !dbuser.isActive || dbuser.isDeleted || dbuser.isBlocked) {
         return res.status(401).send("Account not found or active.");
     }
@@ -82,16 +91,16 @@ async function loginHandlerPOST(req, res) {
     let { salt, password } = dbuser;
     try {
         if (!(await comparePassword(candidatePassword, salt, password))) {
-            return res.status(401).json({ ok: false, error: "Invalid credentials.", login: false });
+            return res.status(401).json({ ok: false, message: "Invalid credentials.", login: false });
         }
     } catch (error) {
         console.error("Error hashing input password:", error);
-        return res.status(500).json({ ok: false, error: "Internal Server Error", login: false });
+        return res.status(500).json({ ok: false, message: "Internal Server Error", login: false });
     }
 
-    console.log(`User ${candidateUsername} authenticated successfully.`);
     // @todo: setup session
-    user_sessions[candidateUsername] = "sha256-session-string";
+    user_sessions.sessions = (user_sessions.sessions || {});
+    user_sessions.sessions[candidateUsername] = "sha256-session-string";
     // @todo: setup cookies
     res.cookie("session-1", "sha256-session-string", {
         sameSite: "strict",
@@ -105,19 +114,24 @@ async function loginHandlerPOST(req, res) {
         secure: false,
         maxAge: 36 * 60 * 60 * 1000
     });
-    // @todo: setup JWT token
+    res.cookie("loggedin", candidateUsername, {
+        sameSite: "strict",
+        httpOnly: false,
+        secure: false,
+        maxAge: 36 * 60 * 60 * 1000
+    });
     res.json({ ok: true, login: true });
 }
 
 function logoutHandlerPOST(req, res) {
-    const { cookies, signedCookies } = req;
-    console.log("POST /logout", { cookies, signedCookies });
+    // const { cookies, signedCookies } = req;
     const username = req.body.username;
-    console.log({ username });
     // security bug
-    user_sessions[username] = null;
+    user_sessions.sessions = (user_sessions.sessions || {});
+    user_sessions.sessions[username] = null;
     res.clearCookie("session-1");
     res.clearCookie(username);
+    res.clearCookie("loggedin");
     res.json({ ok: true, logout: true });
 }
 

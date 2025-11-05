@@ -3,12 +3,17 @@ import { UTC } from "./date";
 /**
  *
  * @param {string} name
- * @returns {string[]} Cookie
+ * @returns {string} Cookie value
  */
 function readCookie(name = "example-name") {
-    return readAllCookies()
+    console.log("readCookie", name);
+    const cookie = readAllCookies()
         .filter(cookie => cookie.startsWith(name))
         .filter(cookie => cookie.split("=")[0] === name);
+    if (cookie.length !== 1) {
+        return null;
+    }
+    return cookie[0].split("=")[1] || null;
 }
 
 /**
@@ -25,6 +30,7 @@ function readAllCookies() {
         return cookies;
     }
     cookies = raw.split("; ");
+    console.log({ cookies });
     return cookies;
 }
 

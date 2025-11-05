@@ -1,15 +1,24 @@
 import { Welcome } from "../components/Welcome";
-import { CheckEngineLight } from "../components/CheckEngineLight";
 import { Login } from "./Login";
 import { Signup } from "./Signup";
-import { loginAction, signupAction, logoutAction } from "../actions/authActions";
+import { loginAction, signupAction, logoutAction, preLoginAction, preSignupAction } from "../actions/authActions";
 import { Logout } from "./Logout";
 import { user_session } from "../session";
 import { hasUserSession } from "../utils/session";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Top() {
     const [showLogoutButton, setShowLogoutButton] = useState(hasUserSession());
+
+    useEffect(() => {
+        (async function () {
+            if (!hasUserSession()) {
+                await preLoginAction();
+                await preSignupAction();
+            }
+        })();
+    }, []);
+
     async function onLogout() {
         await logoutAction();
         setShowLogoutButton(false);
@@ -28,9 +37,9 @@ function Top() {
         await signupAction({ username, password });
         setShowLogoutButton(false);
     }
+
     return <>
         <Welcome />
-        <CheckEngineLight />
         {
             !showLogoutButton &&
             <Login onlogin={onLogin} />

@@ -1,6 +1,30 @@
+import { readCookie } from "../utils/cookie.js";
 import { CONF } from "./net-conf.js";
 
-function login({ username, password }) {
+async function prelogin() {
+    const res = await fetch(`${CONF.SERVER}/${CONF.URLS.LOGIN}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+    });
+    return res;
+}
+
+async function presignup() {
+    const res = await fetch(`${CONF.SERVER}/${CONF.URLS.SIGNUP}`, {
+        credentials: "include",
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        }
+    });
+    return res;
+}
+
+async function login({ username, password }) {
     return fetch(`${CONF.SERVER}/${CONF.URLS.LOGIN}`, {
         credentials: "include",
         method: "POST",
@@ -8,11 +32,11 @@ function login({ username, password }) {
             "Accept": "application/json",
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password, token: "token" }),
+        body: JSON.stringify({ username, password, token: readCookie("login_token") }),
     }).then((res) => res.text());
 }
 
-function signup({ username, password }) {
+async function signup({ username, password }) {
     return fetch(`${CONF.SERVER}/${CONF.URLS.SIGNUP}`, {
         credentials: "include",
         method: "POST",
@@ -20,7 +44,7 @@ function signup({ username, password }) {
             "Accept": "application/json",
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password, token: "token" }),
+        body: JSON.stringify({ username, password, token: readCookie("signup_token") }),
     }).then((res) => res.text());
 }
 
@@ -41,4 +65,4 @@ async function logout({ username }) {
     }
 }
 
-export { login, signup, logout };
+export { login, signup, logout, prelogin, presignup };
