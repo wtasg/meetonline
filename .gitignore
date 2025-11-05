@@ -1250,4 +1250,6 @@ google-services.json
 *.sass.map
 *.scss.map
 
-
+# uploads and certificates
+server/node-server-app/uploads/
+server/node-server-app/images/
