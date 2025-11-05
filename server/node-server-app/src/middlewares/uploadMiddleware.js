@@ -1,26 +1,58 @@
 import multer from "multer";
 import path from "node:path";
-import fs from "node:fs";
 import { getFormattedDate } from "../utils/date.js";
+import { UPLOAD_DIR } from "../utils/fs.js";
+import { sanitizeFilename } from "../utils/sanitize.js";
 
-const uploadFolder = path.resolve(process.cwd(), "uploads");
+const allowedMimes = [
+    "text/plain",
+    "application/pdf",
+    "image/bmp",
+    "image/png",
+    "image/jpeg",
+    "image/webp",
+];
 
-if (!fs.existsSync(uploadFolder)) {
-    fs.mkdirSync(uploadFolder, { recursive: true });
-}
+const allowedExt = [
+    ".txt",
+    ".pdf",
+    ".bmp",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".webp",
+];
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, uploadFolder);
+        cb(null, UPLOAD_DIR);
     },
     filename: (req, file, cb) => {
-        const uniqueName = `${getFormattedDate()}_${file.originalname}`;
-        cb(null, uniqueName);
+        try {
+            const cleaned = sanitizeFilename(file.originalname);
+            cb(null, `${getFormattedDate()}_${cleaned}`);
+        } catch (err) {
+            cb(err, null);
+        }
     },
 });
 
 const fileFilter = (req, file, cb) => {
-    cb(null, true);
+    try {
+        const ext = path.extname(file.originalname).toLowerCase();
+
+        if (!allowedMimes.includes(file.mimetype)) {
+            return cb(new Error(`Invalid file type: ${file.mimetype}`), false);
+        }
+
+        if (!allowedExt.includes(ext)) {
+            return cb(new Error(`Invalid file extension: ${ext}`), false);
+        }
+        
+        cb(null, true);
+    } catch (err) {
+        cb(err, false);
+    }
 };
 
 const limits = {
