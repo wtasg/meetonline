@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { createCookie, readAllCookies, readCookie } from "./cookie";
-import { tomorrow } from "./date";
+import { UTC } from "./date";
 
 describe("Cookie", () => {
     let documentCookieMock;
@@ -37,8 +37,8 @@ describe("Cookie", () => {
 
     describe("createCookie", () => {
         it("should create a cookie successfully", () => {
-            const actual = createCookie("name", "value", { "Expires": tomorrow() });
-            const expected = `name=value; Path=/; Expires=${tomorrow()}; Max-Age=0; SameSite=strict`;
+            const actual = createCookie("name", "value", {});
+            const expected = `name=value; Expires=${UTC.someday(7)}; Path=/; Max-Age=7; SameSite=strict`;
             expect(actual).toBe(expected);
         });
     });
