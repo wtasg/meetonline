@@ -12,10 +12,7 @@ function setupRootHandlers(app) {
  * @param {Express.Response} res
  */
 function rootHandler(req, res) {
-    const { cookies, signedCookies } = req;
-    console.log({ cookies, signedCookies });
-
-    res.send("GET / says hello!");
+    res.json({ ok: true, message: "Server is running" });
 }
 
 export { setupRootHandlers };

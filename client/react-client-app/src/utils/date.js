@@ -1,3 +1,5 @@
+export { today, tomorrow, yesterday, zero, someday, UTC };
+
 function today() {
     return (new Date());
 }
@@ -44,4 +46,4 @@ const UTC = {
     yesterday: () => yesterday().toUTCString()
 };
 
-export { today, tomorrow, yesterday, zero, someday, UTC };
+

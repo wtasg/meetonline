@@ -108,7 +108,6 @@ class MemoryStorage {
     }
 
     retrieve(key) {
-        console.log("MemoryStorage retrieve:", key, this.storage[key]);
         return this.storage[key];
     }
 
