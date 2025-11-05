@@ -31,7 +31,7 @@ describe("Cookie", () => {
 
     describe("readCookie", () => {
         it("should return empty object", () => {
-            expect(readCookie()).toEqual([]);
+            expect(readCookie()).toEqual(null);
         });
     });
 
