@@ -1,4 +1,4 @@
-import { zero, tomorrow } from "./date";
+import { UTC } from "./date";
 
 /**
  *
@@ -30,7 +30,7 @@ function readAllCookies() {
 
 
 function deleteCookie(name = "example-name", path = "/") {
-    document.cookie = `${name}=; Path=${path}; Expires=${zero()}; Max-Age=0;`;
+    document.cookie = `${name}=; Path=${path}; Expires=${UTC.zero()}; Max-Age=0;`;
     return null;
 }
 
@@ -44,12 +44,12 @@ function deleteCookie(name = "example-name", path = "/") {
 function createCookie(name = "example-name", value = "example-value", options = { "Path": "/" }) {
     const defaults = {
         Path: "/",
-        Expires: tomorrow(),
-        "Max-Age": 0,
+        "Max-Age": 7,
         "SameSite": "strict"
     };
     options = { ...defaults, ...options };
-    const parts = [`${name}=${value}`];
+    const Expires = UTC.someday(Number(options["Max-Age"] ?? 7));
+    const parts = [`${name}=${value}`, `Expires=${Expires}`];
     for (const [k, v] of Object.entries(options)) {
         parts.push(`${k}=${v}`);
     }

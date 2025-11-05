@@ -1,23 +1,47 @@
 function today() {
-    return (new Date()).toUTCString();
+    return (new Date());
 }
 
 function tomorrow() {
     const today = new Date();
     const morrow = new Date(today);
     morrow.setDate(today.getDate() + 1);
-    return morrow.toUTCString();
+    return morrow;
 }
 
 function yesterday() {
     const today = new Date();
     const last = new Date(today);
     last.setDate(today.getDate() - 1);
-    return last.toUTCString();
+    return last;
 }
 
 function zero() {
-    return (new Date(0)).toUTCString();
+    return (new Date(0));
 }
 
-export { today, tomorrow, yesterday, zero };
+/**
+ * Calculate a future or past date in UTC string format (e.g. for cookie expiration)
+ * @param {number} days Number of days from now (default: 7)
+ * @returns {string} UTC string for the calculated date
+ */
+function someday(days = 7) {
+    if (typeof days !== "number" || isNaN(days)) {
+        days = 7;
+    }
+
+    const now = new Date();
+    const day = new Date(now);
+    day.setDate(now.getDate() + days);
+    return day;
+}
+
+const UTC = {
+    today: () => today().toUTCString(),
+    tomorrow: () => tomorrow().toUTCString(),
+    someday: (n) => someday(n).toUTCString(),
+    zero: () => zero().toUTCString(),
+    yesterday: () => yesterday().toUTCString()
+};
+
+export { today, tomorrow, yesterday, zero, someday, UTC };
