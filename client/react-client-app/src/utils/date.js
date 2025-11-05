@@ -1,5 +1,9 @@
 export { today, tomorrow, yesterday, zero, someday, UTC };
 
+/**
+ * Create a Date representing the current date and time.
+ * @returns {Date} A Date object for the current instant.
+ */
 function today() {
     return (new Date());
 }
@@ -45,5 +49,4 @@ const UTC = {
     zero: () => zero().toUTCString(),
     yesterday: () => yesterday().toUTCString()
 };
-
 

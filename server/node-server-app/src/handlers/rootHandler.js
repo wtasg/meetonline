@@ -7,9 +7,11 @@ function setupRootHandlers(app) {
 }
 
 /**
+ * Responds to root requests with a JSON health/status message.
  *
- * @param {Express.Request} req
- * @param {Express.Response} res
+ * Sends a JSON payload { ok: true, message: "Server is running" } to the client.
+ * @param {Express.Request} req - Incoming HTTP request for the root path.
+ * @param {Express.Response} res - HTTP response used to send the JSON payload.
  */
 function rootHandler(req, res) {
     res.json({ ok: true, message: "Server is running" });

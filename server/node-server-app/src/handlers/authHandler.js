@@ -15,9 +15,9 @@ function setupAuthHandlers(app) {
 }
 
 /**
+ * Initiates the signup process by generating a UUID token, storing it in `user_sessions.register`, setting a short-lived `signup_token` cookie, and responding with a confirmation JSON message.
  *
- * @param {Express.Request} req
- * @param {Express.Response} res
+ * The cookie is set with SameSite=strict, httpOnly=false, secure=false, and a 2-minute expiration.
  */
 function signupHandlerGET(req, res) {
     // const { cookies, signedCookies } = req;
@@ -35,6 +35,13 @@ function signupHandlerGET(req, res) {
     res.status(200).json({ ok: true, message: "GET /signup says hello!" });
 }
 
+/**
+ * Handle POST /signup requests to create a new user account and establish a session cookie.
+ *
+ * Expects `token`, `username`, and `password` in the request body. If any are missing, responds with HTTP 400 and JSON { ok: false, message: "Missing token, username or password", signup: false }.
+ * On successful account creation, sets an HTTP-only session cookie named `session-1` (SameSite=strict, 36-hour maxAge) and responds with JSON { ok: true, login: true }.
+ * On internal errors during account creation, responds with HTTP 500 and JSON { ok: false, login: false, error: "Internal server error" }.
+ */
 async function signupHandlerPOST(req, res) {
     // const { cookies, signedCookies } = req;
 
@@ -58,6 +65,11 @@ async function signupHandlerPOST(req, res) {
     });
 }
 
+/**
+ * Create a short-lived login token, persist it to user_sessions.login, set it as the `login_token` cookie, and return the token.
+ *
+ * @returns {{ok: true, token: string}} JSON response with `ok: true` and the generated `token`.
+ */
 function loginHandlerGET(req, res) {
     // const { cookies, signedCookies } = req;
     const token = uuidv4();
@@ -71,6 +83,16 @@ function loginHandlerGET(req, res) {
     res.json({ ok: true, token });
 }
 
+/**
+ * Authenticate a user using a one-time login token and password, establish a session, and set session cookies.
+ *
+ * Validates presence of `token`, `username`, and `password` in `req.body` and verifies the provided token matches the `login_token` cookie.
+ * On successful credential verification, stores a session entry under `user_sessions.sessions[username]` and sets the
+ * `session-1`, `username`, and `loggedin` cookies (36-hour expiry). On failure, sends an appropriate HTTP status with JSON or text.
+ *
+ * @param {import('express').Request} req - Express request; expects `body.token`, `body.username`, `body.password` and request cookies (including `login_token`).
+ * @param {import('express').Response} res - Express response used to send HTTP responses and to set cookies.
+ */
 async function loginHandlerPOST(req, res) {
     const { cookies, signedCookies } = req;
     console.log({ cookies, signedCookies });
@@ -123,6 +145,11 @@ async function loginHandlerPOST(req, res) {
     res.json({ ok: true, login: true });
 }
 
+/**
+ * Ends a user's session by clearing the server-side session entry and related cookies, then responds with a logout confirmation.
+ * @param {import('express').Request} req - Express request; expects `req.body.username` identifying the account to log out.
+ * @param {import('express').Response} res - Express response used to clear cookies (`session-1`, the username cookie, `loggedin`) and send the JSON confirmation.
+ */
 function logoutHandlerPOST(req, res) {
     // const { cookies, signedCookies } = req;
     const username = req.body.username;

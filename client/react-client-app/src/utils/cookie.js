@@ -1,9 +1,9 @@
 import { UTC } from "./date";
 
 /**
- *
- * @param {string} name
- * @returns {string} Cookie value
+ * Retrieve the value of the cookie with the given name.
+ * @param {string} name - Cookie name to look up.
+ * @returns {string|null} The cookie value if exactly one matching cookie exists, `null` otherwise.
  */
 function readCookie(name = "example-name") {
     console.log("readCookie", name);
@@ -17,8 +17,10 @@ function readCookie(name = "example-name") {
 }
 
 /**
- * Fetch all Cookies
- * @returns {CookieList}
+ * Return all cookies as an array of "name=value" strings.
+ *
+ * Returns an empty array if no cookies are present or if `document.cookie` is unavailable.
+ * @returns {string[]} An array of cookie strings in the form `name=value`, or an empty array when no cookies are available.
  */
 function readAllCookies() {
     let cookies = [];
