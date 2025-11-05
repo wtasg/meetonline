@@ -3,6 +3,7 @@ import { resolve as pathResolve } from "node:path";
 
 import express from "express";
 import morgan from "morgan";
+import compression from "compression";
 import * as cookieParserPkg from "cookie-parser";
 
 import { SERVER_PORT } from "./config.js";
@@ -25,7 +26,7 @@ setupDirectories({ exists: existsSync, mkdir: mkdirSync });
 /* Middlewares */
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(compression());
 app.use(
     morgan(isProduction ? "combined" : "dev")
 );
