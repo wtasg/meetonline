@@ -19,15 +19,15 @@ async function loginAction({ username, password }) {
     if (!username || !password) {
         return Promise.reject("Username and password are required");
     }
-    const result = JSON.parse(await login({ username, password }));
+    const result = await login({ username, password });
 
     if (result.ok) {
-        user_session["username"] = username;
+        user_session.store("username", username);
         return true;
     }
 
     // failed login
-    user_session["username"] = null;
+    user_session.eject("username");
     console.error(result.error);
     return false;
 }
@@ -40,13 +40,16 @@ async function signupAction({ username, password }) {
 }
 
 async function logoutAction() {
-    console.log(user_session, user_session["username"]);
+    console.log(user_session, user_session.retrieve("username"));
     if (!hasUserSession()) {
         throw new Error("Username not found!");
-    } else {
-        user_session["username"] = null;
     }
-    return await logout({ username: user_session["username"] });
+    const result = await logout({ username: user_session.retrieve("username") });
+    if (!result.ok) {
+        throw new Error("Could not logout!");
+    }
+    user_session.eject("username");
+    return result;
 }
 
 export { loginAction, signupAction, logoutAction, preLoginAction, preSignupAction };

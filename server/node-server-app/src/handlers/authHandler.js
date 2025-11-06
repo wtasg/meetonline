@@ -51,10 +51,10 @@ async function signupHandlerPOST(req, res) {
             secure: false,
             maxAge: 36 * 60 * 60 * 1000
         });
-        res.json({ ok: true, login: true });
+        res.json({ ok: true, signup: true, message: "Signup successful!" });
     }).catch((err) => {
         console.error("Error creating user account:", err);
-        res.status(500).json({ ok: false, login: false, error: "Internal server error" });
+        res.status(500).json({ ok: false, signup: false, message: "Internal server error" });
     });
 }
 
@@ -85,7 +85,7 @@ async function loginHandlerPOST(req, res) {
     // get user from database
     dbuser = await getUserAccountByUsername(candidateUsername);
     if (dbuser.__isDefault || dbuser.__isNull || !dbuser.isActive || dbuser.isDeleted || dbuser.isBlocked) {
-        return res.status(401).send("Account not found or active.");
+        return res.status(401).json({ ok: false, login: false, message: "Account not found or active." });
     }
 
     let { salt, password } = dbuser;
@@ -120,19 +120,22 @@ async function loginHandlerPOST(req, res) {
         secure: false,
         maxAge: 36 * 60 * 60 * 1000
     });
-    res.json({ ok: true, login: true });
+    res.status(200).json({ ok: true, login: true, message: "Login successful!" });
 }
 
 function logoutHandlerPOST(req, res) {
     // const { cookies, signedCookies } = req;
     const username = req.body.username;
-    // security bug
+    // @todo security bug: find it
     user_sessions.sessions = (user_sessions.sessions || {});
     user_sessions.sessions[username] = null;
+
+    // clear cookies
     res.clearCookie("session-1");
-    res.clearCookie(username);
+    res.clearCookie("username");
     res.clearCookie("loggedin");
-    res.json({ ok: true, logout: true });
+    // only success case
+    res.status(200).json({ ok: true, logout: true, message: "Logout successful!" });
 }
 
 export { setupAuthHandlers };
