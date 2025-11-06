@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail
-
 echo "Running lint before commit..."
 
 # Move to repo root
@@ -26,3 +24,4 @@ fi
 
 echo "✅ Lint passed — proceeding with commit."
 exit 0
+
