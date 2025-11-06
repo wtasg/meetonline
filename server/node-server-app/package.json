@@ -9,7 +9,7 @@
     "lint": "./node_modules/.bin/eslint .",
     "lint:fix": "./node_modules/.bin/eslint . --fix",
     "test:jasmine": "./node_modules/.bin/jasmine --config=jasmine.mjs",
-    "test:jest": "SERVER_HTTP_PORT=9006 SERVER_HTTPS_PORT=9443 NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" ./node_modules/.bin/jest --runInBand",
+    "test:jest": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" ./node_modules/.bin/jest --runInBand",
     "test:ava": "./node_modules/.bin/ava \"tests-ava/**/*.js\"",
     "test": "npm run test:jest",
     "test:jest:watch": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" ./node_modules/.bin/jest --runInBand --watch",
@@ -18,7 +18,7 @@
     "cover": "npm run cover:jest",
     "build:certs": "mkdir -p certs && openssl req -x509 -newkey rsa:2048 -nodes -keyout certs/server.key -out certs/server.crt -subj \"/CN=localhost\" -days 365",
     "start": "NODE_ENV=production node src/server.js",
-    "dev": "NODE_ENV=development node src/server.js"
+    "dev": "npm run build:certs && NODE_ENV=development node src/server.js"
   },
   "keywords": [],
   "author": "wtasg",
