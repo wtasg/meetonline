@@ -3,6 +3,7 @@ import { CONF } from "./net-conf.js";
 
 async function prelogin() {
     const res = await fetch(`${CONF.SERVER}/${CONF.URLS.LOGIN}`, {
+        credentials: "include",
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -33,7 +34,7 @@ async function login({ username, password }) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password, token: readCookie("login_token") }),
-    }).then((res) => res.text());
+    }).then((res) => res.json());
 }
 
 async function signup({ username, password }) {
@@ -45,11 +46,11 @@ async function signup({ username, password }) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password, token: readCookie("signup_token") }),
-    }).then((res) => res.text());
+    }).then((res) => res.json());
 }
 
 async function logout({ username }) {
-    const result = await fetch(`${CONF.SERVER}/${CONF.URLS.LOGOUT}`, {
+    const result = await (await fetch(`${CONF.SERVER}/${CONF.URLS.LOGOUT}`, {
         credentials: "include",
         method: "POST",
         headers: {
@@ -57,7 +58,8 @@ async function logout({ username }) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({ username })
-    });
+    })).json();
+
     if (result.ok) {
         return result;
     } else {

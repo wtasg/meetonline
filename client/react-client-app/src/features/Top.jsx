@@ -50,7 +50,7 @@ function Top() {
         }
         {
             showLogoutButton &&
-            <Logout onlogout={onLogout} username={() => user_session["username"]} />
+            <Logout onlogout={onLogout} username={() => user_session.retrieve("username")} />
         }
     </>;
 }

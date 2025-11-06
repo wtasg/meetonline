@@ -3,7 +3,7 @@ import { UTC } from "./date";
 /**
  *
  * @param {string} name
- * @returns {string} Cookie value
+ * @returns {string|null} Cookie value
  */
 function readCookie(name = "example-name") {
     console.log("readCookie", name);
