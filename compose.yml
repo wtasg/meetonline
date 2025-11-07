@@ -27,7 +27,8 @@ services:
     depends_on:
       - database
     volumes:
-      - server_files:/usr/src/app/
+      - server_files:/usr/src/app/uploads
+      - server_certs:/usr/src/app/certs
     restart: no
 
   database:
@@ -47,3 +48,5 @@ services:
 volumes:
   db_data:
   server_files:
+  server_certs:
+
