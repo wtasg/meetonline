@@ -36,7 +36,7 @@ ENV NODE_ENV=production
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-EXPOSE 9006
+EXPOSE 9006 9443
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
