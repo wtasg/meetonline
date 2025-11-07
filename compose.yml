@@ -23,8 +23,11 @@ services:
       - ./server/node-server-app/docker.env
     ports:
       - "9006:9006"
+      - "9443:9443"
     depends_on:
       - database
+    volumes:
+      - server_files:/usr/src/app/
     restart: no
 
   database:
@@ -43,3 +46,4 @@ services:
 
 volumes:
   db_data:
+  server_files:
