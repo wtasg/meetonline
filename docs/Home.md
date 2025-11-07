@@ -6,8 +6,9 @@
 
 ## Setup
 
-- [Set up WSL for dev](./Setup/setup-wsl-for-dev.md)
 - [Setup repo](./Setup/setup-repo.md)
+- [Set up WSL for dev](./Setup/setup-wsl-for-dev.md)
+
 
 ## Architecture
 
