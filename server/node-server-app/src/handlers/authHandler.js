@@ -2,6 +2,10 @@ import { createUserAccount, getUserAccountByUsername } from "../database/user_ac
 import { comparePassword, hashWithSalt, saltWithRounds } from "../utils/hash.js";
 import { user_sessions } from "../utils/session.js";
 import { v4 as uuidv4 } from "uuid";
+import { KVStore } from "../utils/store.js";
+
+const authStore = new KVStore(["memory", "file", "db"]);
+
 /**
  *
  * @param {Express.Application} app
@@ -99,10 +103,10 @@ async function loginHandlerPOST(req, res) {
     }
 
     // @todo: setup session
-    user_sessions.sessions = (user_sessions.sessions || {});
-    user_sessions.sessions[candidateUsername] = "sha256-session-string";
+    const session_id = uuidv4();
+    authStore.store(`session4${candidateUsername}`, session_id);
     // @todo: setup cookies
-    res.cookie("session-1", "sha256-session-string", {
+    res.cookie("session-1", session_id, {
         sameSite: "strict",
         httpOnly: true,
         secure: false,
@@ -127,8 +131,7 @@ function logoutHandlerPOST(req, res) {
     // const { cookies, signedCookies } = req;
     const username = req.body.username;
     // @todo security bug: find it
-    user_sessions.sessions = (user_sessions.sessions || {});
-    user_sessions.sessions[username] = null;
+    authStore.eject(`session4${username}`);
 
     // clear cookies
     res.clearCookie("session-1");

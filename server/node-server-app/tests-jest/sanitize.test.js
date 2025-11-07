@@ -1,5 +1,7 @@
 import { removeConsecutiveSpaces, sanitizeFilename } from "../src/utils/sanitize.js";
-import { test, expect, describe, it } from "@jest/globals";
+import { test, expect, describe, it, jest } from "@jest/globals";
+
+jest.useFakeTimers();
 
 test("sanitizeFilename converts uppercase to lowercase", () => {
     const result = sanitizeFilename("MyFile.JPG");

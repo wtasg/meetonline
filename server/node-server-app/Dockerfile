@@ -26,10 +26,13 @@ RUN mkdir -p /usr/src/app/uploads && \
     chown -R node:node /usr/src/app/uploads && \
     chmod -R 755 /usr/src/app/uploads
 
-
 RUN mkdir -p /usr/src/app/certs && \
     chown -R node:node /usr/src/app/certs && \
     chmod -R 755 /usr/src/app/certs
+
+RUN mkdir -p /usr/src/app/tmp && \
+    chown -R node:node /usr/src/app/tmp && \
+    chmod -R 755 /usr/src/app/tmp
 
 ENV NODE_ENV=production
 

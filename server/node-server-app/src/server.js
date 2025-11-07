@@ -17,8 +17,7 @@ import { setupUploadHandler } from "./handlers/uploadHandler.js";
 import { setupDirectories } from "./utils/fs.js";
 import { loadEnv } from "./utils/env.js";
 import { projectRoot } from "./utils/projectRoot.js";
-
-console.log({ projectRoot });
+import { dbStart } from "./database/db.js";
 
 const app = express();
 const cookieParser = cookieParserPkg.default;
@@ -26,6 +25,9 @@ const cookieParser = cookieParserPkg.default;
 /* process environment */
 const isProduction = process.env.NODE_ENV === "production";
 loadEnv(process.env.NODE_ENV);
+
+/* setup database connection */
+dbStart();
 
 setupDirectories({ exists: existsSync, mkdir: mkdirSync });
 

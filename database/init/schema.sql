@@ -18,3 +18,12 @@ create unique index user_account_username_uindex
 alter table public.user_account
     add constraint user_account_pk
         primary key (username);
+
+
+-- KEY-VALUE Pair storage
+create table if not exists public.kv_store
+(
+    id      bigserial       not null,
+    key     varchar(64)     not null,
+    value   varchar(64)     not null
+);

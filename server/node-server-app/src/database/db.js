@@ -1,24 +1,38 @@
 import { Pool } from "pg";
 
-const config = {
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-};
+let pool = null;
 
-const pool = new Pool(config);
-pool.on("error", (err) => {
-    console.error(err);
-    process.exit(-1);
-});
+function dbStart() {
+    const config = {
+        user: process.env.DB_USER,
+        host: process.env.DB_HOST,
+        database: process.env.DB_NAME,
+        password: process.env.DB_PASSWORD,
+        port: process.env.DB_PORT,
+    };
 
-pool.connect()
-    .then((client) => {
-        console.log("DB connected.");
-        client.release();
-    }).catch(console.error);
+    if (pool === null) {
+        pool = new Pool(config);
+        if(!pool) {
+            process.exit(1);
+        }
+    } else {
+        return pool;
+    }
+
+    pool.on("error", (err) => {
+        console.error({ err });
+        process.exit(1);
+    });
+
+    pool.connect()
+        .then((client) => {
+            console.log("DB connected.");
+            client.release();
+        }).catch(console.error);
+
+    return pool;
+}
 
 async function dbClose() {
     try {
@@ -31,4 +45,4 @@ async function dbClose() {
     }
 }
 
-export { pool, dbClose };
+export { dbStart, pool, dbClose };
