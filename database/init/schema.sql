@@ -1,9 +1,9 @@
 create table if not exists public.user_account
 (
     id           bigserial                           not null,
-    username     varchar(64)                         not null,
-    salt         varchar(256)                        not null,
-    password     varchar(64)                         not null,
+    username     varchar(1024)                         not null,
+    salt         varchar(1024)                        not null,
+    password     varchar(1024)                         not null,
     created_at   timestamp default current_timestamp not null,
     is_active    boolean   default true              not null,
     is_deleted   boolean   default false             not null,
@@ -23,7 +23,14 @@ alter table public.user_account
 -- KEY-VALUE Pair storage
 create table if not exists public.kv_store
 (
-    id      bigserial       not null,
-    key     varchar(64)     not null,
-    value   varchar(64)     not null
+    id      bigserial         not null,
+    k       varchar(1024)     not null,
+    v       varchar(1024)     not null
 );
+
+create unique index kv_store_k_uindex
+    on public.kv_store (k);
+
+alter table public.kv_store
+    add constraint kv_store_pk
+        primary key (k);

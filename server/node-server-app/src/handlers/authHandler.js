@@ -1,10 +1,10 @@
 import { createUserAccount, getUserAccountByUsername } from "../database/user_account.js";
 import { comparePassword, hashWithSalt, saltWithRounds } from "../utils/hash.js";
-import { user_sessions } from "../utils/session.js";
 import { v4 as uuidv4 } from "uuid";
 import { KVStore } from "../utils/store.js";
 
 const authStore = new KVStore(["memory", "file", "db"]);
+const tokenStore = new KVStore(["memory"]);
 
 /**
  *
@@ -23,38 +23,35 @@ function setupAuthHandlers(app) {
  * @param {Express.Request} req
  * @param {Express.Response} res
  */
-function signupHandlerGET(req, res) {
-    // const { cookies, signedCookies } = req;
+async function signupHandlerGET(req, res) {
     const token = uuidv4();
-    user_sessions.register = { ...(user_sessions.register || {}), token };
     res.cookie("signup_token", token, {
         sameSite: "strict",
         httpOnly: false,
         secure: false,
         maxAge: 2 * 60 * 1000
     });
-    /* todo: Generate a token here and send it.
-     * This token will be consumed by POST /signup endpoint.
-     */
+    await tokenStore.store(token, (new Date()).toUTCString());
     res.status(200).json({ ok: true, token });
 }
 
 async function signupHandlerPOST(req, res) {
-    // const { cookies, signedCookies } = req;
-
     const { token, username, password } = req.body;
     if (!token || !username || !password) {
         return res.status(400).json({ ok: false, message: "Missing token, username or password", signup: false });
     }
-    const salt = await saltWithRounds(); // todo: Generate a proper salt
+
+    const tokenCreatedAt = new Date(await tokenStore.retrieve(token));
+    if ((new Date() - tokenCreatedAt) / 1000 > 120) {
+        const newToken = uuidv4();
+        await tokenStore.store(newToken, (new Date()).toUTCString());
+        await tokenStore.eject(token);
+        return res.status(400).json({ ok: false, message: "Old token. Retry!", signup: false, token: newToken });
+    }
+
+    const salt = await saltWithRounds();
     const hashedPassword = await hashWithSalt(password, salt);
     createUserAccount(username, hashedPassword, salt).then(() => {
-        res.cookie("session-1", "sha256-session-string", {
-            sameSite: "strict",
-            httpOnly: true,
-            secure: false,
-            maxAge: 36 * 60 * 60 * 1000
-        });
         res.json({ ok: true, signup: true, message: "Signup successful!" });
     }).catch((err) => {
         console.error("Error creating user account:", err);
@@ -62,29 +59,36 @@ async function signupHandlerPOST(req, res) {
     });
 }
 
-function loginHandlerGET(req, res) {
-    // const { cookies, signedCookies } = req;
+async function loginHandlerGET(req, res) {
     const token = uuidv4();
-    user_sessions.login = { ...(user_sessions.login || {}), token };
     res.cookie("login_token", token, {
         sameSite: "strict",
         httpOnly: false,
         secure: false,
         maxAge: 2 * 60 * 1000
     });
+    await tokenStore.store(token, (new Date()).toUTCString());
     res.json({ ok: true, token });
 }
 
 async function loginHandlerPOST(req, res) {
-    const { cookies, signedCookies } = req;
-    console.log({ cookies, signedCookies });
+    const { cookies } = req;
     const { token, username: candidateUsername, password: candidatePassword } = req.body;
     if (!token || !candidateUsername || !candidatePassword) {
         return res.status(400).json({ ok: false, message: "Missing token, username or password", login: false });
     }
+    const tokenCreatedAt = new Date(await tokenStore.retrieve(token));
+    if ((new Date() - tokenCreatedAt) / 1000 > 120) {
+        const newToken = uuidv4();
+        await tokenStore.store(newToken, (new Date()).toUTCString());
+        await tokenStore.eject(token);
+        return res.status(403).json({ ok: false, message: "Old token. Retry!", login: false, token: newToken });
+    }
+
     if (cookies["login_token"] !== token) {
         return res.status(403).json({ ok: false, message: "Invalid login token.", login: false });
     }
+
     let dbuser = null;
     // get user from database
     dbuser = await getUserAccountByUsername(candidateUsername);
@@ -102,9 +106,8 @@ async function loginHandlerPOST(req, res) {
         return res.status(500).json({ ok: false, message: "Internal Server Error", login: false });
     }
 
-    // @todo: setup session
     const session_id = uuidv4();
-    authStore.store(`session4${candidateUsername}`, session_id);
+    await authStore.store(`session_for_${candidateUsername}`, session_id);
     // @todo: setup cookies
     res.cookie("session-1", session_id, {
         sameSite: "strict",
@@ -127,17 +130,24 @@ async function loginHandlerPOST(req, res) {
     res.status(200).json({ ok: true, login: true, message: "Login successful!" });
 }
 
-function logoutHandlerPOST(req, res) {
-    // const { cookies, signedCookies } = req;
-    const username = req.body.username;
-    // @todo security bug: find it
-    authStore.eject(`session4${username}`);
+async function logoutHandlerPOST(req, res) {
+    const { cookies } = req;
+    const sessionId = cookies?.["session-1"];
+    const username = cookies?.username;
+    if (!sessionId || !username) {
+        return res.status(400).json({ ok: false, logout: false, message: "Missing session" });
+    }
+    const storedSession = await authStore.retrieve(`session_for_${username}`);
+    if (storedSession !== sessionId) {
+        return res.status(403).json({ ok: false, logout: false, message: "Invalid session" });
+    }
+    authStore.eject(`session_for_${username}`);
 
     // clear cookies
     res.clearCookie("session-1");
     res.clearCookie("username");
     res.clearCookie("loggedin");
-    // only success case
+
     res.status(200).json({ ok: true, logout: true, message: "Logout successful!" });
 }
 

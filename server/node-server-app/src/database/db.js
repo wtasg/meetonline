@@ -2,7 +2,7 @@ import { Pool } from "pg";
 
 let pool = null;
 
-function dbStart() {
+async function dbStart() {
     const config = {
         user: process.env.DB_USER,
         host: process.env.DB_HOST,
@@ -13,9 +13,6 @@ function dbStart() {
 
     if (pool === null) {
         pool = new Pool(config);
-        if(!pool) {
-            process.exit(1);
-        }
     } else {
         return pool;
     }
@@ -25,23 +22,26 @@ function dbStart() {
         process.exit(1);
     });
 
-    pool.connect()
-        .then((client) => {
-            console.log("DB connected.");
-            client.release();
-        }).catch(console.error);
-
-    return pool;
+    try {
+        const client = await pool.connect();
+        console.log("DB connected.");
+        client.release();
+        return pool;
+    } catch (err) {
+        console.error({ err });
+        process.exit(1);
+    }
 }
 
 async function dbClose() {
     try {
-        if (!pool.ended && !pool.ending) {
+        if (pool && !pool.ended && !pool.ending) {
             await pool.end();
+            console.log("DB Disconnected.");
         }
-        console.log("DB Disconnected.");
     } catch (err) {
         console.error(err);
+        throw err;
     }
 }
 

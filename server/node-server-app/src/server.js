@@ -27,7 +27,7 @@ const isProduction = process.env.NODE_ENV === "production";
 loadEnv(process.env.NODE_ENV);
 
 /* setup database connection */
-dbStart();
+await dbStart();
 
 setupDirectories({ exists: existsSync, mkdir: mkdirSync });
 

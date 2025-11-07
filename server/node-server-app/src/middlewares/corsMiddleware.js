@@ -1,21 +1,18 @@
 import cors from "cors";
 
 function setupCorsMiddleware(app) {
-    // Environment-specific origins
-    const allowedOrigins = [
-        "http://localhost:5173",
-        "https://localhost:5173"
+    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
+        "http://localhost:5173"
     ];
 
     const corsOptions = {
-        origin: function (origin, callback) {
-            // Allow requests with no origin (mobile apps, etc.)
+        origin: (origin, callback) => {
+            // allow mobile / curl / SSR: clients that don't generally send origin header
             if (!origin) return callback(null, true);
-
-            if (allowedOrigins.indexOf(origin) !== -1) {
+            if (allowedOrigins.includes(origin)) {
                 callback(null, true);
             } else {
-                callback(new Error("Not allowed by CORS"));
+                callback(new Error(`Origin ${origin} not allowed by CORS`));
             }
         },
         credentials: true,

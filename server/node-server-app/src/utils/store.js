@@ -27,16 +27,16 @@ class KVStore {
      * @param {string} key The key for the value to be stored
      * @param {string|number} value The value
      */
-    store(key, value) {
-        this.stores.forEach(s => s.store(key, value));
+    async store(key, value) {
+        this.stores.forEach(async (s) => await s.store(key, value));
     }
 
     /**
      * Fetches the value for a given key.
      * @param {string} key The key for which the value will be retrieved
-     * @returns {string|number}
+     * @returns {Promise<string|number>}
      */
-    retrieve(key) {
+    async retrieve(key) {
         if (!key || typeof key !== "string") {
             throw new TypeError("Param key should be of type string.");
         }
@@ -44,8 +44,8 @@ class KVStore {
             throw new Error("ERROR: no store available!");
         }
         for (const store of this.stores) {
-            const value = store.retrieve(key);
-            if (value !== null) {
+            const value = await store.retrieve(key);
+            if (value !== undefined && value !== null) {
                 return value;
             }
         }
@@ -56,8 +56,8 @@ class KVStore {
      * Removes the kv entry.
      * @param {string} key The key for which kv entry will be removed
      */
-    eject(key) {
-        this.stores.forEach(s => s.eject(key));
+    async eject(key) {
+        this.stores.forEach(async (s) => await s.eject(key));
     }
 }
 
@@ -65,13 +65,29 @@ class MemoryStore {
     constructor() {
         this.storage = {};
     }
-    store(key, value) {
+    /**
+     *
+     * @param {string} key
+     * @param {string|number} value
+     */
+    async store(key, value) {
         this.storage[String(key)] = value;
     }
-    retrieve(key) {
+
+    /**
+     *
+     * @param {string} key
+     * @returns {Promise<string|number>}
+     */
+    async retrieve(key) {
         return this.storage[String(key)] || null;
     }
-    eject(key) {
+
+    /**
+     *
+     * @param {string} key
+     */
+    async eject(key) {
         delete this.storage[String(key)];
     }
 }
@@ -89,7 +105,7 @@ class TmpFileStore {
      * @param {string} key The key for the value to be stored
      * @param {string|number} value The value
      */
-    store(key, value) {
+    async store(key, value) {
         if (!key || typeof key !== "string") {
             throw new TypeError("Param key should be of type string.");
         }
@@ -98,8 +114,8 @@ class TmpFileStore {
         let updated = false;
 
         // Update existing key or add new key
-        for (const line of lines) {
-            const [k,] = line.split("=");
+        for (const line of await lines) {
+            const [k,] = line.split("=", 2);
             if (k === key) {
                 newLines.push(`${key}=${value}`);
                 updated = true;
@@ -119,15 +135,15 @@ class TmpFileStore {
     /**
      * Retrieves the value for a given key from the file.
      * @param {string} key The key for which the value will be retrieved
-     * @returns {string|number|null}
+     * @returns {Promise<string|number|null>}
      */
-    retrieve(key) {
+    async retrieve(key) {
         if (!key || typeof key !== "string") {
             throw new TypeError("Param key should be of type string.");
         }
         const lines = this._readLines();
-        for (const line of lines) {
-            const [k, v] = line.split("=");
+        for (const line of await lines) {
+            const [k, v] = line.split("=", 2);
             if (k === key) {
                 return v;
             }
@@ -139,13 +155,13 @@ class TmpFileStore {
      * Removes a key-value pair from the file.
      * @param {string} key The key for which the entry will be removed
      */
-    eject(key) {
+    async eject(key) {
         if (!key || typeof key !== "string") {
             throw new TypeError("Param key should be of type string.");
         }
-        const lines = this._readLines();
+        const lines = await this._readLines();
         const newLines = lines.filter(line => {
-            const [k] = line.split("=");
+            const [k,] = line.split("=", 2);
             return k !== key;
         });
         write(this.filename, newLines.join("\n"), "utf-8");
@@ -153,13 +169,14 @@ class TmpFileStore {
 
     /**
      * Helper: Reads all lines from the file.
-     * @returns {string[]}
+     * @returns {Promise<string[]>}
      */
-    _readLines() {
+    async _readLines() {
         try {
             const data = read(this.filename, "utf-8");
             return data.split("\n").filter(line => line.trim() !== "");
         } catch (err) {
+            console.error({ err });
             throw new Error(`Failed to read file: ${err.message}`);
         }
     }
@@ -172,25 +189,40 @@ class DBStore {
      * @param {string} key
      * @param {string} value
      */
-    store(key, value) {
-        createOrUpdateKVPair(key, value).then(console.log).catch(console.error);
+    async store(key, value) {
+        try {
+            await createOrUpdateKVPair(key, value);
+        } catch (err) {
+            console.error({ error: err });
+            throw err;
+        }
     }
 
     /**
      * Returns the value for the key from the database
      * @param {string} key
-     * @returns {string} the value
+     * @returns {Promise<string>}
      */
-    retrieve(key) {
-        return getKVPair(key).then(data => data).catch(console.error);
+    async retrieve(key) {
+        try {
+            return await getKVPair(key);
+        } catch (err) {
+            console.error({ error: err });
+            throw err;
+        }
     }
 
     /**
      * Deletes a key-value pair from the database.
      * @param {string} key
      */
-    eject(key) {
-        deleteKVPair(key).then(console.log).catch(console.error);
+    async eject(key) {
+        try {
+            await deleteKVPair(key);
+        } catch (err) {
+            console.error({ error: err });
+            throw err;
+        }
     }
 }
 

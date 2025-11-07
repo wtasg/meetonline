@@ -5,6 +5,7 @@ describe("getFormattedDate", () => {
     beforeEach(() => {
         jest.useFakeTimers();
     });
+
     it("should return date in YYYY_MM_DD_HH_MM_SS format", () => {
         const result = getFormattedDate();
 

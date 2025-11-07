@@ -6,7 +6,6 @@ import { UTC } from "./date";
  * @returns {string|null} Cookie value
  */
 function readCookie(name = "example-name") {
-    console.log("readCookie", name);
     const cookie = readAllCookies()
         .filter(cookie => cookie.startsWith(name))
         .filter(cookie => cookie.split("=")[0] === name);
@@ -30,7 +29,6 @@ function readAllCookies() {
         return cookies;
     }
     cookies = raw.split("; ");
-    console.log({ cookies });
     return cookies;
 }
 

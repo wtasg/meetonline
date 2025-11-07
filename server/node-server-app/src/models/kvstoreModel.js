@@ -24,15 +24,15 @@ class KVStoreModel {
 
         const instance = new KVStoreModel();
         instance.id = row.id;
-        instance.key = row.key;
-        instance.value = row.value;
+        instance.key = row.k;
+        instance.value = row.v;
         return instance;
     }
 
     static toDatabaseFormat(model) {
         return {
-            key: model.key,
-            value: model.value
+            k: model.key,
+            v: model.value
         };
     }
 }
