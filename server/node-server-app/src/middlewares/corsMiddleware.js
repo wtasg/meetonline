@@ -9,7 +9,7 @@ function setupCorsMiddleware(app) {
         origin: (origin, callback) => {
             // allow mobile / curl / SSR: clients that don't generally send origin header
             if (!origin) return callback(null, true);
-            if (allowedOrigins.includes(origin)) {
+            if (allowedOrigins.includes(origin.toLocaleLowerCase())) {
                 callback(null, true);
             } else {
                 callback(new Error(`Origin ${origin} not allowed by CORS`));

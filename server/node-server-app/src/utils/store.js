@@ -81,7 +81,10 @@ class MemoryStore {
      * @returns {Promise<string|number>}
      */
     async retrieve(key) {
-        return this.storage[String(key)] || null;
+        const storageKey = String(key);
+        return Object.prototype.hasOwnProperty.call(this.storage, storageKey)
+            ? this.storage[storageKey]
+            : null;
     }
 
     /**
