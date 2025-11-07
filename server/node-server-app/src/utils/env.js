@@ -8,12 +8,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 /**
- * Loads correct environment file based on current stage of execution.
- * @param {string} stage
+ * Loads docker.env file
  * @returns {{envRel: string, envPath: string}}
  */
-function loadEnv(stage = "development") {
-    const envRel = `../../${stage === "production" ? ".env" : "local.env"}`;
+function loadEnv() {
+    const envRel = "../../docker.env";
 
     try {
         const envPath = resolve(__dirname, envRel);

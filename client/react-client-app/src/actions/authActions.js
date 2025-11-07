@@ -1,6 +1,6 @@
 import { login, signup, logout, prelogin, presignup } from "../net/auth";
 import { user_session } from "../session";
-import { hasUserSession } from "../utils/session";
+import { deleteCookie } from "../utils/cookie";
 
 async function preLoginAction() {
     await prelogin();
@@ -40,15 +40,18 @@ async function signupAction({ username, password }) {
 }
 
 async function logoutAction() {
-    console.log(user_session, user_session.retrieve("username"));
-    if (!hasUserSession()) {
+    const usernameInSession = user_session.retrieve("username");
+    if (!usernameInSession) {
         throw new Error("Username not found!");
     }
-    const result = await logout({ username: user_session.retrieve("username") });
+    // server session destruction
+    const result = await logout({ username: usernameInSession });
     if (!result.ok) {
-        throw new Error("Could not logout!");
+        throw new Error("Could not logout from server!");
     }
+
     user_session.eject("username");
+    deleteCookie("loggedin");
     return result;
 }
 

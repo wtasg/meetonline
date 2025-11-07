@@ -1,8 +1,10 @@
-import { UPLOAD_DIR, CERTS_DIR, setupDirectories } from "../../src/utils/fs.js";
 import { test, beforeEach, afterEach, expect, jest } from "@jest/globals";
+
+import { UPLOAD_DIR, CERTS_DIR, setupDirectories } from "../../src/utils/fs.js";
 
 beforeEach(() => {
     jest.restoreAllMocks();
+    jest.useFakeTimers();
 });
 
 afterEach(() => {
@@ -22,8 +24,8 @@ test("setupDirectories creates missing directories and logs creation (both missi
 
     setupDirectories({ exists, mkdir });
 
-    expect(exists).toHaveBeenCalledTimes(2);
-    expect(mkdir).toHaveBeenCalledTimes(2);
+    expect(exists).toHaveBeenCalledTimes(3);
+    expect(mkdir).toHaveBeenCalledTimes(3);
     expect(mkdir).toHaveBeenCalledWith(UPLOAD_DIR, { recursive: true });
     expect(mkdir).toHaveBeenCalledWith(CERTS_DIR, { recursive: true });
     expect(logSpy).toHaveBeenCalled();
@@ -37,10 +39,10 @@ test("setupDirectories creates only the missing directory when one exists", () =
 
     setupDirectories({ exists, mkdir });
 
-    expect(exists).toHaveBeenCalledTimes(2);
-    expect(mkdir).toHaveBeenCalledTimes(1);
+    expect(exists).toHaveBeenCalledTimes(3);
+    expect(mkdir).toHaveBeenCalledTimes(2);
     expect(mkdir).toHaveBeenCalledWith(CERTS_DIR, { recursive: true });
-    expect(logSpy).toHaveBeenCalledTimes(1);
+    expect(logSpy).toHaveBeenCalledTimes(2);
     expect(logSpy.mock.calls[0][0]).toContain("[setupDirectories]");
 });
 
@@ -51,7 +53,7 @@ test("setupDirectories does nothing when directories already exist", () => {
 
     setupDirectories({ exists, mkdir });
 
-    expect(exists).toHaveBeenCalledTimes(2);
+    expect(exists).toHaveBeenCalledTimes(3);
     expect(mkdir).not.toHaveBeenCalled();
     expect(logSpy).not.toHaveBeenCalled();
 });

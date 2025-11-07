@@ -4,6 +4,7 @@ import { projectRoot } from "./projectRoot.js";
 
 const UPLOAD_DIR = join(projectRoot, "uploads");
 const CERTS_DIR = join(projectRoot, "certs");
+const TMP_DIR = join(projectRoot, "tmp");
 
 /**
  * Generates directories for server
@@ -11,7 +12,7 @@ const CERTS_DIR = join(projectRoot, "certs");
  */
 function setupDirectories({ exists, mkdir }) {
     try {
-        const directories = [UPLOAD_DIR, CERTS_DIR];
+        const directories = [UPLOAD_DIR, CERTS_DIR, TMP_DIR];
         directories.forEach((dir) => {
             if (!exists(dir)) {
                 mkdir(dir, { recursive: true });
@@ -24,4 +25,4 @@ function setupDirectories({ exists, mkdir }) {
     }
 }
 
-export { UPLOAD_DIR, CERTS_DIR, setupDirectories };
+export { UPLOAD_DIR, CERTS_DIR, TMP_DIR, setupDirectories };

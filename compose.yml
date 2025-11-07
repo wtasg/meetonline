@@ -29,6 +29,7 @@ services:
     volumes:
       - server_uploads:/usr/src/app/uploads
       - server_certs:/usr/src/app/certs
+      - server_tmp:/usr/src/app/tmp
     restart: no
 
   database:
@@ -49,4 +50,5 @@ volumes:
   db_data:
   server_uploads:
   server_certs:
+  server_tmp:
 

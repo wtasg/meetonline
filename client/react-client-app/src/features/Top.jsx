@@ -20,10 +20,13 @@ function Top() {
     }, []);
 
     async function onLogout() {
-        await logoutAction();
-        setShowLogoutButton(false);
+        try {
+            await logoutAction();
+            setShowLogoutButton(false);
+        } catch (err) {
+            console.error(err);
+        }
     }
-
     async function onLogin({ username, password }) {
         const isLoggedIn = await loginAction({ username, password });
         if (isLoggedIn) {
