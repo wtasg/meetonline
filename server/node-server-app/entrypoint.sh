@@ -6,7 +6,7 @@
 set -euxo pipefail
 
 # Files we will check for environment variables (in order)
-ENV_FILE_PATHS=".env local.env docker.env"
+ENV_FILE_PATHS="docker.env"
 
 for f in $ENV_FILE_PATHS; do
   if [ -f "$f" ]; then

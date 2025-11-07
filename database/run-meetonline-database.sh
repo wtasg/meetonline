@@ -33,10 +33,10 @@ if docker ps --filter name=meetonline-database --format "{{.Names}}" | grep -w m
     docker run \
         --name meetonline-database \
         --env-file local.env \
-        --publish 54321:5432 \
+        --publish 5432:5432 \
         --volume pgdata:/var/lib/postgresql \
         --detach localhost/meetonline-database:latest
 fi
 
-echo "MeetOnline database container is running on port 54321"
+echo "MeetOnline database container is running on port 5432"
 echo "To connect: docker exec --interactive --tty meetonline-database psql --host=localhost --port=5432 --dbname=meetonline --username myuser --password"

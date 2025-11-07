@@ -15,7 +15,7 @@ docker build --no-cache --tag meetonline-database .
 docker run \
     --name meetonline-database \
     --env-file local.env \
-    --publish 54321:5432 \
+    --publish 5432:5432 \
     --volume pgdata:/var/lib/postgresql/data \
     --detach localhost/meetonline-database:latest
 

@@ -32,7 +32,7 @@ function signupHandlerGET(req, res) {
     /* todo: Generate a token here and send it.
      * This token will be consumed by POST /signup endpoint.
      */
-    res.status(200).json({ ok: true, message: "GET /signup says hello!" });
+    res.status(200).json({ ok: true, token });
 }
 
 async function signupHandlerPOST(req, res) {

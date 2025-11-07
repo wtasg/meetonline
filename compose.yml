@@ -40,7 +40,7 @@ services:
     env_file:
       - ./database/docker.env
     ports:
-      - "54321:5432"
+      - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql:Z
     restart: no
