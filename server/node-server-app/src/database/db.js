@@ -11,18 +11,18 @@ async function dbStart() {
         port: process.env.DB_PORT,
     };
 
-    if (pool === null) {
-        pool = new Pool(config);
-    } else {
-        return pool;
-    }
-
-    pool.on("error", (err) => {
-        console.error({ err });
-        process.exit(1);
-    });
-
     try {
+        if (pool === null) {
+            pool = new Pool(config);
+        } else {
+            return pool;
+        }
+
+        pool.on("error", (err) => {
+            console.error({ err });
+            process.exit(1);
+        });
+
         const client = await pool.connect();
         console.log("DB connected.");
         client.release();

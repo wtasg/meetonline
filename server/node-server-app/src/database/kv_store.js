@@ -24,7 +24,7 @@ async function createOrUpdateKVPair(key, value) {
 /**
  * Returns the value for the key from the database
  * @param {string} key
- * @returns {string}
+ * @returns {Promise<string|null>}
  * @throws {Error}
  */
 async function getKVPair(key) {
@@ -32,10 +32,10 @@ async function getKVPair(key) {
         const query = "SELECT * FROM kv_store WHERE key = $1";
         const values = [String(key)];
         const res = await pool.query(query, values);
-        if (res.rows.length === 0) {
-            return KVStoreModel.null();
-        }
-        return KVStoreModel.fromDatabaseRow(res.rows[0]);
+        let out = res.rows.length === 0 ?
+            KVStoreModel.null() :
+            KVStoreModel.fromDatabaseRow(res.rows[0]);
+        return out.value;
     } catch (error) {
         console.error("Error fetching key value from kv_store", { error });
         throw error;

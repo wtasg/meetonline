@@ -26,9 +26,10 @@ class KVStore {
      * Saves a kv entry
      * @param {string} key The key for the value to be stored
      * @param {string|number} value The value
+     * @returns {Promise<void>}
      */
     async store(key, value) {
-        this.stores.forEach(async (s) => await s.store(key, value));
+        await Promise.all(this.stores.map((s) => s.store(key, value)));
     }
 
     /**
@@ -57,7 +58,7 @@ class KVStore {
      * @param {string} key The key for which kv entry will be removed
      */
     async eject(key) {
-        this.stores.forEach(async (s) => await s.eject(key));
+        await Promise.all(this.stores.map((s) => s.eject(key)));
     }
 }
 

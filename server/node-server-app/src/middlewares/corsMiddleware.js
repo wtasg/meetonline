@@ -1,7 +1,7 @@
 import cors from "cors";
 
 function setupCorsMiddleware(app) {
-    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
+    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map(s => s.trim().toLocaleLowerCase()) || [
         "http://localhost:5173"
     ];
 

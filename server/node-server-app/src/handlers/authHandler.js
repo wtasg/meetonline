@@ -141,7 +141,7 @@ async function logoutHandlerPOST(req, res) {
     if (storedSession !== sessionId) {
         return res.status(403).json({ ok: false, logout: false, message: "Invalid session" });
     }
-    authStore.eject(`session_for_${username}`);
+    await authStore.eject(`session_for_${username}`);
 
     // clear cookies
     res.clearCookie("session-1");

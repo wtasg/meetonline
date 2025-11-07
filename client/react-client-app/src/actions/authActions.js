@@ -46,12 +46,12 @@ async function logoutAction() {
     }
     // server session destruction
     const result = await logout({ username: usernameInSession });
-
-    user_session.eject("username");
-    deleteCookie("loggedin");
     if (!result.ok) {
         throw new Error("Could not logout from server!");
     }
+
+    user_session.eject("username");
+    deleteCookie("loggedin");
     return result;
 }
 
