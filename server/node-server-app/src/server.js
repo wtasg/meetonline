@@ -9,11 +9,16 @@ import morgan from "morgan";
 import compression from "compression";
 import * as cookieParserPkg from "cookie-parser";
 
+// middlewares
 import { setupCorsMiddleware } from "./middlewares/corsMiddleware.js";
+
+// endpoint handlers
 import { setupRootHandlers } from "./handlers/rootHandler.js";
 import { setupAuthHandlers } from "./handlers/authHandler.js";
 import { setupGracefulShutdown } from "./utils/gracefulSetup.js";
 import { setupUploadHandler } from "./handlers/uploadHandler.js";
+import { setupUserAccountHandler } from "./handlers/userAccountHandler.js";
+
 import { setupDirectories } from "./utils/fs.js";
 import { loadEnv } from "./utils/env.js";
 import { projectRoot } from "./utils/projectRoot.js";
@@ -43,6 +48,7 @@ app.use("/uploads", express.static(pathResolve(projectRoot, "uploads")));
 setupRootHandlers(app);
 setupAuthHandlers(app);
 setupUploadHandler(app);
+setupUserAccountHandler(app);
 
 /* Setting up Servers */
 const { SERVER_HTTP_PORT, SERVER_HTTPS_PORT } = process.env;

@@ -1,10 +1,7 @@
 import { createUserAccount, getUserAccountByUsername } from "../database/user_account.js";
 import { comparePassword, hashWithSalt, saltWithRounds } from "../utils/hash.js";
 import { v4 as uuidv4 } from "uuid";
-import { KVStore } from "../utils/store.js";
-
-const authStore = new KVStore(["memory", "file", "db"]);
-const tokenStore = new KVStore(["memory"]);
+import { authStore, tokenStore } from "../utils/store.js";
 
 /**
  *
@@ -131,6 +128,13 @@ async function loginHandlerPOST(req, res) {
 }
 
 async function logoutHandlerPOST(req, res) {
+    await destroySession(req, res);
+
+    res.status(200)
+        .json({ ok: true, logout: true, message: "Logout successful!" });
+}
+
+async function destroySession(req, res) {
     const { cookies } = req;
     const sessionId = cookies?.["session-1"];
     const username = cookies?.username;
@@ -138,17 +142,19 @@ async function logoutHandlerPOST(req, res) {
     res.clearCookie("session-1");
     res.clearCookie("username");
     res.clearCookie("loggedin");
+
     if (!sessionId || !username) {
         // This could be silent.
-        return res.status(400).json({ ok: false, logout: false, message: "Missing session." });
+        return res.status(400)
+            .json({ ok: false, logout: false, message: "Missing session." });
     }
     const storedSession = await authStore.retrieve(`session_for_${username}`);
     if (storedSession !== sessionId) {
         // This could be silent.
-        return res.status(403).json({ ok: false, logout: false, message: "Invalid session." });
+        return res.status(403)
+            .json({ ok: false, logout: false, message: "Invalid session." });
     }
     await authStore.eject(`session_for_${username}`);
-    res.status(200).json({ ok: true, logout: true, message: "Logout successful!" });
 }
 
-export { setupAuthHandlers };
+export { setupAuthHandlers, authStore };

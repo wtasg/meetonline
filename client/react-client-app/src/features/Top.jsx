@@ -6,9 +6,10 @@ import { Logout } from "./Logout";
 import { user_session } from "../session";
 import { hasUserSession } from "../utils/session";
 import { useEffect, useState } from "react";
+import { UserAccount } from "./UserAccount";
 
 function Top() {
-    const [showLogoutButton, setShowLogoutButton] = useState(hasUserSession());
+    const [hasSession, setHasSession] = useState(hasUserSession());
 
     useEffect(() => {
         (async function () {
@@ -22,38 +23,43 @@ function Top() {
     async function onLogout() {
         try {
             await logoutAction();
-            setShowLogoutButton(false);
+            setHasSession(false);
         } catch (err) {
             console.error(err);
+        } finally {
+            window.location.reload(false);
         }
     }
     async function onLogin({ username, password }) {
         const isLoggedIn = await loginAction({ username, password });
         if (isLoggedIn) {
-            setShowLogoutButton(true);
+            setHasSession(true);
         } else {
-            setShowLogoutButton(false);
+            setHasSession(false);
         }
     }
 
     async function onSignup({ username, password }) {
         await signupAction({ username, password });
-        setShowLogoutButton(false);
+        setHasSession(false);
     }
 
     return <>
         <Welcome />
         {
-            !showLogoutButton &&
+            !hasSession &&
             <Login onlogin={onLogin} />
         }
         {
-            !showLogoutButton &&
+            !hasSession &&
             <Signup onsignup={onSignup} />
         }
         {
-            showLogoutButton &&
+            hasSession &&
             <Logout onlogout={onLogout} username={() => user_session.retrieve("username")} />
+        }
+        {
+            hasSession && <UserAccount />
         }
     </>;
 }
