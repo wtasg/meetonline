@@ -21,8 +21,6 @@ WORKDIR /server
 COPY --from=serverbuilder /server/node_modules ./node_modules
 COPY --from=serverbuilder /server .
 
-RUN chown -R node:node /server
-
 RUN mkdir -p /server/uploads && \
     chown -R node:node /server/uploads && \
     chmod -R 755 /server/uploads

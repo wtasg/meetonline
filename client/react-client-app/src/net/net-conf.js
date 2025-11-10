@@ -5,6 +5,7 @@ const CONF = {
         LOGIN: "login",
         SIGNUP: "signup",
         LOGOUT: "logout",
+        USER_ACCOUNT: "user_account",
     }
 };
 

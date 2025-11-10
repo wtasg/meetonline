@@ -230,4 +230,7 @@ class DBStore {
     }
 }
 
-export { KVStore };
+const authStore = new KVStore(["memory", "file", "db"]);
+const tokenStore = new KVStore(["memory"]);
+
+export { KVStore, authStore, tokenStore };
