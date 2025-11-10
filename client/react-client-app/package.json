@@ -12,7 +12,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "build:certs": "mkdir --parents .cert && openssl req -x509 -newkey rsa:4096 -nodes -keyout .cert/key.pem -out .cert/cert.pem -subj \"/CN=localhost\" -days 365"
+    "build:certs": "mkdir -p .cert && openssl req -x509 -newkey rsa:4096 -nodes -keyout .cert/key.pem -out .cert/cert.pem -subj \"/CN=localhost\" -days 365"
   },
   "dependencies": {
     "react": "^19.2.0",
