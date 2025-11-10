@@ -12,7 +12,11 @@ services:
     depends_on:
       - server
     volumes:
+<<<<<<< HEAD
       - client_certs:/client/.cert
+=======
+      - ./server/node-server-app/certs:/usr/src/app/certs:ro
+>>>>>>> 7498f3c (update client to deal with https server)
     restart: no
 
   server:
