@@ -32,7 +32,12 @@ function readAllCookies() {
     return cookies;
 }
 
-
+/**
+ *
+ * @param {string} name
+ * @param {string} path
+ * @returns {null}
+ */
 function deleteCookie(name = "example-name", path = "/") {
     document.cookie = `${name}=; Path=${path}; Expires=${UTC.zero()}; Max-Age=0;`;
     return null;

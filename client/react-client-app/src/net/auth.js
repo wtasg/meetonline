@@ -49,6 +49,11 @@ async function signup({ username, password }) {
     }).then((res) => res.json());
 }
 
+/**
+ *
+ * @param {{username: string}} options
+ * @returns
+ */
 async function logout({ username }) {
     const result = await (await fetch(`${CONF.SERVER}/${CONF.URLS.LOGOUT}`, {
         credentials: "include",
@@ -60,11 +65,7 @@ async function logout({ username }) {
         body: JSON.stringify({ username })
     })).json();
 
-    if (result.ok) {
-        return result;
-    } else {
-        throw new Error("logout error");
-    }
+    return result;
 }
 
 export { login, signup, logout, prelogin, presignup };

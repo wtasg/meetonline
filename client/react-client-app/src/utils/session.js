@@ -1,12 +1,12 @@
 import { user_session } from "../session";
 import { readCookie } from "./cookie";
 
-function hasCookies() {
+function hasAuthCookies() {
     return !!readCookie("loggedin");
 }
 
 function hasUserSession() {
-    return user_session && user_session.retrieve("username") !== null;
+    return hasAuthCookies() && user_session && user_session.retrieve("username") !== null;
 }
 
-export { hasUserSession, hasCookies };
+export { hasUserSession, hasAuthCookies };
