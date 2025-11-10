@@ -1,19 +1,33 @@
-# Stage 1: Build React App
-FROM node:25-bullseye AS builder
+# Stage 1: Build React client
+FROM node:25-bullseye AS clientbuilder
 
-WORKDIR /usr/src/app
-COPY package*.json ./
+WORKDIR /client
+
+COPY package.json package-lock.json ./
 RUN npm ci
+
 COPY . .
+
 RUN npm run build
 
 # Stage 2: Serve built files using 'serve'
 FROM node:25-bullseye
-WORKDIR /usr/src/app
-RUN npm install -g serve
+WORKDIR /client
+RUN npm install --location=global serve
 
-COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=clientbuilder /client/dist ./dist
+COPY --from=clientbuilder /client/.cert ./.cert
+
+RUN chown -R node:node /client
+
+RUN chown -R node:node .cert && \
+    chmod 600 .cert/key.pem && \
+    chmod 644 .cert/cert.pem
 
 EXPOSE 5173
 
-CMD ["serve", "-s", "dist", "-l", "5173"]
+USER node
+
+CMD ["serve", "-s", "dist", "--listen", "5173"]
+# Following doesn't work: it cannot find the files.
+# CMD ["npx", "serve", "-s", "dist", "--ssl-key","/client/.cert/key.pem", "--ssl-cert", "/client/.cert/cert.pem",  "--listen", "5443"]

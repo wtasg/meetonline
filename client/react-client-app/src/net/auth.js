@@ -2,7 +2,7 @@ import { readCookie } from "../utils/cookie.js";
 import { CONF } from "./net-conf.js";
 
 async function prelogin() {
-    const res = await fetch(`${CONF.SERVER}/${CONF.URLS.LOGIN}`, {
+    const res = await fetch(`${CONF.HTTP_SERVER}/${CONF.URLS.LOGIN}`, {
         credentials: "include",
         method: "GET",
         headers: {
@@ -14,7 +14,7 @@ async function prelogin() {
 }
 
 async function presignup() {
-    const res = await fetch(`${CONF.SERVER}/${CONF.URLS.SIGNUP}`, {
+    const res = await fetch(`${CONF.HTTP_SERVER}/${CONF.URLS.SIGNUP}`, {
         credentials: "include",
         method: "GET",
         headers: {
@@ -26,7 +26,7 @@ async function presignup() {
 }
 
 async function login({ username, password }) {
-    return fetch(`${CONF.SERVER}/${CONF.URLS.LOGIN}`, {
+    return fetch(`${CONF.HTTP_SERVER}/${CONF.URLS.LOGIN}`, {
         credentials: "include",
         method: "POST",
         headers: {
@@ -38,7 +38,7 @@ async function login({ username, password }) {
 }
 
 async function signup({ username, password }) {
-    return fetch(`${CONF.SERVER}/${CONF.URLS.SIGNUP}`, {
+    return fetch(`${CONF.HTTP_SERVER}/${CONF.URLS.SIGNUP}`, {
         credentials: "include",
         method: "POST",
         headers: {
@@ -52,10 +52,10 @@ async function signup({ username, password }) {
 /**
  *
  * @param {{username: string}} options
- * @returns
+ * @returns {Promise<{ok:boolean,logout:boolean,message:string}>}
  */
 async function logout({ username }) {
-    const result = await (await fetch(`${CONF.SERVER}/${CONF.URLS.LOGOUT}`, {
+    const result = await (await fetch(`${CONF.HTTP_SERVER}/${CONF.URLS.LOGOUT}`, {
         credentials: "include",
         method: "POST",
         headers: {

@@ -16,7 +16,7 @@
     "cover:nyc": "echo \"not working\"",
     "cover:jest": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" ./node_modules/.bin/jest --runInBand --coverage",
     "cover": "npm run cover:jest",
-    "build:certs": "mkdir -p certs && openssl req -x509 -newkey rsa:2048 -nodes -keyout certs/server.key -out certs/server.crt -subj \"/CN=localhost\" -days 365",
+    "build:certs": "mkdir -p certs && openssl req -x509 -newkey rsa:4096 -nodes -keyout certs/server.key -out certs/server.crt -subj \"/CN=localhost\" -days 365",
     "start": "NODE_ENV=production node src/server.js",
     "dev": "npm run build:certs && NODE_ENV=development node src/server.js"
   },

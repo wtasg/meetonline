@@ -22,4 +22,4 @@ done
 
 echo "Starting server with NODE_ENV=${NODE_ENV:-not set} PORT=${SERVER_PORT:-9006}"
 
-exec "$@"
+node src/server.js

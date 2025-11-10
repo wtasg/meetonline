@@ -1,38 +1,39 @@
 # build stage
-FROM node:25-bullseye AS builder
+FROM node:25-bullseye AS serverbuilder
 
-WORKDIR /usr/src/app
+WORKDIR /server
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends python3 build-essential make g++ && \
+    apt-get install --yes --no-install-recommends python3 build-essential make g++ && \
     rm -rf /var/lib/apt/lists/*
 
-COPY package.json package-lock.json* ./
+COPY package.json package-lock.json ./
 
-RUN npm install --omit=dev --no-audit --no-fund
+RUN npm ci --only-production
 
 COPY . .
 
-# use builder
-
+# use serverbuilder
 FROM node:25-slim
 
-WORKDIR /usr/src/app
+WORKDIR /server
 
-COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app .
+COPY --from=serverbuilder /server/node_modules ./node_modules
+COPY --from=serverbuilder /server .
 
-RUN mkdir -p /usr/src/app/uploads && \
-    chown -R node:node /usr/src/app/uploads && \
-    chmod -R 755 /usr/src/app/uploads
+RUN chown -R node:node /server
 
-RUN mkdir -p /usr/src/app/certs && \
-    chown -R node:node /usr/src/app/certs && \
-    chmod -R 755 /usr/src/app/certs
+RUN mkdir -p /server/uploads && \
+    chown -R node:node /server/uploads && \
+    chmod -R 755 /server/uploads
 
-RUN mkdir -p /usr/src/app/tmp && \
-    chown -R node:node /usr/src/app/tmp && \
-    chmod -R 755 /usr/src/app/tmp
+RUN mkdir -p /server/certs && \
+    chown -R node:node /server/certs && \
+    chmod -R 755 /server/certs
+
+RUN mkdir -p /server/tmp && \
+    chown -R node:node /server/tmp && \
+    chmod -R 755 /server/tmp
 
 ENV NODE_ENV=production
 
@@ -40,9 +41,8 @@ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 9006 9443
+USER node
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
-USER node
-
-CMD ["node", "src/server.js"]
+# CMD ["node", "src/server.js"]
