@@ -1,5 +1,6 @@
 const CONF = {
-    SERVER: "//localhost:9006",
+    HTTP_SERVER: "http://localhost:9006",
+    HTTPS_SERVER: "https://localhost:9443",
     URLS: {
         LOGIN: "login",
         SIGNUP: "signup",

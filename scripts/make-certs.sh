@@ -7,3 +7,7 @@ npm install
 npm run build:certs
 cd ../..
 
+cd client/react-client-app
+npm install
+npm run build:certs
+cd ../..

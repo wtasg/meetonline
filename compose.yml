@@ -11,6 +11,8 @@ services:
       - "5173:5173"
     depends_on:
       - server
+    volumes:
+      - client_certs:/client/.cert
     restart: no
 
   server:
@@ -27,9 +29,9 @@ services:
     depends_on:
       - database
     volumes:
-      - server_uploads:/usr/src/app/uploads
-      - server_certs:/usr/src/app/certs
-      - server_tmp:/usr/src/app/tmp
+      - server_uploads:/server/uploads
+      - server_certs:/server/certs
+      - server_tmp:/server/tmp
     restart: no
 
   database:
@@ -51,4 +53,4 @@ volumes:
   server_uploads:
   server_certs:
   server_tmp:
-
+  client_certs:
