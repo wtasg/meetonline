@@ -40,18 +40,17 @@ async function signupAction({ username, password }) {
 }
 
 async function logoutAction() {
+    deleteCookie("loggedin");
     const usernameInSession = user_session.retrieve("username");
     if (!usernameInSession) {
         throw new Error("Username not found!");
     }
+    user_session.eject("username");
     // server session destruction
     const result = await logout({ username: usernameInSession });
     if (!result.ok) {
         throw new Error("Could not logout from server!");
     }
-
-    user_session.eject("username");
-    deleteCookie("loggedin");
     return result;
 }
 

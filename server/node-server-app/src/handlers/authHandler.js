@@ -134,20 +134,20 @@ async function logoutHandlerPOST(req, res) {
     const { cookies } = req;
     const sessionId = cookies?.["session-1"];
     const username = cookies?.username;
-    if (!sessionId || !username) {
-        return res.status(400).json({ ok: false, logout: false, message: "Missing session" });
-    }
-    const storedSession = await authStore.retrieve(`session_for_${username}`);
-    if (storedSession !== sessionId) {
-        return res.status(403).json({ ok: false, logout: false, message: "Invalid session" });
-    }
-    await authStore.eject(`session_for_${username}`);
-
     // clear cookies
     res.clearCookie("session-1");
     res.clearCookie("username");
     res.clearCookie("loggedin");
-
+    if (!sessionId || !username) {
+        // This could be silent.
+        return res.status(400).json({ ok: false, logout: false, message: "Missing session." });
+    }
+    const storedSession = await authStore.retrieve(`session_for_${username}`);
+    if (storedSession !== sessionId) {
+        // This could be silent.
+        return res.status(403).json({ ok: false, logout: false, message: "Invalid session." });
+    }
+    await authStore.eject(`session_for_${username}`);
     res.status(200).json({ ok: true, logout: true, message: "Logout successful!" });
 }
 

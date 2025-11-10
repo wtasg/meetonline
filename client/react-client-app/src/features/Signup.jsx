@@ -27,7 +27,7 @@ function Signup({ onsignup }) {
     return (<>
         <p>Signup</p>
         <input type="text" id="signup_username" placeholder="signup_username" value={signup_username} onChange={e => updateSignupUsername(e.target.value)} />
-        <input type="text" id="signup_password" placeholder="signup_password" value={signup_password} onChange={e => updateSignupPassword(e.target.value)} />
+        <input type="password" id="signup_password" placeholder="signup_password" value={signup_password} onChange={e => updateSignupPassword(e.target.value)} />
         <button type="button" onClick={onSignup}>Signup</button>
     </>);
 }
