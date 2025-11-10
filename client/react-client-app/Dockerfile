@@ -4,7 +4,7 @@ FROM node:25-bullseye AS clientbuilder
 WORKDIR /client
 
 COPY package.json package-lock.json ./
-RUN npm ci --only-production
+RUN npm ci
 
 COPY . .
 
