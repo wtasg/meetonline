@@ -21,7 +21,8 @@ COPY --from=clientbuilder /client/.cert ./.cert
 RUN chown -R node:node /client
 
 RUN chown -R node:node .cert && \
-    chmod -R 644 .cert/*
+    chmod 600 .cert/key.pem && \
+    chmod 644 .cert/cert.pem
 
 EXPOSE 5173
 
