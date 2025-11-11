@@ -12,7 +12,8 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "build:certs": "mkdir -p .cert && openssl req -x509 -newkey rsa:4096 -nodes -keyout .cert/key.pem -out .cert/cert.pem -subj \"/CN=localhost\" -days 365"
+    "build:certs": "mkdir -p .cert && openssl req -x509 -newkey rsa:4096 -nodes -keyout .cert/key.pem -out .cert/cert.pem -subj \"/CN=localhost\" -days 365",
+    "e2e": "npx playwright test"
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -20,10 +21,12 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.0",
+    "@playwright/test": "^1.56.1",
     "@stylistic/eslint-plugin": "^5.5.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^24.10.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.1.0",
