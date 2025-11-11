@@ -25,6 +25,8 @@
 ## sass             ✔
 # documentation
 ## docusaurus       ✔
+# Testing
+## Playwright       ✔
 
 ##
 ## mine
@@ -1253,3 +1255,13 @@ google-services.json
 # uploads and certificates
 server/node-server-app/uploads/
 server/node-server-app/images/
+
+
+
+## Testing
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
