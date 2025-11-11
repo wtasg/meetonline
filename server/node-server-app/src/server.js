@@ -8,6 +8,7 @@ import express from "express";
 import morgan from "morgan";
 import compression from "compression";
 import * as cookieParserPkg from "cookie-parser";
+import helmet from "helmet";
 
 // middlewares
 import { setupCorsMiddleware } from "./middlewares/corsMiddleware.js";
@@ -41,6 +42,7 @@ setupCorsMiddleware(app);
 app.use(compression());
 app.use(express.json());
 app.use(cookieParser());
+app.use(helmet());
 app.use(morgan(isProduction ? "combined" : "dev"));
 app.use("/uploads", express.static(pathResolve(projectRoot, "uploads")));
 
