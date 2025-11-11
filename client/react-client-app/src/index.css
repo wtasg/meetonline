@@ -14,17 +14,40 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    --min-gap: 4px 8px;
+    --margin: var(--min-gap);
+
+    --min-padding: 2px 4px;
+    --padding: var(--min-padding);
+
+    --min-button-width: 60px;
+    --min-input-width: 60px;
+    --min-input-height: 40px;
 }
 
 *,
 *::after,
 *::before {
     box-sizing: border-box;
+    margin: var(--margin);
+    padding: var(--padding);
+    line-height: 1.4;
 }
 
 body {
-    min-width: 320px;
-    min-height: 50vh;
+    min-width: 800px;
+    min-height: 100vh;
+}
+
+button {
+    min-width: var(--min-button-width);
+    min-height: var(--min-input-height);
+}
+
+input {
+    min-height: var(--min-input-height);
+    min-width: var(--min-input-width);
 }
 
 @media (prefers-color-scheme: light) {
