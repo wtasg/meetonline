@@ -30,24 +30,50 @@
 *::after,
 *::before {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    min-width: 800px;
+}
+
+button,
+a.btn,
+*[role="button"],
+input {
     margin: var(--margin);
     padding: var(--padding);
     line-height: 1.4;
 }
 
-body {
-    min-width: 800px;
-    min-height: 100vh;
-}
-
-button {
+button,
+a.btn,
+*[role="button"] {
     min-width: var(--min-button-width);
     min-height: var(--min-input-height);
+
 }
 
 input {
     min-height: var(--min-input-height);
     min-width: var(--min-input-width);
+}
+
+.flex {
+    display: flex;
+    gap: 20px;
+}
+
+.vflex {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    &.sb {
+        justify-content: space-between;
+    }
 }
 
 @media (prefers-color-scheme: light) {

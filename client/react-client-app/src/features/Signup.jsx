@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { hasUserSession } from "../utils/session";
+import { preSignupAction } from "../actions/authActions";
 
 function Signup({ onsignup }) {
     const [signup_password, set_signup_password] = useState("");
@@ -24,12 +26,32 @@ function Signup({ onsignup }) {
         set_signup_username("");
     }
 
-    return (<>
-        <p>Signup</p>
-        <input type="text" id="signup_username" placeholder="signup_username" value={signup_username} onChange={e => updateSignupUsername(e.target.value)} />
-        <input type="password" id="signup_password" placeholder="signup_password" value={signup_password} onChange={e => updateSignupPassword(e.target.value)} />
-        <button type="button" onClick={onSignup}>Signup</button>
-    </>);
+    useEffect(() => {
+        (async function () {
+            if (!hasUserSession()) {
+                await preSignupAction();
+            }
+        })();
+    }, []);
+
+    return (<div className="form signup vflex">
+        <h2>Signup</h2>
+        <div>
+            <label htmlFor="signup_username" className="flex">
+                <>Username:</>
+                <input type="text" id="signup_username" placeholder="signup_username" value={signup_username} onChange={e => updateSignupUsername(e.target.value)} />
+            </label>
+        </div>
+        <div>
+            <label htmlFor="signup_password" className="flex">
+                <>Password:</>
+                <input type="password" id="signup_password" placeholder="signup_password" value={signup_password} onChange={e => updateSignupPassword(e.target.value)} />
+            </label>
+        </div>
+        <div>
+            <button type="button" onClick={onSignup}>Signup</button>
+        </div>
+    </div>);
 }
 
 export { Signup };
