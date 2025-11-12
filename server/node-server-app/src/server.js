@@ -56,9 +56,7 @@ setupUserAccountHandler(app);
 const { SERVER_HTTP_PORT, SERVER_HTTPS_PORT } = process.env;
 
 const httpServer = createHttpServer(app);
-httpServer.listen(SERVER_HTTP_PORT, () => {
-    console.log(`Server running at http://localhost:${SERVER_HTTP_PORT}`);
-});
+httpServer.listen(SERVER_HTTP_PORT);
 setupGracefulShutdown(httpServer);
 
 try {
@@ -67,9 +65,7 @@ try {
         cert: readFileSync(pathResolve(projectRoot, "certs/server.crt")),
     };
     const httpsServer = createHttpsServer(sslOptions, app);
-    httpsServer.listen(SERVER_HTTPS_PORT, () => {
-        console.log(`Server running at https://localhost:${SERVER_HTTPS_PORT}`);
-    });
+    httpsServer.listen(SERVER_HTTPS_PORT);
     setupGracefulShutdown(httpsServer);
 } catch (error) {
     console.warn(error.message);

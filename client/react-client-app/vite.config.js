@@ -17,7 +17,14 @@ export default defineConfig({
     server: {
         https,
         host: "0.0.0.0",
-        port: 5173
+        port: 5173,
+        proxy: {
+            "/api": {
+                target: "https://localhost:9443",
+                changeOrigin: true,
+                secure: false
+            }
+        }
     },
     test: {
         globals: true,
