@@ -1,6 +1,6 @@
-FROM node:25-bullseye AS clientbuilder
+FROM node:25-bullseye
 
-WORKDIR /client
+WORKDIR /grahak
 
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -8,7 +8,3 @@ RUN npm ci
 COPY . .
 
 RUN npm run build -- --mode=production
-
-FROM busybox AS export
-COPY --from=clientbuilder /client/dist /dist
-COPY --from=clientbuilder /client/.cert /.cert
