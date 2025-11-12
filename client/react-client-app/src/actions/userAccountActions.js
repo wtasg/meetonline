@@ -8,7 +8,6 @@ import { userAccount } from "../net/userAccount.js";
 async function fetchUserAccount() {
     const username = user_session.retrieve("username");
     const ua = await userAccount({ username });
-    console.log({ ua });
     return ua;
 }
 

@@ -1,0 +1,17 @@
+.buttons {
+    min-height: calc(1.2 * var(--min-input-height));
+}
+
+.menu {
+    min-height: 600px;
+    min-width: 200px;
+    height: 100vh;
+}
+
+.menu[role="navigation"] ul {
+    padding: 0;
+
+    & li {
+        list-style: none
+    }
+}

@@ -1,24 +1,16 @@
 import { Welcome } from "../components/Welcome";
 import { Login } from "./Login";
 import { Signup } from "./Signup";
-import { loginAction, signupAction, logoutAction, preLoginAction, preSignupAction } from "../actions/authActions";
+import { loginAction, signupAction, logoutAction } from "../actions/authActions";
 import { Logout } from "./Logout";
 import { user_session } from "../session";
 import { hasUserSession } from "../utils/session";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { UserAccount } from "./UserAccount";
 
 function Top() {
     const [hasSession, setHasSession] = useState(hasUserSession());
-
-    useEffect(() => {
-        (async function () {
-            if (!hasUserSession()) {
-                await preLoginAction();
-                await preSignupAction();
-            }
-        })();
-    }, []);
+    const { pathname } = window.location;
 
     async function onLogout() {
         try {
@@ -34,6 +26,7 @@ function Top() {
         const isLoggedIn = await loginAction({ username, password });
         if (isLoggedIn) {
             setHasSession(true);
+            window.location = "/";
         } else {
             setHasSession(false);
         }
@@ -44,24 +37,29 @@ function Top() {
         setHasSession(false);
     }
 
-    return <>
-        <Welcome />
-        {
-            !hasSession &&
-            <Login onlogin={onLogin} />
-        }
-        {
-            !hasSession &&
-            <Signup onsignup={onSignup} />
-        }
-        {
-            hasSession &&
-            <Logout onlogout={onLogout} username={() => user_session.retrieve("username")} />
-        }
-        {
-            hasSession && <UserAccount />
-        }
-    </>;
+    switch (pathname) {
+        case "/login":
+            return !hasSession && <Login onLogin={onLogin} />;
+        case "/signup":
+            return !hasSession && <Signup onSignup={onSignup} />;
+        case "/account":
+            return hasSession && <UserAccount />;
+        case "/logout":
+            return hasSession ? <Logout onLogout={onLogout} username={() => user_session.retrieve("username")} /> : <div>You are logged out.</div>;
+        case "/":
+            return hasSession &&
+                <>
+                    <Welcome />
+                    <Logout onLogout={onLogout} username={() => user_session.retrieve("username")} />
+                </>;
+        default:
+            return <>
+                {!hasSession && <div>You are logged out.</div>}
+                {
+                    hasSession && <><Welcome /></>
+                }
+            </>;
+    }
 }
 
 export { Top };
