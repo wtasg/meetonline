@@ -43,4 +43,3 @@ USER node
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
-# CMD ["node", "src/server.js"]

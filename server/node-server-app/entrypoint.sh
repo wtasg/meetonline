@@ -20,6 +20,4 @@ for f in $ENV_FILE_PATHS; do
   fi
 done
 
-echo "Starting server with NODE_ENV=${NODE_ENV:-not set} PORT=${SERVER_PORT:-9006}"
-
 node src/server.js

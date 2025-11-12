@@ -9,11 +9,11 @@ services:
       - "443:443"
     volumes:
       - ./proxy/nginx.conf:/etc/nginx/nginx.conf:ro
-      - /dev/null:/etc/nginx/conf.d/default.conf   # disable default nginx page
+      - /dev/null:/etc/nginx/conf.d/default.conf
       - client_certs:/client/.cert
       - client_dist:/usr/share/nginx/html:ro
       - server_certs:/server/certs
-    restart: unless-stopped
+    restart: no
 
   client:
     build:
@@ -26,7 +26,7 @@ services:
     depends_on:
       - server
     volumes:
-      - client_dist:/out
+      - client_dist:/dist
     restart: no
 
   server:
@@ -37,10 +37,9 @@ services:
     container_name: meetonline-server
     env_file:
       - ./server/node-server-app/docker.env
-    ports:
-      - "9006:9006"
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     volumes:
       - server_uploads:/server/uploads
       - server_certs:/server/certs
@@ -60,6 +59,11 @@ services:
     volumes:
       - db_data:/var/lib/postgresql:Z
     restart: no
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   db_data:
