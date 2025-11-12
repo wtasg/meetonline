@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
+import { v4 as uuidv4 } from "uuid";
 
-const WEB_URL = "http://localhost:5173";
+const WEB_URL = "https://localhost";
 // HTTPS issues with browsers, might be related to accepting https self-signed certificates.
 const SECURE_WEB_URL = "https://localhost:5174";
 const PATH = WEB_URL;
@@ -56,13 +57,15 @@ test("can login", async ({ page }) => {
     await expect(page.locator("input#signup_password")).toBeVisible();
     await expect(page.locator("button", { name: "Signup" })).toBeVisible();
 
+    const username = uuidv4();
+    const password = uuidv4();
 
     // fill the form
-    await page.locator("input#signup_username").fill("user123");
-    await page.locator("input#signup_password").fill("pass123");
+    await page.locator("input#signup_username").fill(username);
+    await page.locator("input#signup_password").fill(password);
     await page.locator("button", { name: "Signup" }).filter({ visible: true }).click();
 
-     // load page
+    // load page
     await page.goto(`${PATH}/login`);
     await page.waitForURL("**/login");
 
@@ -75,8 +78,8 @@ test("can login", async ({ page }) => {
     await expect(page.locator("button", { name: "Login" })).toBeVisible();
 
     // fill the form
-    await page.locator("input#login_username").fill("user123");
-    await page.locator("input#login_password").fill("pass123");
+    await page.locator("input#login_username").fill(username);
+    await page.locator("input#login_password").fill(password);
     await page.locator("button", { name: "Login" }).filter({ visible: true }).click();
 
     // verify the page load etc?

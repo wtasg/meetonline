@@ -3,6 +3,10 @@ import { fetchUserAccount } from "../actions/userAccountActions.js";
 import { hasUserSession } from "../utils/session.js";
 
 function UserAccount() {
+    if (!hasUserSession()) {
+        window.location.assign("/login");
+        return;
+    }
 
     const [account, setAccount] = useState({ username: "", createdAt: "", modifiedAt: "" });
     useEffect(() => {
@@ -11,10 +15,6 @@ function UserAccount() {
         })();
     }, []);
 
-    if (!hasUserSession()) {
-        window.location.assign("/login");
-        return;
-    }
     return (<>
         <p>Username: {account.username}</p>
         <p>Created At: {account.createdAt}</p>

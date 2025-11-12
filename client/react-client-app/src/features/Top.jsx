@@ -11,7 +11,6 @@ import { UserAccount } from "./UserAccount";
 function Top() {
     const [hasSession, setHasSession] = useState(hasUserSession());
     const { pathname } = window.location;
-    console.log({ pathname });
 
     async function onLogout() {
         try {
@@ -40,31 +39,27 @@ function Top() {
 
     switch (pathname) {
         case "/login":
-            return !hasSession ?
-                <Login onlogin={onLogin} /> : <Logout onlogout={onLogout} username={() => user_session.retrieve("username")} />;
+            return !hasSession && <Login onLogin={onLogin} />;
         case "/signup":
-            return !hasSession ? <Signup onsignup={onSignup} /> : <Logout onlogout={onLogout} username={() => user_session.retrieve("username")} />;
+            return !hasSession && <Signup onSignup={onSignup} />;
         case "/account":
             return hasSession && <UserAccount />;
         case "/logout":
-            return hasSession ? <Logout onlogout={onLogout} username={() => user_session.retrieve("username")} /> : <div>You are logged out.</div>;
+            return hasSession ? <Logout onLogout={onLogout} username={() => user_session.retrieve("username")} /> : <div>You are logged out.</div>;
         case "/":
-            hasSession &&
+            return hasSession &&
                 <>
                     <Welcome />
-                    <Logout onlogout={onLogout} username={() => user_session.retrieve("username")} />
+                    <Logout onLogout={onLogout} username={() => user_session.retrieve("username")} />
                 </>;
+        default:
+            return <>
+                {!hasSession && <div>You are logged out.</div>}
+                {
+                    hasSession && <><Welcome /></>
+                }
+            </>;
     }
-
-    return <>
-        {!hasSession && <div>You are logged out.</div>}
-        {
-            hasSession &&
-            <>
-                <Welcome />
-            </>
-        }
-    </>;
 }
 
 export { Top };

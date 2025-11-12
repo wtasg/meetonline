@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { hasUserSession } from "../utils/session";
 import { preLoginAction } from "../actions/authActions";
 
-function Login({ onlogin }) {
+function Login({ onLogin }) {
     const [login_password, set_login_password] = useState("");
     const [login_username, set_login_username] = useState("");
 
@@ -20,8 +20,8 @@ function Login({ onlogin }) {
         set_login_username(username);
     }
 
-    async function onLogin() {
-        await onlogin({ username: login_username, password: login_password });
+    async function onLoginLocal() {
+        await onLogin({ username: login_username, password: login_password });
         set_login_password("");
         set_login_username("");
     }
@@ -49,7 +49,7 @@ function Login({ onlogin }) {
             </label>
         </div>
         <div>
-            <button type="button" onClick={onLogin}>Login</button>
+            <button type="button" onClick={onLoginLocal}>Login</button>
         </div>
     </div>);
 }

@@ -1,6 +1,6 @@
-function Logout({ username, onlogout }) {
+function Logout({ username, onLogout }) {
     return (<>
-        <button onClick={onlogout}>Logout {username()}</button>
+        <button onClick={onLogout}>Logout {username()}</button>
     </>);
 }
 
