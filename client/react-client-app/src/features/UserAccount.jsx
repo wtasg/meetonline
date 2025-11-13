@@ -15,11 +15,12 @@ function UserAccount() {
         })();
     }, []);
 
-    return (<>
-        <p>Username: {account.username}</p>
-        <p>Created At: {account.createdAt}</p>
-        <p>Last Modified At: {account.modifiedAt}</p>
-    </>);
+    return (<div className="vflex">
+        <h2>User Account</h2>
+        <div className="flex"><div className="w30p">Username: </div><div>{account.username}</div></div>
+        <div className="flex"><div className="w30p">Created At: </div><div>{new Date(account.createdAt).toLocaleDateString()} ({new Date(account.createdAt).toDateString()})</div></div>
+        <div className="flex"><div className="w30p">Last Modified At: </div><div>{new Date(account.modifiedAt).toLocaleDateString()} ({new Date(account.createdAt).toDateString()})</div></div>
+    </div>);
 }
 
 export { UserAccount };
