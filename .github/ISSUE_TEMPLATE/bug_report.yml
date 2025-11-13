@@ -1,0 +1,49 @@
+name: "🐛 Bug Report"
+description: "Report a bug following the project’s guidelines"
+title: "[BUG]: "
+labels: ["bug"]
+
+body:
+  - type: textarea
+    id: what_is_happening
+    attributes:
+      label: "🔍 What is happening?"
+      description: "Describe the bug clearly."
+      placeholder: "Example: When clicking 'Login', the app crashes."
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: "✅ What should happen?"
+      description: "Explain the expected correct behavior."
+      placeholder: "Example: The user should be logged in successfully."
+
+  - type: input
+    id: timeline
+    attributes:
+      label: "⏱ When did it start breaking?"
+      description: "Was this working earlier? If yes, when?"
+      placeholder: "Example: Worked in v0.5.2, broken in v0.6.0."
+
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: "🧪 Reproduction Steps"
+      description: "Steps to reproduce the bug."
+      placeholder: |
+        1. Go to...
+        2. Click on...
+        3. Observe the issue...
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: "💻 Environment"
+      description: "Add OS, browser, device, Node version, etc."
+      placeholder: "Ubuntu 22.04, Node 18, Chrome 123"
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: "📎 Additional Info + Logs"
+      placeholder: "Any screenshots, videos,logs, or context"
