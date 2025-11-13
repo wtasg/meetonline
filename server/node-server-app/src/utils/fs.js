@@ -16,7 +16,6 @@ function setupDirectories({ exists, mkdir }) {
         directories.forEach((dir) => {
             if (!exists(dir)) {
                 mkdir(dir, { recursive: true });
-                console.log(`[setupDirectories] Created directory: ${dir}`);
             }
         });
     } catch (error) {
