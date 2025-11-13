@@ -8,6 +8,7 @@
 
 - [Setup repo](./Setup/setup-repo.md)
 - [Set up WSL for dev](./Setup/setup-wsl-for-dev.md)
+- [docker](docker.md)
 
 
 ## Architecture
@@ -17,8 +18,10 @@
 
 ## Tech
 
-- [Git Commands](./git-commands.md)
+- [tech-index](tech-index.md)
 
 ## Drawings
 
-- [Git Branches](./Excalidraw/git-branches.excalidraw)
+- [git-branches.excalidraw](git-branches.excalidraw.md)
+- [git-staging.excalidraw](git-staging.excalidraw.md)
+- [git-rebase.excalidraw](git-rebase.excalidraw.md)
