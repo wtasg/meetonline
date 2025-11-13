@@ -1,12 +1,20 @@
-# Git Commands for Developers
+#tech #git 
 
-## pulling changes
+## Quick overview
+
+- git tracks text and not files
+- branching in git is cheap, easy, light operation
+- work is committed in chunks called commits
+
+## Git Commands for Developers
+
+### pulling changes
 
 ```bash
 git pull --rebase origin main
 ```
 
-## pushing changes
+### pushing changes
 
 ```bash
 ## pull changes before pushing changes
@@ -18,7 +26,7 @@ git pull --rebase origin main
 git push origin <BRANCH>
 ```
 
-## branches
+### branches
 
 ```bash
 ## always go to main before creating a new branch for development of a new feature
@@ -31,7 +39,7 @@ git switch --create feature_be_new_branch
 git push origin feature_be_new_branch
 ```
 
-## Config
+### Config
 
 ```bash
 ## for global settings
