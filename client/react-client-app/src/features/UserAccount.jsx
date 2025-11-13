@@ -18,8 +18,8 @@ function UserAccount() {
     return (<div className="vflex">
         <h2>User Account</h2>
         <div className="flex"><div className="w30p">Username: </div><div>{account.username}</div></div>
-        <div className="flex"><div className="w30p">Created At: </div><div>{new Date(account.createdAt).toLocaleDateString()} ({new Date(account.createdAt).toDateString()})</div></div>
-        <div className="flex"><div className="w30p">Last Modified At: </div><div>{new Date(account.modifiedAt).toLocaleDateString()} ({new Date(account.createdAt).toDateString()})</div></div>
+        <div className="flex"><div className="w30p">Created At: </div><div>{new Date(account.createdAt).toLocaleDateString()}</div> <div>({new Date(account.createdAt).toDateString()})</div></div>
+        <div className="flex"><div className="w30p">Last Modified At: </div><div>{new Date(account.modifiedAt).toLocaleDateString()}</div> <div>({new Date(account.modifiedAt).toDateString()})</div></div>
     </div>);
 }
 

@@ -76,6 +76,11 @@ input {
     }
 }
 
+.w0 {
+    min-width: 0;
+    width: 0vw;
+}
+
 .w10 {
     min-width: 100px;
     width: 10vw;
@@ -126,6 +131,11 @@ input {
     width: 100vw;
 }
 
+.w0p {
+    min-width: 0;
+    width: 0%;
+}
+
 .w10p {
     min-width: 100px;
     width: 10%;
@@ -173,7 +183,7 @@ input {
 
 .w100p {
     min-width: 1000px;
-    width: 10%;
+    width: 100%;
 }
 
 @media (prefers-color-scheme: light) {
