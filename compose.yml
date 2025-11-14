@@ -21,6 +21,7 @@ services:
       dockerfile: Dockerfile
     image: meetonline-client:latest
     container_name: meetonline-client
+    command: ["sleep", "infinity"]
     env_file:
       - ./client/react-client-app/docker.env
     depends_on:
@@ -29,6 +30,10 @@ services:
       - client_dist:/grahak/dist
       - client_certs:/grahak/.cert
     restart: no
+    develop:
+      watch:
+        - path: ./client/react-client-app
+          action: rebuild
 
   server:
     build:
