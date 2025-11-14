@@ -24,19 +24,19 @@ fi
 dos2unix entrypoint.sh
 chmod u+x entrypoint.sh
 
-docker build --no-cache --tag meetonline-database .
+docker build --no-cache --tag localhost/meetonline-database:manual .
 
-if docker ps --filter name=meetonline-database --format "{{.Names}}" | grep -w meetonline-database >/dev/null 2>&1; then
+if docker ps --filter name=manual-meetonline-database --format "{{.Names}}" | grep -w manual-meetonline-database >/dev/null 2>&1; then
     echo "Container is already running"
-    docker stop meetonline-database
-    docker rm meetonline-database
+    docker stop manual-meetonline-database
+    docker rm manual-meetonline-database
     docker run \
-        --name meetonline-database \
+        --name manual-meetonline-database \
         --env-file local.env \
         --publish 5432:5432 \
         --volume pgdata:/var/lib/postgresql \
-        --detach localhost/meetonline-database:latest
+        --detach localhost/meetonline-database:manual
 fi
 
 echo "MeetOnline database container is running on port 5432"
-echo "To connect: docker exec --interactive --tty meetonline-database psql --host=localhost --port=5432 --dbname=meetonline --username myuser --password"
+echo "To connect: docker exec --interactive --tty manual-meetonline-database psql --host=localhost --port=5432 --dbname=meetonline --username myuser --password"

@@ -12,6 +12,8 @@ WORKDIR /var/lib/postgresql
 
 EXPOSE 5432
 
+# default execution
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
+# cli configurable execution
 CMD ["postgres"]

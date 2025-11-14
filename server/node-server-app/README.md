@@ -4,17 +4,17 @@
 ## docker
 
 ```bash
-# docker network create meetonline-network
+# docker network create manual-meetonline-network
 
 docker build \
-    --tag meetonline-server \
+    --tag localhost/meetonline-server:manual \
     --file Dockerfile .
 
 docker run \
-    --name meetonline-server \
+    --name manual-meetonline-server \
     --publish 9006:9006 \
     --env-file local.env \
     --env-file .env \
     --env-file docker.env \
-    --detach meetonline-server
+    --detach localhost/meetonline-server:manual
 ```
