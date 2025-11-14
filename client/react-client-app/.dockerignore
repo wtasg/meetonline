@@ -1,7 +1,6 @@
 node_modules
-npm - debug.log
+npm-debug.log
 coverage
-    .nyc_output
 dist
 Dockerfile
-    .dockerignore
+.dockerignore
