@@ -36,7 +36,7 @@
 
 html,
 body {
-    min-width: 800px;
+    min-width: 1000px;
 }
 
 button,
@@ -74,6 +74,116 @@ input {
     &.sb {
         justify-content: space-between;
     }
+}
+
+.w0 {
+    min-width: 0;
+    width: 0vw;
+}
+
+.w10 {
+    min-width: 100px;
+    width: 10vw;
+}
+
+.w20 {
+    min-width: 200px;
+    width: 20vw;
+}
+
+.w30 {
+    min-width: 300px;
+    width: 30vw;
+}
+
+.w40 {
+    min-width: 400px;
+    width: 40vw;
+}
+
+.w50 {
+    min-width: 500px;
+    width: 50vw;
+}
+
+.w60 {
+    min-width: 600px;
+    width: 60vw;
+}
+
+.w70 {
+    min-width: 700px;
+    width: 70vw;
+}
+
+.w80 {
+    min-width: 800px;
+    width: 80vw;
+}
+
+.w90 {
+    min-width: 900px;
+    width: 90vw;
+}
+
+.w100 {
+    min-width: 1000px;
+    width: 100vw;
+}
+
+.w0p {
+    min-width: 0;
+    width: 0%;
+}
+
+.w10p {
+    min-width: 100px;
+    width: 10%;
+}
+
+.w20p {
+    min-width: 200px;
+    width: 20%;
+}
+
+.w30p {
+    min-width: 300px;
+    width: 30%;
+}
+
+.w40p {
+    min-width: 400px;
+    width: 40%;
+}
+
+.w50p {
+    min-width: 500px;
+    width: 50%;
+}
+
+.w60p {
+    min-width: 600px;
+    width: 60%;
+}
+
+.w70p {
+    min-width: 700px;
+    width: 70%;
+}
+
+.w80p {
+    min-width: 800px;
+    width: 80%;
+}
+
+.w90p {
+    min-width: 900px;
+    width: 90%;
+}
+
+.w100p {
+    min-width: 1000px;
+    width: 100%;
 }
 
 @media (prefers-color-scheme: light) {
