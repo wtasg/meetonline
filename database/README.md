@@ -1,10 +1,6 @@
 # database
 
-+ PostgreSql via Docker
-+ Create tables...
-
-
-## Database setup
+## Docker (manually)
 
 ```bash
 # create volume if not created
@@ -23,7 +19,7 @@ docker run \
     --volume pgdata:/var/lib/postgresql/data \
     --detach localhost/meetonline-database:manual
 
-docker logs --follow meetonline-database
+docker logs --follow manual-meetonline-database
 ```
 
 Run psql locally in the container

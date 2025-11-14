@@ -1,10 +1,8 @@
 # meetonline server
 
-
-## docker
+## Docker (manually)
 
 ```bash
-# docker network create manual-meetonline-network
 
 docker build \
     --tag localhost/meetonline-server:manual \

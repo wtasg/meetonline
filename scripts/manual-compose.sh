@@ -96,14 +96,15 @@ for arg in "$@"; do
     -c | --clean) clean_flag=true ;;
     -b | --build) build_flag=true ;;
     -r | --run) run_flag=true ;;
-    --no-db) no_db_flag=true ;;
-    --no-server) no_server_flag=true ;;
-    --no-client) no_client_flag=true ;;
-    -c | --all)
+    -a | --all)
         clean_flag=true
         build_flag=true
         run_flag=true
         ;;
+    --no-db) no_db_flag=true ;;
+    --no-server) no_server_flag=true ;;
+    --no-client) no_client_flag=true ;;
+
     -h | --help) usage ;;
     *)
         echo "Unknown option: $arg"
