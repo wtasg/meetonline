@@ -3,7 +3,8 @@ FROM node:25-bullseye
 WORKDIR /grahak
 
 COPY package.json package-lock.json ./
-RUN npm ci
+
+RUN npm ci --only-production --no-fund
 
 COPY . .
 
