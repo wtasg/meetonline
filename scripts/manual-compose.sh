@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-# set -euxo pipefail
+# expanded below # set -euxo pipefail
+set -o errexit
+set -o nounset
+set -o pipefail
+# set -o xtrace # disabled in production
 
 ## CLI params
 clean_flag=false
@@ -43,19 +47,44 @@ cleanup() {
 
 ## function for building images
 buildup() {
-    ! $no_db_flag && docker build \
-        --no-cache \
-        --tag localhost/meetonline-database:manual \
-        --file database/manual.Dockerfile database/
+    ! $no_db_flag && {
 
-    ! $no_server_flag && docker build \
-        --tag localhost/meetonline-server:manual \
-        --file server/node-server-app/manual.Dockerfile server/node-server-app/
+        [ -f database/manual.Dockerfile ] || {
+            echo "Error: database/manual.Dockerfile not found"
+            return 1
+        }
 
-    ! $no_client_flag && docker build \
-        --build-arg ENV_FILE=local.env \
-        --tag localhost/meetonline-client:manual \
-        --file client/react-client-app/manual.Dockerfile client/react-client-app/
+        docker build \
+            --no-cache \
+            --tag localhost/meetonline-database:manual \
+            --file database/manual.Dockerfile database
+    }
+
+    ! $no_server_flag && {
+
+        [ -f server/node-server-app/manual.Dockerfile ] || {
+            echo "Error: server/node-server-app/manual.Dockerfile not found"
+            return 1
+        }
+
+        docker build \
+            --tag localhost/meetonline-server:manual \
+            --file server/node-server-app/manual.Dockerfile server/node-server-app/
+    }
+
+    ! $no_client_flag && {
+
+        [ -f client/react-client-app/manual.Dockerfile ] || {
+            echo "Error: client/react-client-app/manual.Dockerfile not found"
+            return 1
+        }
+
+        docker build \
+            --build-arg ENV_FILE=local.env \
+            --tag localhost/meetonline-client:manual \
+            --file client/react-client-app/manual.Dockerfile client/react-client-app/
+
+    }
 }
 
 ## function for running the images
@@ -92,7 +121,7 @@ runup() {
             --volume manual-meetonline-pgdata:/var/lib/postgresql \
             --detach localhost/meetonline-database:manual
 
-        ( $did_shutdown_db || $volcreated ) && sleep 10
+        ($did_shutdown_db || $volcreated) && sleep 10
     }
 
     ! $no_server_flag &&

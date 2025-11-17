@@ -18,21 +18,12 @@ config({ path: `${__dirname}/${process.env.VITE_ENV_FILE}`, quiet: true });
 
 export default defineConfig({
     define: {
-        "process.env": process.env
+        "process.env.VITE_ENV_FILE": JSON.stringify(process.env.VITE_ENV_FILE)
     },
     plugins: [react()],
     server: {
         https,
         secure: true,
-        // host: "0.0.0.0",
-        // port: 5173,
-        // proxy: {
-        //     "/api": {
-        //         target: "https://localhost:9443",
-        //         changeOrigin: true,
-        //         secure: false
-        //     }
-        // }
     },
     test: {
         globals: true,

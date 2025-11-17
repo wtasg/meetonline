@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail
+set -o errexit
+set -o nounset
+set -o pipefail
 
-ENV_FILE_PATHS="$@"
-
-for f in $ENV_FILE_PATHS; do
+for f in "$@"; do
     if [ -f "$f" ]; then
         echo "Found env file: $f"
         set -a
