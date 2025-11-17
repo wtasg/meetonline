@@ -21,3 +21,5 @@ echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD:+(set,hidden)}"
 
 # Drop privilege and run the server as postgres user
 exec gosu postgres postgres
+
+exec initdb /opt/schema.sql
