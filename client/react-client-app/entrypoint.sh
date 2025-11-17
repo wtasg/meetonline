@@ -9,15 +9,17 @@ set -euxo pipefail
 ENV_FILE_PATHS="$@"
 
 for f in $ENV_FILE_PATHS; do
-  if [ -f "$f" ]; then
-    echo "Found env file: $f"
-    # export all variables defined in the file
-    set -a
-    # shellcheck disable=SC1090
-    . "$f"
-    set +a
-    # break
-  fi
+    if [ -f "$f" ]; then
+        echo "Found env file: $f"
+        # export all variables defined in the file
+        set -a
+        # shellcheck disable=SC1090
+        . "$f"
+        set +a
+        # break
+    fi
 done
 
-node src/server.js
+# npm run dev
+
+serve -s dist --listen 5173

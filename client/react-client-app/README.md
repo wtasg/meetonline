@@ -9,12 +9,12 @@
 ```bash
 docker build \
     --tag localhost/meetonline-client:manual \
-    --file Dockerfile .
+    --file manual.Dockerfile .
 
 docker run \
     --name manual-meetonline-client \
     --publish 5173:5173 \
-    --env-file docker.env \
+    --env-file .env \
     --detach localhost/meetonline-client:manual
     
 ```

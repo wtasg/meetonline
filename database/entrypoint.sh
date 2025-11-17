@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
+apt-get update
+apt-get install --yes gosu
+
 set -euxo pipefail
 
-ENV_FILE_PATHS="docker.env"
+ENV_FILE_PATHS="$@"
 
 for f in $ENV_FILE_PATHS; do
     if [ -f "$f" ]; then
@@ -19,4 +22,5 @@ echo "POSTGRES_USER=${POSTGRES_USER:-not set}"
 echo "POSTGRES_DB=${POSTGRES_DB:-not set}"
 echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD:+(set,hidden)}"
 
-exec docker-entrypoint.sh "$@"
+# Drop privilege and run the server as postgres user
+exec gosu postgres postgres

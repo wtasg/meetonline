@@ -16,7 +16,7 @@ docker run \
     --env-file local.env \
     --env-file docker.env \
     --publish 5432:5432 \
-    --volume pgdata:/var/lib/postgresql/data \
+    --volume pgdata:/var/lib/postgresql \
     --detach localhost/meetonline-database:manual
 
 docker logs --follow manual-meetonline-database

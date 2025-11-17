@@ -20,16 +20,25 @@ graceful_exit() {
 # Handle CTRL+C | SIGINT | 130
 trap graceful_exit INT
 
+did_shutdown_db=false
+
 ## function for cleaning up the running containers
 cleanup() {
-    ! $no_db_flag && docker stop manual-meetonline-database || true
-    ! $no_db_flag && docker rm manual-meetonline-database || true
+    ! $no_db_flag && {
+        docker stop manual-meetonline-database || true
+        docker rm manual-meetonline-database || true
+        did_shutdown_db=true
+    }
 
-    ! $no_server_flag && docker stop manual-meetonline-server || true
-    ! $no_server_flag && docker rm manual-meetonline-server || true
+    ! $no_server_flag && {
+        docker stop manual-meetonline-server || true
+        docker rm manual-meetonline-server || true
+    }
 
-    ! $no_client_flag && docker stop manual-meetonline-client || true
-    ! $no_client_flag && docker rm manual-meetonline-client || true
+    ! $no_client_flag && {
+        docker stop manual-meetonline-client || true
+        docker rm manual-meetonline-client || true
+    }
 }
 
 ## function for building images
@@ -41,9 +50,10 @@ buildup() {
 
     ! $no_server_flag && docker build \
         --tag localhost/meetonline-server:manual \
-        --file server/node-server-app/Dockerfile server/node-server-app/
+        --file server/node-server-app/manual.Dockerfile server/node-server-app/
 
     ! $no_client_flag && docker build \
+        --build-arg ENV_FILE=local.env \
         --tag localhost/meetonline-client:manual \
         --file client/react-client-app/manual.Dockerfile client/react-client-app/
 }
@@ -51,37 +61,58 @@ buildup() {
 ## function for running the images
 runup() {
 
-    ## checking and/or building a volume for pgdata
+    netcreated=false
+    if docker network inspect manual-meetonline-network >/dev/null 2>&1; then
+        echo "Network exists."
+    else
+        echo "Creating network."
+        docker network create manual-meetonline-network 2>/dev/null || true
+        netcreated=true
+    fi
+
+    $netcreated && sleep 2
+
+    ## checking and/or building a volume for postgres
     ! $no_db_flag && {
-        if docker volume inspect manual-pgdata >/dev/null 2>&1; then
-            echo "Volume already exists"
+        volcreated=false
+
+        if docker volume inspect manual-meetonline-pgdata >/dev/null 2>&1; then
+            echo "Volume exists."
         else
-            echo "Creating volume..."
-            docker volume create manual-pgdata
+            echo "Creating volume."
+            docker volume create manual-meetonline-pgdata 2>/dev/null || true
+            volcreated=true
         fi
+
+        docker run \
+            --name manual-meetonline-database \
+            --env-file database/local.env \
+            --network manual-meetonline-network \
+            --publish 5432:5432 \
+            --volume manual-meetonline-pgdata:/var/lib/postgresql \
+            --detach localhost/meetonline-database:manual
+
+        ( $did_shutdown_db || $volcreated ) && sleep 10
     }
 
-    ! $no_db_flag && docker run \
-        --name manual-meetonline-database \
-        --env-file database/local.env \
-        --env-file database/docker.env \
-        --publish 5432:5432 \
-        --volume manual-pgdata:/var/lib/postgresql/data \
-        --detach localhost/meetonline-database:manual
+    ! $no_server_flag &&
+        docker run \
+            --name manual-meetonline-server \
+            --env-file server/node-server-app/local.env \
+            --network manual-meetonline-network \
+            --publish 9006:9006 \
+            --publish 9443:9443 \
+            --detach localhost/meetonline-server:manual &&
+        sleep 2
 
-    ! $no_server_flag && docker run \
-        --name manual-meetonline-server \
-        --publish 9006:9006 \
-        --publish 9443:9443 \
-        --env-file server/node-server-app/local.env \
-        --env-file server/node-server-app/docker.env \
-        --detach localhost/meetonline-server:manual
-
-    ! $no_client_flag && docker run \
-        --name manual-meetonline-client \
-        --publish 5173:5173 \
-        --env-file client/react-client-app/docker.env \
-        --detach localhost/meetonline-client:manual
+    ! $no_client_flag &&
+        docker run \
+            --name manual-meetonline-client \
+            --env-file client/react-client-app/local.env \
+            --network manual-meetonline-network \
+            --publish 5173:5173 \
+            --detach localhost/meetonline-client:manual &&
+        sleep 1
 }
 
 usage() {
@@ -89,8 +120,7 @@ usage() {
     exit 1
 }
 
-## EXECECUTE IT ALL
-
+## EXECECUTION
 for arg in "$@"; do
     case "$arg" in
     -c | --clean) clean_flag=true ;;
@@ -113,7 +143,6 @@ for arg in "$@"; do
     esac
 done
 
-# ------------ EXECUTION LOGIC ------------
 # If no flags, default to --all
 if ! $clean_flag && ! $build_flag && ! $run_flag; then
     clean_flag=true
