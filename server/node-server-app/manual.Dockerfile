@@ -9,7 +9,7 @@ RUN apt-get update && \
 
 COPY package.json package-lock.json ./
 
-RUN npm ci --only-production --no-fund
+RUN npm ci --no-fund
 
 COPY . .
 
