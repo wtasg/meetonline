@@ -14,10 +14,7 @@ cleanup() {
     docker rm "$CONTAINER_NAME" >/dev/null 2>&1 || true
     exit 0
 }
-trap cleanup INT
-
-docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
-docker rm "$CONTAINER_NAME" >/dev/null 2>&1 || true
+trap cleanup INT TERM
 
 echo "Starting Vite dev server in Docker with live reload..."
 
@@ -28,7 +25,14 @@ docker run \
     --volume "$(pwd)/$CLIENT_DIR:/app" \
     --workdir /app \
     --publish $PORT:$PORT \
-    node:25-bullseye \
+    --detach node:25-bullseye \
     bash -c "npm install && npm run dev -- --host"
 
-echo "Dev client stopped."
+echo "Dev client is running. Hit CTRL+C to exit."
+
+docker logs --follow "${CONTAINER_NAME}"
+
+echo "Stopping container."
+
+docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
+docker rm "$CONTAINER_NAME" >/dev/null 2>&1 || true
