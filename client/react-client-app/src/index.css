@@ -26,17 +26,17 @@
     --min-input-height: 40px;
 }
 
-*,
-*::after,
-*::before {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
 
-html,
 body {
     min-width: 1000px;
+
+    & *,
+    & *::after,
+    & *::before {
+        box-sizing: border-box;
+        margin: var(--margin);
+        padding: var(--padding);
+    }
 }
 
 button,
@@ -63,13 +63,13 @@ input {
 
 .flex {
     display: flex;
-    gap: 20px;
+    gap: 5px 10px;
 }
 
 .vflex {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 5px 10px;
 
     &.sb {
         justify-content: space-between;

@@ -4,11 +4,17 @@
 + JsDocs
 + Fast iteration + tests + small, non-destructive commits +... 
 
-```
+## Docker (manually)
+
+```bash
+docker build \
+    --tag localhost/meetonline-client:manual \
+    --file manual.Dockerfile .
+
 docker run \
-    --name meetonline-client \
+    --name manual-meetonline-client \
     --publish 5173:5173 \
-    --env-file docker.env \
-    --detach meetonline-client
+    --env-file .env \
+    --detach localhost/meetonline-client:manual
     
 ```

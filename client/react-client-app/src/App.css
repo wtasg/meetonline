@@ -5,7 +5,6 @@
 .menu {
     min-height: 600px;
     min-width: 200px;
-    height: 100vh;
 }
 
 .menu[role="navigation"] ul {

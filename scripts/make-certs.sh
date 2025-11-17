@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail
+set -o errexit
+set -o nounset
+set -o pipefail
 
 cd server/node-server-app
 npm install --no-fund

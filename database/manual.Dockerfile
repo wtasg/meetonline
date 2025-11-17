@@ -1,20 +1,24 @@
 FROM docker.io/library/postgres:18
 
+WORKDIR /db
+
+COPY init/ /docker-entrypoint-initdb.d/
+
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN apt-get update && apt-get install --yes gosu dos2unix \
     && dos2unix /usr/local/bin/entrypoint.sh \
     && chmod +x /usr/local/bin/entrypoint.sh
 
-COPY init/ /docker-entrypoint-initdb.d/
+RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY local.env /opt/local.env
 
 WORKDIR /var/lib/postgresql
 
 EXPOSE 5432
 
 # default execution
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "docker.env"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "/opt/local.env"]
 
 # cli configurable execution
 CMD ["postgres"]
-
