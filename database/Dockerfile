@@ -2,7 +2,7 @@ FROM docker.io/library/postgres:18
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
-RUN apt-get update && apt-get install -y dos2unix \
+RUN apt-get update && apt-get install --yes gosu dos2unix \
     && dos2unix /usr/local/bin/entrypoint.sh \
     && chmod +x /usr/local/bin/entrypoint.sh
 

@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-apt-get update
-apt-get install --yes gosu
-
 set -euxo pipefail
 
 ENV_FILE_PATHS="$@"

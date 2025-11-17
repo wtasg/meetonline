@@ -5,6 +5,11 @@ WORKDIR /db
 COPY init/ /docker-entrypoint-initdb.d/
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+RUN apt-get update && apt-get install --yes gosu dos2unix \
+    && dos2unix /usr/local/bin/entrypoint.sh \
+    && chmod +x /usr/local/bin/entrypoint.sh
+
 RUN chmod +x /usr/local/bin/entrypoint.sh
 COPY local.env /opt/local.env
 
