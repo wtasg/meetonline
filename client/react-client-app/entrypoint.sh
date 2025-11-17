@@ -16,4 +16,6 @@ for f in "$@"; do
     fi
 done
 
-node src/server.js
+# npm run dev
+
+serve -s dist --listen 5173

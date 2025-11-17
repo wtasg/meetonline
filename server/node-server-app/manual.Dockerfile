@@ -37,9 +37,8 @@ ENV NODE_ENV=production
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
-COPY docker.env /opt/docker.env
 
 EXPOSE 9006 9443
 USER node
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "/opt/docker.env"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "local.env"]
