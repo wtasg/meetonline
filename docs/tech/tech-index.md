@@ -15,6 +15,8 @@
 5. [https](https.md)
 6. [http2](http2.md)
 7. [git](git.md)
+8. [web-apis](web-apis.md)
+9. [browser-processes](browser-processes.md)
 
 ## Other
 
