@@ -49,7 +49,7 @@ function Login({ onLogin }) {
             </label>
         </div>
         <div>
-            <button type="button" onClick={onLoginLocal}>Login</button>
+            <button type="button" onClick={onLoginLocal}>Login / signin</button>
         </div>
     </div>);
 }

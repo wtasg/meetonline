@@ -10,19 +10,13 @@ services:
   client:
     build: ./client/react-client-app
     command: ["npm", "run", "dev", "--", "--host"]
-    ports:
-      - 5173:5173
     env_file:
       - ./client/react-client-app/docker.env
-    depends_on:
-      - server
     volumes:
       - ./client/react-client-app:/app
     restart: no
-    develop:
-      watch:
-        - path: ./client/react-client-app
-          action: rebuild
+    depends_on:
+      - server
 
   server:
     build:
