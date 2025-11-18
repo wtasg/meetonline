@@ -5,8 +5,6 @@ function setupCorsMiddleware(app) {
         .map(s => s.trim().toLowerCase().replace(/\/$/, "")
         ) ||
         [
-            "http://meet.local",
-            "https://meet.local",
             "http://localhost:5173",
             "https://localhost:5173",
             "http://localhost:5174",

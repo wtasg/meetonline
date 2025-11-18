@@ -29,20 +29,21 @@ did_shutdown_db=false
 ## function for cleaning up the running containers
 cleanup() {
     ! $no_db_flag && {
-        docker stop manual-meetonline-database || true
-        docker rm manual-meetonline-database || true
+        docker stop manual-meetonline-database manual-meetonline-adminer || true
+        docker rm manual-meetonline-database manual-meetonline-adminer || true
+        docker volume rm manual-meetonline-pgdata || true
         did_shutdown_db=true
-    }
+    } || true
 
     ! $no_server_flag && {
         docker stop manual-meetonline-server || true
         docker rm manual-meetonline-server || true
-    }
+    } || true
 
     ! $no_client_flag && {
         docker stop manual-meetonline-client || true
         docker rm manual-meetonline-client || true
-    }
+    } || true
 }
 
 ## function for building images
@@ -55,10 +56,11 @@ buildup() {
         }
 
         docker build \
+            --progress=plain \
             --no-cache \
             --tag localhost/meetonline-database:manual \
             --file database/manual.Dockerfile database
-    }
+    } || true
 
     ! $no_server_flag && {
 
@@ -68,9 +70,11 @@ buildup() {
         }
 
         docker build \
+            --progress=plain \
             --tag localhost/meetonline-server:manual \
             --file server/node-server-app/manual.Dockerfile server/node-server-app/
-    }
+
+    } || true
 
     ! $no_client_flag && {
 
@@ -80,11 +84,12 @@ buildup() {
         }
 
         docker build \
+            --progress=plain \
             --build-arg ENV_FILE=local.env \
             --tag localhost/meetonline-client:manual \
             --file client/react-client-app/manual.Dockerfile client/react-client-app/
 
-    }
+    } || true
 }
 
 ## function for running the images
@@ -115,14 +120,20 @@ runup() {
 
         docker run \
             --name manual-meetonline-database \
+            --env DB_INIT_FILE:database/init/schema.sql \
             --env-file database/local.env \
             --network manual-meetonline-network \
             --publish 5432:5432 \
             --volume manual-meetonline-pgdata:/var/lib/postgresql \
             --detach localhost/meetonline-database:manual
 
-        ($did_shutdown_db || $volcreated) && sleep 10
-    }
+        docker run \
+            --name manual-meetonline-adminer \
+            --publish 54320:8080 \
+            --detach adminer
+
+        ($did_shutdown_db || $volcreated) && sleep 3
+    } || true
 
     ! $no_server_flag &&
         docker run \
