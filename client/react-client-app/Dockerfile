@@ -1,11 +1,10 @@
 FROM node:25-bullseye
 
-WORKDIR /grahak
-
-COPY package.json package-lock.json ./
-
-RUN npm ci --no-fund
+WORKDIR /app
 
 COPY . .
 
-RUN npm run build -- --mode=production
+RUN <<EOF
+rm -rf node_modules .cert
+chown -R node:node /app
+EOF

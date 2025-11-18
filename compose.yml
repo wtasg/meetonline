@@ -10,8 +10,8 @@ services:
     volumes:
       - ./proxy/nginx.conf:/etc/nginx/nginx.conf:ro
       - /dev/null:/etc/nginx/conf.d/default.conf
-      - client_certs:/grahak/.cert:ro
-      - client_dist:/usr/share/nginx/html:ro
+      - client_certs:/app/.cert:ro
+      - ./client/react-client-app/dist/:/usr/share/nginx/html:ro
       - server_certs:/server/certs:ro
     restart: no
 
@@ -26,8 +26,8 @@ services:
     depends_on:
       - server
     volumes:
-      - client_dist:/grahak/dist
-      - client_certs:/grahak/.cert
+      - ./client/react-client-app/dist:/app/dist
+      - client_certs:/app/.cert
     restart: no
 
   server:
@@ -38,6 +38,9 @@ services:
     container_name: meetonline-server
     env_file:
       - ./server/node-server-app/docker.env
+    ports:
+      - 9443:9443
+      - 9006:9006
     depends_on:
       database:
         condition: service_healthy
@@ -53,6 +56,8 @@ services:
       dockerfile: Dockerfile
     image: meetonline-database:latest
     container_name: meetonline-database
+    environment:
+      - DB_INIT_FILE=./database/init/schema.sql
     env_file:
       - ./database/docker.env
     ports:
@@ -72,4 +77,3 @@ volumes:
   server_certs:
   server_tmp:
   client_certs:
-  client_dist:
