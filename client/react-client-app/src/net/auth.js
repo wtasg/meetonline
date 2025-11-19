@@ -1,8 +1,9 @@
 import { readCookie } from "../utils/cookie.js";
 import { CONF } from "./net-conf.js";
+import { debounce } from "../utils/debounce.js";
 
-async function prelogin() {
-    const res = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGIN}`, {
+const _prelogin = async function () {
+    return fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGIN}`, {
         credentials: "include",
         method: "GET",
         headers: {
@@ -10,11 +11,16 @@ async function prelogin() {
             "Content-Type": "application/json",
         },
     });
-    return res;
+};
+
+const preloginDebouncer = debounce(_prelogin, 400);
+
+function prelogin() {
+    return preloginDebouncer();
 }
 
-async function presignup() {
-    const res = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.SIGNUP}`, {
+const _presignup = async function () {
+    return fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.SIGNUP}`, {
         credentials: "include",
         method: "GET",
         headers: {
@@ -22,8 +28,14 @@ async function presignup() {
             "Content-Type": "application/json",
         }
     });
-    return res;
+};
+
+const presignupDebouncer = debounce(_presignup, 400);
+
+function presignup() {
+    return presignupDebouncer();
 }
+
 
 async function login({ username, password }) {
     return fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGIN}`, {
