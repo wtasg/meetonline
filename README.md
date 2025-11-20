@@ -41,7 +41,7 @@ Documentation is available in `docs/`. Visit [Documentation Home](./docs/Home.md
 
 ### YouTube series on development journey
 
-- [yt/@life-goes-mild software-development](https://youtube.com/playlist?list=PLo7CWSMIloMyBvHG9RwJjEdUyNJhc-bAN&si=QCooekGGXO6LEfR3)
+- [yt/@wtasyt software-development](https://www.youtube.com/playlist?list=PLbUtscuRQ61xiGmjCL00Ime9z5sJEZu4M)
 
 
 ## LICENSE
