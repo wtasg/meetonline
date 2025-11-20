@@ -7,6 +7,7 @@ import { user_session } from "../session";
 import { hasUserSession } from "../utils/session";
 import { useState } from "react";
 import { UserAccount } from "./UserAccount";
+import { UserProfile } from "./UserProfile";
 
 function Top() {
     const [hasSession, setHasSession] = useState(hasUserSession());
@@ -44,6 +45,8 @@ function Top() {
             return !hasSession && <Signup onSignup={onSignup} />;
         case "/account":
             return hasSession && <UserAccount />;
+        case "/profile":
+            return hasSession && <UserProfile />;
         case "/logout":
             return hasSession ? <Logout onLogout={onLogout} username={() => user_session.retrieve("username")} /> : <div>You are logged out.</div>;
         case "/":
