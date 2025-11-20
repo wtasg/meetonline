@@ -50,7 +50,6 @@ function Top() {
             return hasSession &&
                 <>
                     <Welcome />
-                    <Logout onLogout={onLogout} username={() => user_session.retrieve("username")} />
                 </>;
         default:
             return <>
