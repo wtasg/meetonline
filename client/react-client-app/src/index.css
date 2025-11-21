@@ -70,20 +70,11 @@ body {
 
 button,
 a.btn,
-*[role="button"],
-input {
-    padding: var(--padding);
-    line-height: 1.4;
-}
-
-button,
-a.btn,
 *[role="button"] {
-    display: inline;
+    padding: var(--min-padding);
+    margin: var(--margin);
     color: var(--cta-btn-text-color);
     background-color: var(--btn-background-color);
-    min-width: var(--min-button-width);
-    min-height: var(--min-input-height);
     border: 2px solid var(--btn-background-color);
 
     &:hover {
@@ -107,8 +98,8 @@ a {
 }
 
 input {
-    min-height: var(--min-input-height);
-    min-width: var(--min-input-width);
+    padding: var(--min-padding);
+    margin: var(--margin);
 }
 
 .flex {

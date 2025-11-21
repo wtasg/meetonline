@@ -47,12 +47,23 @@ async function getUserProfileByUsername(username) {
     }
 }
 
+/**
+ * what do you think?!
+ * @param {string} username
+ * @param {string} key
+ * @param {string} value
+ * @returns {Promise<boolean>}
+ */
 async function updateUserProfile(username, key, value) {
     key = userProfileKeyMap[key];
+    if (!key) {
+        console.error("Invalid key");
+        return false;
+    }
     try {
         const id = (await getUserAccountByUsername(username)).id;
         // fetch profile to see if it exists
-        const profile = getUserProfileByUsername(username);
+        const profile = await getUserProfileByUsername(username);
         if (profile.__isNull || profile.__isDefault) {
             const q1 =
                 `INSERT INTO public.user_profile

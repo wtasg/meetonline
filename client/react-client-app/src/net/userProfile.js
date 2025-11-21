@@ -31,7 +31,7 @@ async function userProfile({ username }) {
 /**
  *
  * @param {{username: string, key: string, value: string}} options
- * @returns {{ok: boolean, user_profile: boolean, message: string}}
+ * @returns {Promise<{ok: boolean, user_profile: boolean, message: string}>}
  */
 async function updateUserProfile({ username, key, value }) {
     try {
