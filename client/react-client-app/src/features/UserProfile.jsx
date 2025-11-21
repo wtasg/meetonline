@@ -29,6 +29,8 @@ function UserProfile() {
             updateProfileName(value);
         } else if (key === "displayName") {
             updateDisplayName(value);
+        } else if (key === "email") {
+            updateEmail(value);
         } else if (key === "phoneNumber") {
             updatePhoneNumber(value);
         } else if (key === "address") {
@@ -48,7 +50,6 @@ function UserProfile() {
             <div className="w30p">Profile Name</div>
             <div>
                 <EditableValue
-                    valueType={"text"}
                     initialValue={profile.profileName}
                     onChangeFn={(value) => updateProfileDetail("profileName", value)} />
             </div>
@@ -57,7 +58,6 @@ function UserProfile() {
             <div className="w30p">Display Name </div>
             <div>
                 <EditableValue
-                    valueType={"text"}
                     initialValue={profile.displayName}
                     onChangeFn={(value) => updateProfileDetail("displayName", value)} />
             </div>
@@ -66,7 +66,6 @@ function UserProfile() {
             <div className="w30p">Phone Number </div>
             <div>
                 <EditableValue
-                    valueType={"text"}
                     initialValue={profile.phoneNumber}
                     onChangeFn={(value) => updateProfileDetail("phoneNumber", value)} />
             </div>
@@ -85,7 +84,6 @@ function UserProfile() {
             <div className="w30p">Address </div>
             <div>
                 <EditableValue
-                    valueType={"text"}
                     initialValue={profile.address}
                     onChangeFn={(value) => updateProfileDetail("address", value)} />
             </div>
@@ -95,7 +93,6 @@ function UserProfile() {
             <div className="w30p">Website URL </div>
             <div>
                 <EditableValue
-                    valueType={"text"}
                     initialValue={profile.websiteUrl}
                     onChangeFn={(value) => updateProfileDetail("websiteUrl", value)} />
             </div>

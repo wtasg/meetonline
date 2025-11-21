@@ -17,7 +17,7 @@ function EditableValue({ initialValue, onChangeFn, valueType }) {
         setIsEditing(true);
     }
 
-    return <div className="editable w30p" onClick={handleEditClick}>
+    return <div className="editable" onClick={handleEditClick}>
         {!isEditing && (initialValue || (localValue.trim().length === 0 && <>"no-value"</>))}
         {isEditing && <input
             type={valueType || "text"}
