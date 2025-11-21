@@ -92,7 +92,6 @@ class UserProfileModel {
         const obj = pojo(this);
         delete obj.__isDefault;
         delete obj.__isNull;
-        delete obj.id;
         delete obj.userId;
         return obj;
     }

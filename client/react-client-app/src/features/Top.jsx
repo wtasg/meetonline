@@ -20,14 +20,15 @@ function Top() {
         } catch (err) {
             console.error(err);
         } finally {
-            window.location.reload(false);
+            window.location.assign("/");
         }
     }
+
     async function onLogin({ username, password }) {
         const isLoggedIn = await loginAction({ username, password });
         if (isLoggedIn) {
             setHasSession(true);
-            window.location = "/";
+            window.location.assign("/");
         } else {
             setHasSession(false);
         }
@@ -56,10 +57,7 @@ function Top() {
                 </>;
         default:
             return <>
-                {!hasSession && <div>You are logged out.</div>}
-                {
-                    hasSession && <><Welcome /></>
-                }
+                ERROR
             </>;
     }
 }

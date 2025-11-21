@@ -13,16 +13,12 @@ async function getUserProfileByUsername(username) {
         const q1 = "SELECT * FROM public.user_account WHERE username = $1";
         const v1 = [username];
         const r1 = await pool.query(q1, v1);
-        console.log({ r1 });
         const id = r1.rows[0].id;
-        console.log({ id });
 
         const q2 = "SELECT * from public.user_profile WHERE user_id = $1";
         const v2 = [id];
         const r2 = await pool.query(q2, v2);
-        console.log({ r2 });
         const profile = UserProfileModel.fromDatabaseRow(r2.rows[0]);
-        console.log({ profile });
         return profile;
     } catch (err) {
         console.error("ERROR: fetching user profile.");
@@ -45,15 +41,14 @@ async function updateUserProfile(username, key, value) {
                 ($1, $2)
             `;
             const v1 = [id, username];
-            const r1 = await pool.query(q1, v1);
-            console.log({ r1 });
+            await pool.query(q1, v1);
         }
         // security issue
 
         const q2 = `UPDATE public.user_profile SET ${key} = $1 WHERE user_id = ${id}`;
         const v2 = [value];
-        const r2 = await pool.query(q2, v2);
-        console.log({ r2 });
+        await pool.query(q2, v2);
+
         return true;
     }
     catch (err) {

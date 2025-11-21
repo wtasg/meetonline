@@ -29,7 +29,6 @@ async function userProfile({ username }) {
 
 
 async function updateUserProfile({ username, key, value }) {
-    console.log("updateUserProfile", { username, key, value });
     try {
         const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.USER_PROFILE}`, {
             credentials: "include",

@@ -1,32 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function EditableValue({ initialValue, onChangeFn, valueType }) {
-    initialValue = initialValue || "";
-    console.log({ initialValue });
-    const [localValue, setLocalValue] = useState(initialValue);
-    const [isEditing, setIsEditing] = useState(false);
+    const [localValue, setLocalValue] = useState(initialValue || "");
+    const [dirty, setDirty] = useState(false);
 
     function onValueChange() {
-        setIsEditing(false);
-        if (localValue.length > 0) {
-            onChangeFn(localValue.trim());
-        }
+        setDirty(false);
+        onChangeFn(localValue.trim());
     }
 
-    function handleEditClick() {
-        setIsEditing(true);
-    }
+    useEffect(() => {
+        setLocalValue(initialValue || "");
+    }, [initialValue]);
 
-    return <div className="editable" onClick={handleEditClick}>
-        {!isEditing && (initialValue || (localValue.trim().length === 0 && <>"no-value"</>))}
-        {isEditing && <input
+    return <div className="editable flex" style={{ borderBottom: "1px dashed green" }}>
+        <input
             type={valueType || "text"}
-            onChange={e => setLocalValue(e.target.value)}
-            onBlur={onValueChange}
+            onChange={e => { setDirty(true); setLocalValue(e.target.value); }}
+            onKeyDown={(e) => { if (e.key === "Enter") onValueChange(); }}
             value={localValue}
-            autoFocus
-        />}
-
+            style={{ border: dirty ? "thin solid red" : "" }}
+        />
+        {dirty && <span style={{ color: "red" }}>*</span>}
     </div>;
 }
 

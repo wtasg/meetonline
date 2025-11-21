@@ -79,6 +79,7 @@ input {
 button,
 a.btn,
 *[role="button"] {
+    display: inline;
     color: var(--cta-btn-text-color);
     background-color: var(--btn-background-color);
     min-width: var(--min-button-width);
