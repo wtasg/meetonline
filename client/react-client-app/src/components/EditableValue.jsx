@@ -1,27 +1,32 @@
 import { useState } from "react";
 
-function EditableValue({ initialValue, onChange }) {
+function EditableValue({ initialValue, onChangeFn, valueType }) {
+    initialValue = initialValue || "";
+    console.log({ initialValue });
     const [localValue, setLocalValue] = useState(initialValue);
-    const [isEditing, setIsEditing] = useState(!initialValue);
+    const [isEditing, setIsEditing] = useState(false);
 
     function onValueChange() {
-        if (localValue) {
-            setIsEditing(false);
-            onChange(localValue);
+        setIsEditing(false);
+        if (localValue.length > 0) {
+            onChangeFn(localValue.trim());
         }
     }
 
-    return <div
-        onClick={() => setIsEditing(true)}
-        onBlur={() => setIsEditing(false)}
-    >
+    function handleEditClick() {
+        setIsEditing(true);
+    }
+
+    return <div className="editable w30p" onClick={handleEditClick}>
+        {!isEditing && (initialValue || (localValue.trim().length === 0 && <>"no-value"</>))}
         {isEditing && <input
-            type="text"
+            type={valueType || "text"}
             onChange={e => setLocalValue(e.target.value)}
             onBlur={onValueChange}
             value={localValue}
+            autoFocus
         />}
-        {!isEditing && localValue}
+
     </div>;
 }
 

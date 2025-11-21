@@ -18,7 +18,7 @@ async function userAccountPOST(req, res) {
     try {
         const { cookies } = req;
         if (!cookies) {
-            res.status(400).json({
+            return res.status(400).json({
                 ok: false,
                 user_account: false,
                 message: "Missing Cookie Headers."
@@ -52,7 +52,7 @@ async function userAccountPOST(req, res) {
 
         const { createdAt, modifiedAt } = await getUserAccountByUsername(username);
 
-        res.status(200)
+        return res.status(200)
             .json({
                 username,
                 createdAt,
@@ -63,7 +63,7 @@ async function userAccountPOST(req, res) {
         res.clearCookie("session-1");
         res.clearCookie("username");
         res.clearCookie("loggedin");
-        res.status(500)
+        return res.status(500)
             .json({
                 ok: false,
                 user_account: false,

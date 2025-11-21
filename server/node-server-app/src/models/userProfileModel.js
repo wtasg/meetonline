@@ -1,9 +1,34 @@
+import { pojo } from "@wtasnorg/node-lib";
+
 const updateUserProfile = (userProfile, updates) => {
     return {
         ...userProfile,
         ...updates,
         modifiedAt: new Date().toISOString(),
     };
+};
+
+const userProfileKeyMap = {
+    "id": "id",
+    // "id": "id",
+    "userId": "user_id",
+    "user_id": "userId",
+    "profileName": "profile_name",
+    "profile_name": "profileName",
+    "displayName": "display_name",
+    "display_name": "displayName",
+    "phoneNumber": "phone_number",
+    "phone_number": "phoneNumber",
+    "email": "email",
+    // "email": "email",
+    "address": "address",
+    // "address": "address",
+    "websiteUrl": "website_url",
+    "website_url": "websiteUrl",
+    "createdAt": "created_at",
+    "created_at": "createdAt",
+    "modifiedAt": "modified_at",
+    "modified_at": "modifiedAt",
 };
 
 class UserProfileModel {
@@ -62,6 +87,15 @@ class UserProfileModel {
         instance.__isDefault = true;
         return instance;
     }
+
+    toClient() {
+        const obj = pojo(this);
+        delete obj.__isDefault;
+        delete obj.__isNull;
+        delete obj.id;
+        delete obj.userId;
+        return obj;
+    }
 }
 
-export { updateUserProfile, UserProfileModel };
+export { updateUserProfile, UserProfileModel, userProfileKeyMap };

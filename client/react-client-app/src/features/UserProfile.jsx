@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { fetchUserProfile } from "../actions/userProfileActions.js";
+import { fetchUserProfile, updateAddress, updateDisplayName, updateEmail, updatePhoneNumber, updateProfileName, updateWebsiteUrl } from "../actions/userProfileActions.js";
 import { hasUserSession } from "../utils/session.js";
 import { EditableValue } from "../components/EditableValue.jsx";
+import { ServiceError } from "../components/Error.jsx";
 
 function UserProfile() {
     if (!hasUserSession()) {
@@ -9,40 +10,95 @@ function UserProfile() {
         return;
     }
 
+    const [serviceError, setServiceError] = useState({ hasError: false, message: "" });
     const [profile, setProfile] = useState({ profileName: "", displayName: "", phoneNumber: "", email: "", address: "", websiteUrl: "", createdAt: "", modifiedAt: "" });
     useEffect(() => {
         (async function () {
-            setProfile(await fetchUserProfile());
+            const profile = await fetchUserProfile();
+            if (!profile.ok) {
+                setServiceError({ hasError: true, message: profile.message });
+                return;
+            }
+            const { profileName, displayName, phoneNumber, email, address, websiteUrl, createdAt, modifiedAt } = profile.user_profile;
+            setProfile({ profileName, displayName, phoneNumber, email, address, websiteUrl, createdAt, modifiedAt });
         })();
     }, []);
 
+    function updateProfileDetail(key, value) {
+        if (key === "profileName") {
+            updateProfileName(value);
+        } else if (key === "displayName") {
+            updateDisplayName(value);
+        } else if (key === "phoneNumber") {
+            updatePhoneNumber(value);
+        } else if (key === "address") {
+            updateAddress(value);
+        } else if (key === "websiteUrl") {
+            updateWebsiteUrl(value);
+        }
+        profile[key] = value;
+        setProfile({ ...profile });
+    }
+
+
     return (<div className="vflex">
         <h2>User Profile</h2>
+        <ServiceError {...serviceError} />
         <div className="flex">
-            <div className="w30p">Profile Name </div>
-            <div><EditableValue initialValue={profile.profileName} onChange={console.log} /></div>
+            <div className="w30p">Profile Name</div>
+            <div>
+                <EditableValue
+                    valueType={"text"}
+                    initialValue={profile.profileName}
+                    onChangeFn={(value) => updateProfileDetail("profileName", value)} />
+            </div>
         </div>
         <div className="flex">
             <div className="w30p">Display Name </div>
-            <div><EditableValue initialValue={profile.displayName} onChange={console.log} /></div>
+            <div>
+                <EditableValue
+                    valueType={"text"}
+                    initialValue={profile.displayName}
+                    onChangeFn={(value) => updateProfileDetail("displayName", value)} />
+            </div>
         </div>
         <div className="flex">
             <div className="w30p">Phone Number </div>
-            <div><EditableValue initialValue={profile.phoneNumber} onChange={console.log} /></div>
+            <div>
+                <EditableValue
+                    valueType={"text"}
+                    initialValue={profile.phoneNumber}
+                    onChangeFn={(value) => updateProfileDetail("phoneNumber", value)} />
+            </div>
         </div>
         <div className="flex">
             <div className="w30p">Email </div>
-            <div><EditableValue initialValue={profile.email} onChange={console.log} /></div>
+            <div>
+                <EditableValue
+                    valueType={"email"}
+                    initialValue={profile.email}
+                    onChangeFn={(value) => updateProfileDetail("email", value)} />
+            </div>
 
         </div>
         <div className="flex">
             <div className="w30p">Address </div>
-            <div><EditableValue initialValue={profile.address} onChange={console.log} /></div>
+            <div>
+                <EditableValue
+                    valueType={"text"}
+                    initialValue={profile.address}
+                    onChangeFn={(value) => updateProfileDetail("address", value)} />
+            </div>
 
         </div>
         <div className="flex">
             <div className="w30p">Website URL </div>
-            <div><EditableValue initialValue={profile.websiteUrl} onChange={console.log} /></div>
+            <div>
+                <EditableValue
+                    valueType={"text"}
+                    initialValue={profile.websiteUrl}
+                    onChangeFn={(value) => updateProfileDetail("websiteUrl", value)} />
+            </div>
 
         </div>
         <div className="flex">

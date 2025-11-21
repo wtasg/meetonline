@@ -15,10 +15,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    --min-gap: 4px 8px;
+    --min-gap: 4px;
     --margin: var(--min-gap);
 
-    --min-padding: 2px 4px;
+    --min-padding: var(--min-gap) calc(var(--min-gap) * 2);
     --padding: var(--min-padding);
 
     --min-button-width: 60px;
@@ -233,4 +233,18 @@ input {
 .w100p {
     min-width: 1000px;
     width: 100%;
+}
+
+.box {
+    padding: var(--padding);
+    margin: var(--margin) 0;
+    border: thin solid var(--app-background-color);
+
+    &.error {
+        border: thin solid red;
+    }
+}
+
+.editable {
+    cursor: text;
 }

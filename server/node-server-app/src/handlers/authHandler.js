@@ -48,12 +48,13 @@ async function signupHandlerPOST(req, res) {
 
     const salt = await saltWithRounds();
     const hashedPassword = await hashWithSalt(password, salt);
-    createUserAccount(username, hashedPassword, salt).then(() => {
-        res.json({ ok: true, signup: true, message: "Signup successful!" });
-    }).catch((err) => {
-        console.error("Error creating user account:", err);
-        res.status(500).json({ ok: false, signup: false, message: "Internal server error" });
-    });
+    createUserAccount(username, hashedPassword, salt)
+        .then(() => {
+            return res.json({ ok: true, signup: true, message: "Signup successful!" });
+        }).catch((err) => {
+            console.error("Error creating user account:", err);
+            return res.status(500).json({ ok: false, signup: false, message: "Internal server error" });
+        });
 }
 
 async function loginHandlerGET(req, res) {

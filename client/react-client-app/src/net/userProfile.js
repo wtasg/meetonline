@@ -7,7 +7,7 @@ import { CONF } from "./net-conf.js";
  */
 async function userProfile({ username }) {
     try {
-        return await (await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.USER_ACCOUNT}`, {
+        const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.USER_PROFILE}`, {
             credentials: "include",
             method: "POST",
             headers: {
@@ -15,13 +15,44 @@ async function userProfile({ username }) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ username }),
-        })).json();
+        });
+        const json = await response.json();
+        if (!json.ok) {
+            console.error(json);
+        }
+        return json;
     } catch (err) {
         console.error(err);
-        return { ok: false };
+        return { ok: false, message: err.message };
+    }
+}
+
+
+async function updateUserProfile({ username, key, value }) {
+    console.log("updateUserProfile", { username, key, value });
+    try {
+        const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.USER_PROFILE}`, {
+            credentials: "include",
+            method: "PATCH",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, key, value }),
+        });
+        const json = await response.json();
+        if (!json.ok) {
+            console.error(json);
+        }
+        return json;
+    }
+    catch (err) {
+        console.error(err);
+        return { ok: false, message: err.message };
     }
 }
 
 export {
-    userProfile
+    userProfile,
+    updateUserProfile
 };
