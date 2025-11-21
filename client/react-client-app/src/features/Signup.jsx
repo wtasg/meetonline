@@ -37,19 +37,22 @@ function Signup({ onSignup }) {
     return (<div className="form signup vflex">
         <h2>Signup</h2>
         <div>
-            <label htmlFor="signup_username" className="flex">
-                <>Username:</>
+            <label htmlFor="signup_username" className="vflex">
+                <>Username</>
                 <input type="text" id="signup_username" name="signup_username" placeholder="signup_username" value={signup_username} onChange={e => updateSignupUsername(e.target.value)} />
             </label>
         </div>
         <div>
-            <label htmlFor="signup_password" className="flex">
-                <>Password:</>
+            <label htmlFor="signup_password" className="vflex">
+                <>Password</>
                 <input type="password" id="signup_password" name="signup_password" placeholder="signup_password" value={signup_password} onChange={e => updateSignupPassword(e.target.value)} />
             </label>
         </div>
         <div>
-            <button type="button" onClick={onSignupLocal}>Signup</button>
+            <button type="button" className="cta" onClick={onSignupLocal}>Signup</button>
+        </div>
+        <div>
+            <a href="/login">login instead</a>
         </div>
     </div>);
 }

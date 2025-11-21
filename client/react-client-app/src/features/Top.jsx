@@ -7,6 +7,7 @@ import { user_session } from "../session";
 import { hasUserSession } from "../utils/session";
 import { useState } from "react";
 import { UserAccount } from "./UserAccount";
+import { UserProfile } from "./UserProfile";
 
 function Top() {
     const [hasSession, setHasSession] = useState(hasUserSession());
@@ -19,22 +20,26 @@ function Top() {
         } catch (err) {
             console.error(err);
         } finally {
-            window.location.reload(false);
+            window.location.assign("/");
         }
     }
+
     async function onLogin({ username, password }) {
         const isLoggedIn = await loginAction({ username, password });
         if (isLoggedIn) {
             setHasSession(true);
-            window.location = "/";
+            window.location.assign("/");
         } else {
             setHasSession(false);
         }
     }
 
     async function onSignup({ username, password }) {
-        await signupAction({ username, password });
         setHasSession(false);
+        const { ok, signup } = await signupAction({ username, password });
+        if (ok && signup) {
+            window.location.assign("/login#signup:true");
+        }
     }
 
     switch (pathname) {
@@ -44,20 +49,18 @@ function Top() {
             return !hasSession && <Signup onSignup={onSignup} />;
         case "/account":
             return hasSession && <UserAccount />;
+        case "/profile":
+            return hasSession && <UserProfile />;
         case "/logout":
             return hasSession ? <Logout onLogout={onLogout} username={() => user_session.retrieve("username")} /> : <div>You are logged out.</div>;
         case "/":
             return hasSession &&
                 <>
                     <Welcome />
-                    <Logout onLogout={onLogout} username={() => user_session.retrieve("username")} />
                 </>;
         default:
             return <>
-                {!hasSession && <div>You are logged out.</div>}
-                {
-                    hasSession && <><Welcome /></>
-                }
+                ERROR
             </>;
     }
 }

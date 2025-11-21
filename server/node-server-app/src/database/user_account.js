@@ -1,4 +1,4 @@
-import { UserAccountModel } from "../models/userModel.js";
+import { UserAccountModel } from "../models/userAccountModel.js";
 import { pool } from "./db.js";
 
 /**

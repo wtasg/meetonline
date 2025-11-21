@@ -32,7 +32,7 @@ cd client/react-client-app && npm run build -- --watch
 
 # cleanup
 docker compose --file compose.yml down
-# docker volume list | sed '1d' | awk '{print $2}' | xargs -n1 docker volume 
+# docker volume list | grep meetonline | awk '{print $2}' | xargs -n1 docker volume rm
 ```
 
 ## Documentation

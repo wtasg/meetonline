@@ -6,21 +6,6 @@ const updateUserAccount = (userAccount, updates) => {
     };
 };
 
-/**
- *
- * @param {UserAccountModel} userAccount The user account model object
- * @returns {Object} The user account in database format
- */
-const toDatabaseFormat = (userAccount) => ({
-    username: userAccount.username,
-    password: userAccount.password,
-    salt: userAccount.salt,
-    is_active: userAccount.isActive,
-    is_deleted: userAccount.isDeleted,
-    is_blocked: userAccount.isBlocked,
-    is_forgotten: userAccount.isForgotten
-});
-
 class UserAccountModel {
     constructor() {
         this.id = null;
@@ -57,6 +42,10 @@ class UserAccountModel {
         return instance;
     }
 
+    static null() {
+        return new UserAccountModel();
+    }
+
     static default() {
         const instance = new UserAccountModel();
         instance.id = "default-user-id";
@@ -75,4 +64,4 @@ class UserAccountModel {
     }
 }
 
-export { updateUserAccount, toDatabaseFormat, UserAccountModel };
+export { updateUserAccount, UserAccountModel };

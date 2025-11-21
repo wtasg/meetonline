@@ -1,10 +1,27 @@
 import { useState, useEffect } from "react";
 import { hasUserSession } from "../utils/session";
 import { preLoginAction } from "../actions/authActions";
+import { ServiceError } from "../components/Error";
+
+/**
+ * Returns true if user credentials are valid to POST
+ * @param {{username: string, password: string}} options user credentials to be validated
+ * @returns {boolean}
+ */
+function areUserCredentialsValid(username, password) {
+    return typeof username === "string" &&
+        typeof password === "string" &&
+        username.trim().length > 0 &&
+        password.trim().length > 0;
+}
 
 function Login({ onLogin }) {
     const [login_password, set_login_password] = useState("");
     const [login_username, set_login_username] = useState("");
+    const [btn_options, set_btn_options] = useState({ ariaDisabled: true, disabled: "disabled" });
+
+    const [fromSignup, _] = useState(window.location.hash.endsWith("#signup:true"));
+    const [failedLogin, setFailedLogin] = useState(false);
 
     function updateLoginPassword(password) {
         if (!password) {
@@ -21,7 +38,12 @@ function Login({ onLogin }) {
     }
 
     async function onLoginLocal() {
-        await onLogin({ username: login_username, password: login_password });
+        const ok = await onLogin({ username: login_username, password: login_password });
+        if (!ok) {
+            setFailedLogin(true);
+        } else {
+            setFailedLogin(false);
+        }
         set_login_password("");
         set_login_username("");
     }
@@ -34,22 +56,38 @@ function Login({ onLogin }) {
         })();
     }, []);
 
+    useEffect(() => {
+        if (areUserCredentialsValid(login_username, login_password)) {
+            set_btn_options({ ariaDisabled: false });
+        } else {
+            set_btn_options({ ariaDisabled: true, disabled: "disabled" });
+        }
+    }, [login_password, login_username]);
+
     return (<div className="form login vflex">
         <h2>Login</h2>
+        {failedLogin && <ServiceError hasError={true} message="login failed"></ServiceError>}
+        {fromSignup && <p style={{ color: "green" }}>Signup was successful!</p>}
         <div>
-            <label htmlFor="login_username" className="flex">
-                <>Username:</>
+            <label htmlFor="login_username" className="vflex">
+                <>Username</>
                 <input type="text" id="login_username" name="login_username" placeholder="login_username" value={login_username} onChange={e => updateLoginUsername(e.target.value)} />
             </label>
         </div>
         <div>
-            <label htmlFor="login_password" className="flex">
-                <>Password:</>
+            <label htmlFor="login_password" className="vflex">
+                <>Password</>
                 <input type="password" id="login_password" name="login_password" placeholder="login_password" value={login_password} onChange={e => updateLoginPassword(e.target.value)} />
             </label>
         </div>
         <div>
-            <button type="button" onClick={onLoginLocal}>Login</button>
+            <button {...btn_options}
+                type="button"
+                className="cta"
+                onClick={onLoginLocal}>Login</button>
+        </div>
+        <div>
+            <a href="/signup">create a new account</a>
         </div>
     </div>);
 }

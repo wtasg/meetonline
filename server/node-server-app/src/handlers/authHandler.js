@@ -48,12 +48,13 @@ async function signupHandlerPOST(req, res) {
 
     const salt = await saltWithRounds();
     const hashedPassword = await hashWithSalt(password, salt);
-    createUserAccount(username, hashedPassword, salt).then(() => {
-        res.json({ ok: true, signup: true, message: "Signup successful!" });
-    }).catch((err) => {
-        console.error("Error creating user account:", err);
-        res.status(500).json({ ok: false, signup: false, message: "Internal server error" });
-    });
+    createUserAccount(username, hashedPassword, salt)
+        .then(() => {
+            return res.json({ ok: true, signup: true, message: "Signup successful!" });
+        }).catch((err) => {
+            console.error("Error creating user account:", err);
+            return res.status(500).json({ ok: false, signup: false, message: "Internal server error" });
+        });
 }
 
 async function loginHandlerGET(req, res) {
@@ -143,18 +144,12 @@ async function destroySession(req, res) {
     res.clearCookie("username");
     res.clearCookie("loggedin");
 
-    if (!sessionId || !username) {
-        // This could be silent.
-        return res.status(400)
-            .json({ ok: false, logout: false, message: "Missing session." });
+    if (sessionId && username) {
+        const storedSession = await authStore.retrieve(`session_for_${username}`);
+        if (storedSession === sessionId) {
+            await authStore.eject(`session_for_${username}`);
+        }
     }
-    const storedSession = await authStore.retrieve(`session_for_${username}`);
-    if (storedSession !== sessionId) {
-        // This could be silent.
-        return res.status(403)
-            .json({ ok: false, logout: false, message: "Invalid session." });
-    }
-    await authStore.eject(`session_for_${username}`);
 }
 
 export { setupAuthHandlers, authStore };

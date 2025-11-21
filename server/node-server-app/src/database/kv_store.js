@@ -29,7 +29,7 @@ async function createOrUpdateKVPair(key, value) {
  */
 async function getKVPair(key) {
     try {
-        const query = "SELECT * FROM kv_store WHERE key = $1";
+        const query = "SELECT * FROM kv_store WHERE k = $1";
         const values = [String(key)];
         const res = await pool.query(query, values);
         let out = res.rows.length === 0 ?
