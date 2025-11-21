@@ -53,7 +53,7 @@ async function userProfilePOST(req, res) {
             return res.status(500)
                 .json({
                     ok: false,
-                    user_profile: false,
+                    user_profile,
                     message: "Cannot fetch proper user profile."
                 });
         }
@@ -83,7 +83,7 @@ async function userProfilePATCH(req, res) {
             return res.status(400).json({
                 ok: false,
                 user_profile: false,
-                message: "Missing Cookie Headers."
+                message: "Invalid Session."
             });
         }
 
@@ -97,12 +97,9 @@ async function userProfilePATCH(req, res) {
                 .json({
                     ok: false,
                     user_profile: false,
-                    message: "Missing session."
+                    message: "Invalid Session."
                 });
         }
-
-        // patch workflow
-        // database query...
 
         const storedSession = (await userSession({ username })).session;
         if (storedSession !== sessionId) {

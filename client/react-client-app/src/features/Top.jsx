@@ -35,8 +35,11 @@ function Top() {
     }
 
     async function onSignup({ username, password }) {
-        await signupAction({ username, password });
         setHasSession(false);
+        const { ok, signup } = await signupAction({ username, password });
+        if (ok && signup) {
+            window.location.assign("/login#signup:true");
+        }
     }
 
     switch (pathname) {

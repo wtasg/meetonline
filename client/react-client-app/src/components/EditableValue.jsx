@@ -17,7 +17,7 @@ function EditableValue({ initialValue, onChangeFn, valueType }) {
         <input
             type={valueType || "text"}
             onChange={e => { setDirty(true); setLocalValue(e.target.value); }}
-            onKeyDown={(e) => { if (e.key === "Enter") onValueChange(); }}
+            onKeyDown={(e) => { if (e.key === "Enter" && localValue.length > 0) onValueChange(); }}
             value={localValue}
             style={{ border: dirty ? "thin solid red" : "" }}
         />

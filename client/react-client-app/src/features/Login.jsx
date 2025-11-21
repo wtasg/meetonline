@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { hasUserSession } from "../utils/session";
 import { preLoginAction } from "../actions/authActions";
+import { ServiceError } from "../components/Error";
 
 /**
  * Returns true if user credentials are valid to POST
@@ -19,6 +20,9 @@ function Login({ onLogin }) {
     const [login_username, set_login_username] = useState("");
     const [btn_options, set_btn_options] = useState({ ariaDisabled: true, disabled: "disabled" });
 
+    const [fromSignup, _] = useState(window.location.hash.endsWith("#signup:true"));
+    const [failedLogin, setFailedLogin] = useState(false);
+
     function updateLoginPassword(password) {
         if (!password) {
             return;
@@ -34,7 +38,12 @@ function Login({ onLogin }) {
     }
 
     async function onLoginLocal() {
-        await onLogin({ username: login_username, password: login_password });
+        const ok = await onLogin({ username: login_username, password: login_password });
+        if (!ok) {
+            setFailedLogin(true);
+        } else {
+            setFailedLogin(false);
+        }
         set_login_password("");
         set_login_username("");
     }
@@ -57,6 +66,8 @@ function Login({ onLogin }) {
 
     return (<div className="form login vflex">
         <h2>Login</h2>
+        {failedLogin && <ServiceError hasError={true} message="login failed"></ServiceError>}
+        {fromSignup && <p style={{ color: "green" }}>Signup was successful!</p>}
         <div>
             <label htmlFor="login_username" className="vflex">
                 <>Username</>

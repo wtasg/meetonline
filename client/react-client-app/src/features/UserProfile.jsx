@@ -19,8 +19,8 @@ function UserProfile() {
                 setServiceError({ hasError: true, message: profile.message });
                 return;
             }
-            const { profileName, displayName, phoneNumber, email, address, websiteUrl, createdAt, modifiedAt } = profile.user_profile;
-            setProfile({ profileName, displayName, phoneNumber, email, address, websiteUrl, createdAt, modifiedAt });
+            const { id, profileName, displayName, phoneNumber, email, address, websiteUrl, createdAt, modifiedAt } = profile.user_profile;
+            setProfile({ id, profileName, displayName, phoneNumber, email, address, websiteUrl, createdAt, modifiedAt });
         })();
     }, []);
 

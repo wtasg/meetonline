@@ -25,8 +25,13 @@ async function presignup() {
     return res;
 }
 
+/**
+ *
+ * @param {{username: string, password: string}} userCredentials
+ * @returns {{ok: boolean, login: boolean, message: string}} typical network response
+ */
 async function login({ username, password }) {
-    return fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGIN}`, {
+    const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGIN}`, {
         credentials: "include",
         method: "POST",
         headers: {
@@ -34,7 +39,8 @@ async function login({ username, password }) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password, token: readCookie("login_token") }),
-    }).then((res) => res.json());
+    });
+    return await response.json();
 }
 
 async function signup({ username, password }) {

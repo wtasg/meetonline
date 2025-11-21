@@ -3,7 +3,7 @@ import { userProfile, updateUserProfile } from "../net/userProfile.js";
 
 /**
  *
- * @returns {Promise<{username: string, createdAt: string, modifiedAt: string}>}
+ * @returns {Promise<{id: number, profileName: string, displayName: string, phoneNumber: string, email: string, address: string, websiteUrl: string, createdAt: string, modifiedAt: string}>}
  */
 async function fetchUserProfile() {
     const username = user_session.retrieve("username");
