@@ -2,6 +2,10 @@
 
 An app to let you build and find online communities.
 
+## Reporting bugs
+
+- Read up, copy-paste from [Bug Report template](./docs/bug-report-template.md)
+
 ## Run
 
 ### manual compose
