@@ -39,7 +39,7 @@
   "devDependencies": {
     "@eslint/js": "^9.38.0",
     "@jest/globals": "^30.2.0",
-    "@stylistic/eslint-plugin": "^5.6.0",
+    "@stylistic/eslint-plugin": "^5.6.1",
     "@types/express": "^5.0.5",
     "@types/node": "^24.10.1",
     "@types/pg": "^8.15.6",
