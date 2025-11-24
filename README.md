@@ -5,6 +5,7 @@ An app to let you build and find online communities.
 ## Run
 
 ### manual compose
+
 ```bash
 # docker compose --file compose.yml down
 # docker volume list | sed '1d' | awk '{print $2}' | xargs -n1 docker volume rm
@@ -37,12 +38,12 @@ docker compose --file compose.yml down
 
 ## Documentation
 
-Documentation is available in `docs/`. Visit [Documentation Home](./docs/Home.md) 
+Documentation is available in `docs/`. Visit [Documentation Home](./docs/Home.md)
 
-### YouTube series on development journey
+## Social
 
-- [yt/@wtasyt software-development](https://www.youtube.com/playlist?list=PLbUtscuRQ61xiGmjCL00Ime9z5sJEZu4M)
-
+- [YouTube playlist](https://www.youtube.com/playlist?list=PLbUtscuRQ61xiGmjCL00Ime9z5sJEZu4M)
+- [Discord invite](https://discord.gg/QFBPAseR)
 
 ## LICENSE
 
