@@ -41,7 +41,7 @@ export default defineConfig({
         launchOptions: {
             args: ["--ignore-certificate-errors"]
         },
-        baseURL: "https://localhost:5174",
+        baseURL: "https://localhost",
         ignoreHTTPSErrors: true, // ✅ Trust self-signed certs
         headless: true,
     },
