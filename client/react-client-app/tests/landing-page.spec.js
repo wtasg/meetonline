@@ -1,24 +1,24 @@
 import { test, expect } from "@playwright/test";
 
-import { PATH } from "./common.js";
+import { APP_ROOT } from "./common.js";
 
 test("has title", async ({ page }) => {
-    await page.goto(PATH);
+    await page.goto(APP_ROOT);
     await expect(page).toHaveTitle(/meet online client react app/);
 });
 
 test("has home, login, and signup links", async ({ page }) => {
-    await page.goto(PATH);
+    await page.goto(APP_ROOT);
     await expect(page.getByRole("link", { name: "home" })).toBeVisible();
     await expect(page.getByRole("link", { name: "login" })).toBeVisible();
     await expect(page.getByRole("link", { name: "signup" })).toBeVisible();
 });
 
 test("clicking /login takes user to /login page", async ({ page }) => {
-    await page.goto(PATH);
+    await page.goto(APP_ROOT);
     await expect(page.getByRole("link", { name: "login" })).toBeVisible();
     await page.getByRole("link", { name: "login" }).filter({ visible: true }).click();
-    // await page.goto(`${PATH}/login`);
+    // await page.goto(`${APP_ROOT}/login`);
     await page.waitForURL("**/login");
     expect(page.url().endsWith("/login")).toBe(true);
     // await expect(page.getByText("Login")).toBeVisible();
@@ -29,7 +29,7 @@ test("clicking /login takes user to /login page", async ({ page }) => {
 
 
 test("clicking /signup takes user to /signup page", async ({ page }) => {
-    await page.goto(PATH);
+    await page.goto(APP_ROOT);
     await expect(page.getByRole("link", { name: "signup" })).toBeVisible();
     await page.getByRole("link", { name: "signup" }).filter({ visible: true }).click();
     await page.waitForURL("**/signup");

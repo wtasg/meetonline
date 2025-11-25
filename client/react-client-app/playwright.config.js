@@ -31,13 +31,17 @@ export default defineConfig({
         /* Base URL to use in actions like `await page.goto('')`. */
         // baseURL: 'http://localhost:3000',
 
+        viewport: {
+            width: 1200,
+            height: 1000,
+        },
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
         trace: "on-first-retry",
 
         launchOptions: {
             args: ["--ignore-certificate-errors"]
         },
-        baseURL: "https://localhost",
+        baseURL: "https://localhost:5173",
         ignoreHTTPSErrors: true, // ✅ Trust self-signed certs
         headless: true,
     },
