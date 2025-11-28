@@ -6,7 +6,11 @@ An app to let you build and find online communities.
 
 - Read up, copy-paste from [Bug Report template](./docs/bug-report-template.md)
 
-## Run
+## Discussions
+
+Start with introducing yourself [here](https://github.com/wtasg/meetonline/discussions/84).
+
+## Development/Run
 
 ### manual compose
 
