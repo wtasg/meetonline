@@ -44,7 +44,7 @@ jobs:
             --config eslint.config.js \
             --ext .js,.jsx,.ts,.tsx \
             --format @microsoft/eslint-formatter-sarif \
-            --output-file ../eslint-client.sarif
+            --output-file client/eslint-client.sarif
         continue-on-error: true
 
       - name: Run ESLint in server/node-server-app
@@ -56,7 +56,7 @@ jobs:
             --config eslint.config.js \
             --ext .js,.jsx,.ts,.tsx \
             --format @microsoft/eslint-formatter-sarif \
-            --output-file ../eslint-server.sarif
+            --output-file server/eslint-server.sarif
         continue-on-error: true
 
       - name: Upload analysis results to GitHub
