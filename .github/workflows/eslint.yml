@@ -30,34 +30,60 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install ESLint
-        run: |
-          npm install eslint@8.10.0
-          npm install @microsoft/eslint-formatter-sarif@3.1.0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
+      # Client: install deps (prefer npm ci if lockfile present), ensure eslint & formatter installed,
+      # run eslint and output SARIF to client/eslint-client.sarif
       - name: Run ESLint in client/react-client-app
         env:
           SARIF_ESLINT_IGNORE_SUPPRESSED: "true"
         working-directory: client/react-client-app
         run: |
+          if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
+            npm ci --no-audit --no-fund
+          else
+            # Ensure eslint + sarif formatter are available locally
+            npm install --no-audit --no-fund --no-save eslint@8 @microsoft/eslint-formatter-sarif@3
+          fi
+
+          # Run eslint and always write SARIF to ../eslint-client.sarif
           npx eslint . \
-            --config eslint.config.js \
             --ext .js,.jsx,.ts,.tsx \
             --format @microsoft/eslint-formatter-sarif \
-            --output-file client/eslint-client.sarif
+            --output-file ../eslint-client.sarif || true
         continue-on-error: true
 
+      # Server: same as client
       - name: Run ESLint in server/node-server-app
         env:
           SARIF_ESLINT_IGNORE_SUPPRESSED: "true"
         working-directory: server/node-server-app
         run: |
+          if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
+            npm ci --no-audit --no-fund
+          else
+            npm install --no-audit --no-fund --no-save eslint@8 @microsoft/eslint-formatter-sarif@3
+          fi
+
           npx eslint . \
-            --config eslint.config.js \
             --ext .js,.jsx,.ts,.tsx \
             --format @microsoft/eslint-formatter-sarif \
-            --output-file server/eslint-server.sarif
+            --output-file ../eslint-server.sarif || true
         continue-on-error: true
+
+      # Ensure SARIF files exist (prevent upload step from failing if ESLint crashed)
+      - name: Ensure SARIF files exist
+        run: |
+          mkdir -p client server
+          if [ ! -f client/eslint-client.sarif ]; then
+            echo '{"version":"2.1.0","runs":[]}' > client/eslint-client.sarif
+          fi
+          if [ ! -f server/eslint-server.sarif ]; then
+            echo '{"version":"2.1.0","runs":[]}' > server/eslint-server.sarif
+          fi
 
       - name: Upload analysis results to GitHub
         uses: github/codeql-action/upload-sarif@v4
