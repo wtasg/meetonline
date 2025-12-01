@@ -1,0 +1,32 @@
+# .github/labeler.yml
+# Refer to https://github.com/actions/labeler for documentation and implementation
+# Refer to v4 documentation: https://github.com/marketplace/actions/labeler?version=v4.3.0
+
+documentation:
+  - "docs/**/*"
+
+testing:
+  - "client/**/*.test.js"
+  - "server/**/*.test.js"
+
+todo:
+  - "**/*.todo.*"
+
+backend:
+  - "server/**/*"
+
+frontend:
+  - "client/**/*"
+
+database:
+  - "database/**/*"
+
+env:
+  - "**/*.env"
+
+docker:
+  - "**/*Dockerfile"
+  - "**/*compose.yml"
+
+ui-design:
+  - "client/**/*.css"
