@@ -30,3 +30,7 @@ docker:
 
 ui-design:
   - "client/**/*.css"
+
+maintenance:
+  - "**/package*.json"
+  - ".github/**/*"
