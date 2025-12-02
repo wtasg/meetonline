@@ -128,7 +128,7 @@ create table if not exists event
     -- other
     group_id                   bigint default null,
     created_at                 timestamp default CURRENT_TIMESTAMP not null,
-    updated_at                 timestamp default CURRENT_TIMESTAMP not null,
+    modified_at                 timestamp default CURRENT_TIMESTAMP not null,
     is_deleted                 boolean   default false             not null,
     is_hidden                  boolean   default false             not null,
     is_archived                boolean   default false             not null
@@ -155,7 +155,7 @@ comment on column event.interested is 'interested users';
 comment on column event.attached_documents is 'attach document link';
 comment on column event.group_id is 'Reserved for groups feature';
 comment on column event.created_at is 'Record creation timestamp';
-comment on column event.updated_at is 'Record update timestamp';
+comment on column event.modified_at is 'Record update timestamp';
 comment on column event.is_deleted is 'delete flag';
 comment on column event.is_hidden is 'whether event is hidden from public listing';
 comment on column event.is_archived is 'whether event is archived';
