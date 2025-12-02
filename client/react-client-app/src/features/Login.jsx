@@ -18,7 +18,7 @@ function areUserCredentialsValid(username, password) {
 function Login({ onLogin }) {
     const [login_password, set_login_password] = useState("");
     const [login_username, set_login_username] = useState("");
-    const [btn_options, set_btn_options] = useState({ ariaDisabled: true, disabled: "disabled" });
+    const [btn_options, set_btn_options] = useState({ "aria-disabled": true, disabled: "disabled" });
 
     const [fromSignup, _] = useState(window.location.hash.endsWith("#signup:true"));
     const [failedLogin, setFailedLogin] = useState(false);
@@ -58,9 +58,9 @@ function Login({ onLogin }) {
 
     useEffect(() => {
         if (areUserCredentialsValid(login_username, login_password)) {
-            set_btn_options({ ariaDisabled: false });
+            set_btn_options({ "aria-disabled": false });
         } else {
-            set_btn_options({ ariaDisabled: true, disabled: "disabled" });
+            set_btn_options({ "aria-disabled": true, disabled: "disabled" });
         }
     }, [login_password, login_username]);
 

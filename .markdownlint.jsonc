@@ -1,4 +1,6 @@
 {
     // MD018/no-missing-space-atx: No space after hash on atx style heading
-    "MD018": false
+    "MD018": false,
+    // MD013/line-length: Line length [Expected: 80; Actual: ...]
+    "MD013": false
 }
