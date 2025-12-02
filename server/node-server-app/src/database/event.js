@@ -79,6 +79,7 @@ async function createEvent(data) {
 
         const v = [
             data.organiser_id,
+            data.organiser || null,
             data.title,
             data.description || null,
             data.online_location || null,
@@ -93,8 +94,10 @@ async function createEvent(data) {
             data.is_anonymous ?? false,
             data.category_id || null,
             data.theme || null,
+            data.interested || null,
             data.attached_document_id || null,
-            data.group_id || null
+            data.group_id || null,
+            data.tags || null
         ];
 
         const r = await pool.query(q, v);
@@ -113,7 +116,7 @@ async function createEvent(data) {
 async function getEventById(event_id) {
     try {
         const q = `
-            SELECT * FROM events
+            SELECT * FROM event
             WHERE event_id = $1 AND is_deleted = false
         `;
         const v = [event_id];
@@ -136,8 +139,8 @@ async function getEventById(event_id) {
 async function listEventsByProfile(profile_id) {
     try {
         const q = `
-            SELECT * FROM events
-            WHERE chief_organiser_profile_id = $1
+            SELECT * FROM event
+            WHERE organiser_id = $1
               AND is_deleted = false
             ORDER BY start_at ASC
         `;
