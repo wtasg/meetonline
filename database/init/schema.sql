@@ -93,7 +93,7 @@ create table if not exists event
 
     -- Orgnisers
     organiser_id               bigint                              not null,
-    organiser                  text,
+    organisers                  text,
 
     -- Event fields
     title                      varchar(1024)                       not null,
@@ -106,8 +106,6 @@ create table if not exists event
 
     -- Payment
     is_paid                    boolean   default false             not null,
-    price_amount               numeric(12,2),
-    currency                   char(3),
 
     -- Broadcast
     is_broadcast               boolean   default false             not null,
@@ -115,18 +113,17 @@ create table if not exists event
 
     -- Tags and Categories
     tags                       text,
-    category_id                text,
+    categories                   text,
 
     -- Visibility and Interaction
     is_interactive             boolean   default true              not null,
     is_anonymous               boolean   default false             not null,
-    theme                      varchar(32),
 
     -- Engagement
     interested                  text,
 
     -- Attachments
-    attached_document_id       text,
+    attached_documents       text,
 
     -- other
     group_id                   bigint default null,
@@ -140,7 +137,7 @@ create table if not exists event
 comment on table event is 'Events created by user profiles';
 comment on column event.id is 'Primary key for events table';
 comment on column event.organiser_id is 'FK: profile_id who created the event';
-comment on column event.organiser is 'FK: profile who created the event';
+comment on column event.organisers is 'FK: profile who created the event';
 comment on column event.title is 'Title of the event or meeting';
 comment on column event.description is 'Description of the event';
 comment on column event.online_location is 'Meeting URL or Meeting ID';
@@ -148,16 +145,14 @@ comment on column event.start_at is 'Event start timestamp';
 comment on column event.end_at is 'event end time';
 comment on column event.is_paid is 'Whether the event requires payment';
 comment on column event.price_amount is 'Price if the event is paid';
-comment on column event.currency is 'Currency code (example: USD, INR)';
 comment on column event.is_broadcast is 'Whether the event is a broadcast (YT Live, Twitch, prerecorded)';
 comment on column event.broadcast_type is 'Type of broadcast: youtube, twitch, prerecorded';
 comment on column event.tags is 'hashtag for event';
-comment on column event.category_id is 'FK to categories table';
+comment on column event.categories is 'categories for event';
 comment on column event.is_interactive is 'Will organiser interact with attendees?';
 comment on column event.is_anonymous is 'Whether attendees can join anonymously';
-comment on column event.theme is 'theme text';
 comment on column event.interested is 'interested users';
-comment on column event.attached_document_id is 'attach document link';
+comment on column event.attached_documents is 'attach document link';
 comment on column event.group_id is 'Reserved for groups feature';
 comment on column event.created_at is 'Record creation timestamp';
 comment on column event.updated_at is 'Record update timestamp';
