@@ -1,12 +1,10 @@
 import { user_session } from "../session";
-import { readCookie } from "./cookie";
-
-function hasAuthCookies() {
-    return !!readCookie("loggedin");
-}
+import { isNonEmptyString } from "./string";
 
 function hasUserSession() {
-    return hasAuthCookies() && user_session && user_session.retrieve("username") !== null;
+    return user_session &&
+        isNonEmptyString(user_session.retrieve("username")) &&
+        isNonEmptyString(user_session.retrieve("session"));
 }
 
-export { hasUserSession, hasAuthCookies };
+export { hasUserSession };
