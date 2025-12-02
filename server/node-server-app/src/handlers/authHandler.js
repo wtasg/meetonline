@@ -110,22 +110,41 @@ async function loginHandlerPOST(req, res) {
     res.cookie("session-1", session_id, {
         sameSite: "strict",
         httpOnly: true,
-        secure: false,
-        maxAge: 36 * 60 * 60 * 1000
+        secure: true,
+        maxAge: 36 * 60 * 60 * 1000,
+        path: "/",
     });
     res.cookie("username", candidateUsername, {
         sameSite: "strict",
         httpOnly: true,
-        secure: false,
-        maxAge: 36 * 60 * 60 * 1000
+        secure: true,
+        maxAge: 36 * 60 * 60 * 1000,
+        path: "/",
     });
-    res.cookie("loggedin", candidateUsername, {
+    res.cookie("loggedin", `${candidateUsername}_${session_id}`, {
         sameSite: "strict",
-        httpOnly: false,
-        secure: false,
-        maxAge: 36 * 60 * 60 * 1000
+        httpOnly: true,
+        secure: true,
+        maxAge: 36 * 60 * 60 * 1000,
+        path: "/",
     });
-    res.status(200).json({ ok: true, login: true, message: "Login successful!" });
+    /*
+    console.log("successful login.", {
+        login: {
+            username: candidateUsername,
+            session: session_id
+        }
+    });
+    */
+    return res.status(200)
+        .json({
+            ok: true,
+            login: {
+                username: candidateUsername,
+                session: session_id
+            },
+            message: "Login successful!"
+        });
 }
 
 async function logoutHandlerPOST(req, res) {

@@ -20,9 +20,10 @@ async function loginAction({ username, password }) {
         return Promise.reject("Username and password are required");
     }
     const result = await login({ username, password });
-
+    // console.log(JSON.stringify({ actionResult: result }), null, 4);
     if (result.ok) {
-        user_session.store("username", username);
+        user_session.store("username", result.login.username);
+        user_session.store("session", result.login.session);
         return true;
     }
 

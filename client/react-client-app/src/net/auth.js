@@ -1,6 +1,10 @@
 import { readCookie } from "../utils/cookie.js";
 import { CONF } from "./net-conf.js";
 
+/**
+ * GET login tokens
+ * @returns {Response}
+ */
 async function prelogin() {
     const res = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGIN}`, {
         credentials: "include",
@@ -13,6 +17,10 @@ async function prelogin() {
     return res;
 }
 
+/**
+ * GET signup tokens
+ * @returns {Response}
+ */
 async function presignup() {
     const res = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.SIGNUP}`, {
         credentials: "include",
@@ -26,9 +34,9 @@ async function presignup() {
 }
 
 /**
- *
+ * POST /login
  * @param {{username: string, password: string}} userCredentials
- * @returns {{ok: boolean, login: boolean, message: string}} typical network response
+ * @returns {{ok: boolean, login: {username: string, session: string}, message: string}} typical network response
  */
 async function login({ username, password }) {
     const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGIN}`, {
@@ -40,9 +48,16 @@ async function login({ username, password }) {
         },
         body: JSON.stringify({ username, password, token: readCookie("login_token") }),
     });
-    return await response.json();
+    const result = await response.json();
+    // console.log(JSON.stringify({ result }));
+    return result;
 }
 
+/**
+ * POST /signup
+ * @param {{username: string, password: string}} userCredentials
+ * @returns
+ */
 async function signup({ username, password }) {
     return fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.SIGNUP}`, {
         credentials: "include",
