@@ -5,9 +5,10 @@ import { pool } from "./db.js";
  * @param {object} row
  */
 function mapEvent(row) {
+    if (!row) return null;
     return {
         event_id: row.event_id,
-        chief_organiser_profile_id: row.chief_organiser_profile_id,
+        organiser_id: row.organiser_id,
         title: row.title,
         description: row.description,
         online_location: row.online_location,
@@ -26,7 +27,12 @@ function mapEvent(row) {
         group_id: row.group_id,
         created_at: row.created_at,
         updated_at: row.updated_at,
-        is_deleted: row.is_deleted
+        is_deleted: row.is_deleted,
+        tags: row.tags,
+        organiser: row.organiser,
+        interested: row.interested,
+        is_hidden: row.is_hidden,
+        is_archived: row.is_archived
     };
 }
 
@@ -36,9 +42,13 @@ function mapEvent(row) {
  */
 async function createEvent(data) {
     try {
+        if (!data.organiser_id) throw new Error("organiser_id is required");
+        if (!data.title) throw new Error("title is required");
+        if (!data.start_at) throw new Error("start_at is required");
         const q = `
-            INSERT INTO events (
-                chief_organiser_profile_id,
+            INSERT INTO event (
+                organiser_id,
+                organiser,
                 title,
                 description,
                 online_location,
@@ -53,19 +63,22 @@ async function createEvent(data) {
                 is_anonymous,
                 category_id,
                 theme,
+                interested,
                 attached_document_id,
-                group_id
+                group_id,
+                tags
             )
             VALUES (
                 $1, $2, $3, $4, $5, $6,
                 $7, $8, $9, $10, $11,
                 $12, $13, $14, $15, $16, $17
+                $18, $19, $20
             )
             RETURNING *;
         `;
 
         const v = [
-            data.chief_organiser_profile_id,
+            data.organiser_id,
             data.title,
             data.description || null,
             data.online_location || null,
