@@ -128,7 +128,7 @@ create table if not exists event
     -- other
     group_id                   bigint default null,
     created_at                 timestamp default    CURRENT_TIMESTAMP   not null,
-    modified_at                 timestamp default   CURRENT_TIMESTAMP   not null,
+    modified_at                timestamp default    CURRENT_TIMESTAMP   not null,
     is_deleted                 boolean   default    false               not null,
     is_hidden                  boolean   default    false               not null,
     is_archived                boolean   default    false               not null
@@ -142,7 +142,7 @@ comment on column event.title is 'Title of the event or meeting';
 comment on column event.description is 'Description of the event';
 comment on column event.online_location is 'Meeting URL or Meeting ID';
 comment on column event.start_at is 'Event start timestamp';
-comment on column event.end_at is 'event end time';
+comment on column event.end_at is 'Event end time';
 comment on column event.is_paid is 'Whether the event requires payment';
 comment on column event.is_broadcast is 'Whether the event is a broadcast (YT Live, Twitch, prerecorded)';
 comment on column event.broadcast_type is 'Type of broadcast: youtube, twitch, prerecorded';
@@ -169,9 +169,12 @@ alter table event
 
 -- Foreign Keys
 alter table event
-    add constraint event_organiser_id_fk
-        foreign key (organiser_id) references user_profile (id);
+    add constraint event_end_after_start_check
+        check (end_at > start_at);
 
+alter table event
+    add constraint event_broadcast_type_check
+        check (broadcast_type IS NULL OR broadcast_type IN ('youtube', 'twitch', 'prerecorded'));
 -- Indexes
 create index if not exists event_start_at_index
     on event (start_at);
@@ -179,4 +182,12 @@ create index if not exists event_start_at_index
 create index if not exists event_organiser_id_index
     on event (organiser_id);
 
+create index if not exists event_is_hidden_index
+    on event (is_hidden);
+
+create index if not exists event_is_archived_index
+    on event (is_archived);
+
+create index if not exists event_created_at_desc_index
+    on event (created_at desc);
 -- EVENT : END
