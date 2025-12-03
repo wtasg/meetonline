@@ -1,13 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchUserAccount } from "../actions/userAccountActions.js";
-import { hasUserSession } from "../utils/session.js";
-import { location } from "../session.js";
 
 function UserAccount() {
-    if (!hasUserSession()) {
-        location.store("path", "/login");
-        return;
-    }
 
     const [account, setAccount] = useState({ username: "", createdAt: "", modifiedAt: "" });
     useEffect(() => {

@@ -4,7 +4,7 @@ import { Link } from "../components/Link.jsx";
 function Menu() {
     const hasSession = hasUserSession();
 
-    return <div role="navigation" className="vflex menu sidebar">
+    return <nav role="navigation" className="vflex menu sidebar">
         <ul>
             <li>
                 <Link to={"/"}>Home</Link>
@@ -40,7 +40,7 @@ function Menu() {
                 </li>
             }
         </ul>
-    </div>;
+    </nav>;
 }
 
 export { Menu };

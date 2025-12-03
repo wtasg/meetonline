@@ -1,16 +1,9 @@
 import { useState, useEffect } from "react";
 import { fetchUserProfile, updateAddress, updateDisplayName, updateEmail, updatePhoneNumber, updateProfileName, updateWebsiteUrl } from "../actions/userProfileActions.js";
-import { hasUserSession } from "../utils/session.js";
 import { EditableValue } from "../components/EditableValue.jsx";
 import { ServiceError } from "../components/Error.jsx";
-import { location } from "../session.js";
 
 function UserProfile() {
-    if (!hasUserSession()) {
-        location.store("path", "/login");
-        return;
-    }
-
     const [serviceError, setServiceError] = useState({ hasError: false, message: "" });
     const [profile, setProfile] = useState({ profileName: "", displayName: "", phoneNumber: "", email: "", address: "", websiteUrl: "", createdAt: "", modifiedAt: "" });
     useEffect(() => {

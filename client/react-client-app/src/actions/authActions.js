@@ -32,6 +32,11 @@ async function loginAction({ username, password }) {
     return false;
 }
 
+/**
+ *
+ * @param {{username:string, password:string}} userCredentials
+ * @returns {Promise<{ok:boolean,signup:{username:string},message:string}>}
+ */
 async function signupAction({ username, password }) {
     if (!username || !password) {
         return Promise.reject("Username and password are required");
@@ -41,7 +46,7 @@ async function signupAction({ username, password }) {
 
 /**
  *
- * @returns {Promise<{ok: string, logout: boolean, message: string}>}
+ * @returns {Promise<{ok: boolean, logout: boolean, message: string}>}
  */
 async function logoutAction() {
 

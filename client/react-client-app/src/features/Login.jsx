@@ -22,7 +22,7 @@ function Login({ onLogin }) {
     const [login_username, set_login_username] = useState("");
     const [btn_options, set_btn_options] = useState({ "aria-disabled": true, disabled: "disabled" });
 
-    const [fromSignup, _] = useState(location.retrieve("path").endsWith("#signup:true"));
+    const [fromSignup, _] = useState(location.retrieve("path")?.endsWith("#signup:true") || false);
     const [failedLogin, setFailedLogin] = useState(false);
 
     function updateLoginPassword(password) {

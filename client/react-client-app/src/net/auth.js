@@ -36,7 +36,7 @@ async function presignup() {
 /**
  * POST /login
  * @param {{username: string, password: string}} userCredentials
- * @returns {{ok: boolean, login: {username: string, session: string}, message: string}} typical network response
+ * @returns {Promise<{ok: boolean, login: {username: string, session: string}, message: string}>}
  */
 async function login({ username, password }) {
     const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGIN}`, {
@@ -54,7 +54,7 @@ async function login({ username, password }) {
 /**
  * POST /signup
  * @param {{username: string, password: string}} userCredentials
- * @returns
+ * @returns {Promise<{ok:boolean,signup:{username:string},message:string}>}
  */
 async function signup({ username, password }) {
     const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.SIGNUP}`, {
