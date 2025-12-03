@@ -12,6 +12,12 @@ Start with introducing yourself [here](https://github.com/wtasg/meetonline/discu
 
 ## Development/Run
 
+### good first issues
+
+- Feel free to work on them. You don't need our permission for working on GFIs.
+- If you need help, ask, maybe once a day.
+- [check GFIs here](https://github.com/wtasg/meetonline/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22)
+
 ### Checklists
 
 - [Review Checklist](https://github.com/wtasg/meetonline/discussions/298)
