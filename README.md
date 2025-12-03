@@ -57,6 +57,7 @@ Documentation is available in `docs/`. Visit [Documentation Home](./docs/Home.md
 
 - [YouTube playlist](https://www.youtube.com/playlist?list=PLbUtscuRQ61xiGmjCL00Ime9z5sJEZu4M)
 - [Discord invite](https://discord.gg/QFBPAseR)
+- We might be slow to respond, don't hesitate to ping again.
 
 ## LICENSE
 
