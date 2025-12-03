@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { hasUserSession } from "../utils/session";
 import { preLoginAction } from "../actions/authActions";
 import { ServiceError } from "../components/Error";
+import { location } from "../session";
+import { Link } from "../components/Link";
 
 /**
  * Returns true if user credentials are valid to POST
@@ -20,7 +22,7 @@ function Login({ onLogin }) {
     const [login_username, set_login_username] = useState("");
     const [btn_options, set_btn_options] = useState({ "aria-disabled": true, disabled: "disabled" });
 
-    const [fromSignup, _] = useState(window.location.hash.endsWith("#signup:true"));
+    const [fromSignup, _] = useState(location.retrieve("path").endsWith("#signup:true"));
     const [failedLogin, setFailedLogin] = useState(false);
 
     function updateLoginPassword(password) {
@@ -87,7 +89,7 @@ function Login({ onLogin }) {
                 onClick={onLoginLocal}>Login</button>
         </div>
         <div>
-            <a href="/signup">create a new account</a>
+            <Link to="/signup">create a new account</Link>
         </div>
     </div>);
 }

@@ -3,10 +3,11 @@ import { fetchUserProfile, updateAddress, updateDisplayName, updateEmail, update
 import { hasUserSession } from "../utils/session.js";
 import { EditableValue } from "../components/EditableValue.jsx";
 import { ServiceError } from "../components/Error.jsx";
+import { location } from "../session.js";
 
 function UserProfile() {
     if (!hasUserSession()) {
-        window.location.assign("/login");
+        location.store("path", "/login");
         return;
     }
 

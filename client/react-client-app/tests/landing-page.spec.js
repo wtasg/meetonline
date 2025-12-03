@@ -27,7 +27,6 @@ test("clicking /login takes user to /login page", async ({ page }) => {
     await expect(page.locator("input#login_username")).toBeVisible();
 });
 
-
 test("clicking /signup takes user to /signup page", async ({ page }) => {
     await page.goto(APP_ROOT);
     await expect(page.getByRole("link", { name: "signup" })).toBeVisible();

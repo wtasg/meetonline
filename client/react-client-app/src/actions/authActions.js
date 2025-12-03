@@ -1,6 +1,5 @@
 import { login, signup, logout, prelogin, presignup } from "../net/auth";
 import { user_session } from "../session";
-import { deleteCookie } from "../utils/cookie";
 
 async function preLoginAction() {
     await prelogin();
@@ -40,13 +39,18 @@ async function signupAction({ username, password }) {
     return await signup({ username, password });
 }
 
+/**
+ *
+ * @returns {Promise<{ok: string, logout: boolean, message: string}>}
+ */
 async function logoutAction() {
-    deleteCookie("loggedin");
+
     const usernameInSession = user_session.retrieve("username");
     if (!usernameInSession) {
         throw new Error("Username not found!");
     }
     user_session.eject("username");
+    user_session.eject("session");
     // server session destruction
     const result = await logout({ username: usernameInSession });
     if (!result.ok) {
