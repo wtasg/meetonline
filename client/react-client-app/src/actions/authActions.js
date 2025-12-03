@@ -1,6 +1,5 @@
 import { login, signup, logout, prelogin, presignup } from "../net/auth";
 import { user_session } from "../session";
-import { deleteCookie } from "../utils/cookie";
 
 async function preLoginAction() {
     await prelogin();
@@ -33,6 +32,11 @@ async function loginAction({ username, password }) {
     return false;
 }
 
+/**
+ *
+ * @param {{username:string, password:string}} userCredentials
+ * @returns {Promise<{ok:boolean,signup:{username:string},message:string}>}
+ */
 async function signupAction({ username, password }) {
     if (!username || !password) {
         return Promise.reject("Username and password are required");
@@ -40,13 +44,18 @@ async function signupAction({ username, password }) {
     return await signup({ username, password });
 }
 
+/**
+ *
+ * @returns {Promise<{ok: boolean, logout: boolean, message: string}>}
+ */
 async function logoutAction() {
-    deleteCookie("loggedin");
+
     const usernameInSession = user_session.retrieve("username");
     if (!usernameInSession) {
         throw new Error("Username not found!");
     }
     user_session.eject("username");
+    user_session.eject("session");
     // server session destruction
     const result = await logout({ username: usernameInSession });
     if (!result.ok) {

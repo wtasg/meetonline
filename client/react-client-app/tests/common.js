@@ -12,7 +12,7 @@ const PROFILE_PATH = "/profile";
 
 /**
  *
- * @param {*} page
+ * @param {import('@playwright/test').Page} page
  * @param {string?} username
  * @param {string?} password
  * @returns {{username: string, password: string, page: any}}
@@ -27,9 +27,8 @@ async function login(page, username, password) {
         password = signedup.password;
     }
     // load page
-    await expect(LOGIN_PATH).toBe("/login");
-    await page.goto(`${APP_ROOT}${LOGIN_PATH}`);
-    await page.waitForURL(`**${LOGIN_PATH}`);
+    await page.goto(`${APP_ROOT}`);
+    await page.getByRole("link", { name: "login" }).filter({ visible: true }).click();
 
     // expect elements on the page
     await expect(page.locator("h2")).toBeVisible();
@@ -51,7 +50,7 @@ async function login(page, username, password) {
 
 /**
  *
- * @param {*} page
+ * @param {import('@playwright/test').Page} page
  * @param {string?} username
  * @param {string?} password
  * @returns {{username: string, password: string, page: any}}
@@ -67,9 +66,8 @@ async function signup(page, username, password) {
         password = uuidv4().toLowerCase().replace(/[^a-z0-9_]/g, "_").slice(0, 32);
     }
     // load page
-    await expect(SIGNUP_PATH).toBe("/signup");
-    await page.goto(`${APP_ROOT}${SIGNUP_PATH}`);
-    await page.waitForURL(`**${SIGNUP_PATH}`);
+    await page.goto(`${APP_ROOT}`);
+    await page.getByRole("link", { name: "signup" }).filter({ visible: true }).click();
 
     // expect elements on the page
     await expect(page.locator("h2")).toBeVisible();

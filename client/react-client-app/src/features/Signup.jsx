@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { hasUserSession } from "../utils/session";
 import { preSignupAction } from "../actions/authActions";
+import { Link } from "../components/Link";
 
 function Signup({ onSignup }) {
     const [signup_password, set_signup_password] = useState("");
@@ -52,7 +53,7 @@ function Signup({ onSignup }) {
             <button type="button" className="cta" onClick={onSignupLocal}>Signup</button>
         </div>
         <div>
-            <a href="/login">login instead</a>
+            <Link to="/login">login instead</Link>
         </div>
     </div>);
 }

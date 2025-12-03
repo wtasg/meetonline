@@ -1,19 +1,46 @@
-import { hasUserSession } from "../utils/session";
+import { hasUserSession } from "../utils/session.js";
+import { Link } from "../components/Link.jsx";
 
 function Menu() {
     const hasSession = hasUserSession();
-    return <div role="navigation" className="vflex menu sidebar">
+
+    return <nav role="navigation" className="vflex menu sidebar">
         <ul>
-            <li><a href="/">home</a></li>
-            {hasSession && <li><a href="/account">account</a></li>}
-            {hasSession && <li><a href="/profile">profile</a></li>}
+            <li>
+                <Link to={"/"}>Home</Link>
+            </li>
+            {
+                hasSession &&
+                <li>
+                    <Link to={"/account"}>account</Link>
+                </li>
+            }
+            {
+                hasSession &&
+                <li>
+                    <Link to={"/profile"}>profile</Link>
+                </li>
+            }
         </ul>
         <ul>
-            {!hasSession && <li><a href="/login">login</a></li>}
-            {!hasSession && <li><a href="/signup">signup</a></li>}
-            {hasSession && <li><a href="/logout">logout</a></li>}
+            {!hasSession &&
+                <li>
+                    <Link to={"/login"}>login</Link>
+                </li>
+            }
+            {!hasSession &&
+                <li>
+                    <Link to={"/signup"}>signup</Link>
+                </li>
+            }
+            {
+                hasSession &&
+                <li>
+                    <Link to={"/logout"}>logout</Link>
+                </li>
+            }
         </ul>
-    </div>;
+    </nav>;
 }
 
 export { Menu };

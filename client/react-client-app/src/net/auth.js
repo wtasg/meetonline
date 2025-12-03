@@ -36,7 +36,7 @@ async function presignup() {
 /**
  * POST /login
  * @param {{username: string, password: string}} userCredentials
- * @returns {{ok: boolean, login: {username: string, session: string}, message: string}} typical network response
+ * @returns {Promise<{ok: boolean, login: {username: string, session: string}, message: string}>}
  */
 async function login({ username, password }) {
     const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGIN}`, {
@@ -48,18 +48,16 @@ async function login({ username, password }) {
         },
         body: JSON.stringify({ username, password, token: readCookie("login_token") }),
     });
-    const result = await response.json();
-    // console.log(JSON.stringify({ result }));
-    return result;
+    return await response.json();
 }
 
 /**
  * POST /signup
  * @param {{username: string, password: string}} userCredentials
- * @returns
+ * @returns {Promise<{ok:boolean,signup:{username:string},message:string}>}
  */
 async function signup({ username, password }) {
-    return fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.SIGNUP}`, {
+    const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.SIGNUP}`, {
         credentials: "include",
         method: "POST",
         headers: {
@@ -67,7 +65,8 @@ async function signup({ username, password }) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password, token: readCookie("signup_token") }),
-    }).then((res) => res.json());
+    });
+    return await response.json();
 }
 
 /**
@@ -76,7 +75,7 @@ async function signup({ username, password }) {
  * @returns {Promise<{ok:boolean,logout:boolean,message:string}>}
  */
 async function logout({ username }) {
-    const result = await (await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGOUT}`, {
+    const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGOUT}`, {
         credentials: "include",
         method: "POST",
         headers: {
@@ -84,9 +83,9 @@ async function logout({ username }) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({ username })
-    })).json();
+    });
 
-    return result;
+    return await response.json();
 }
 
 export { login, signup, logout, prelogin, presignup };
