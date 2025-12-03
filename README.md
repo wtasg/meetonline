@@ -12,6 +12,11 @@ Start with introducing yourself [here](https://github.com/wtasg/meetonline/discu
 
 ## Development/Run
 
+### Checklists
+
+- [Review Checklist](https://github.com/wtasg/meetonline/discussions/298)
+- [Dev Checklist](https://github.com/wtasg/meetonline/discussions/211)
+
 ### manual compose
 
 ```bash
