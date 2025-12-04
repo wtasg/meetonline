@@ -1,4 +1,5 @@
 # Setting up docker images, containers, compose
+#docker #setup
 
 ```bash
 docker build --file database/Dockerfile --tag meetonline-database database

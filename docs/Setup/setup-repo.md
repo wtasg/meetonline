@@ -1,5 +1,7 @@
 # Setting up repo for Development
 
+#git  #setup
+
 ## make scripts executable
 
 ```bash
@@ -20,6 +22,8 @@ bash ./scripts/pre-commit.sh
 
 `./scripts/pre-commit.sh` exists in git repo 
 
+
+** Below needs update **
 ## before running docker compose
 
 Make sure that the certificates are built and that the .env files are present by executing the scripts

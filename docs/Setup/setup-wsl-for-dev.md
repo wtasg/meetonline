@@ -1,5 +1,7 @@
 # Setting up WSL2 for development
 
+#wsl #windows #setup
+
 - Use WSL2
 - `wsl.exe --install debian`
 - `debian` : Run the debian app
