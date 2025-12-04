@@ -39,15 +39,17 @@ await dbStart();
 setupDirectories({ exists: existsSync, mkdir: mkdirSync });
 
 /* Middlewares */
+app.use(helmet());
+app.use(helmet.noSniff());
+app.disable("x-powered-by");
 setupCorsMiddleware(app);
 app.use(compression());
 app.use(express.json());
 app.use(cookieParser());
-app.use(helmet());
 app.use(morgan(isProduction ? "combined" : "dev"));
-app.use("/uploads", express.static(pathResolve(projectRoot, "uploads")));
 
 /* Endpoint Handlers */
+app.use("/uploads", express.static(pathResolve(projectRoot, "uploads")));
 setupRootHandlers(app);
 setupAuthHandlers(app);
 setupUploadHandler(app);
