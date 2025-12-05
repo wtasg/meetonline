@@ -1,4 +1,3 @@
-import { readCookie } from "../utils/cookie.js";
 import { CONF } from "./net-conf.js";
 
 /**
@@ -14,7 +13,7 @@ async function prelogin() {
             "Content-Type": "application/json",
         },
     });
-    return res;
+    return res.json();
 }
 
 /**
@@ -30,15 +29,15 @@ async function presignup() {
             "Content-Type": "application/json",
         }
     });
-    return res;
+    return res.json();
 }
 
 /**
  * POST /login
- * @param {{username: string, password: string}} userCredentials
+ * @param {{username: string, password: string, token: string}} userCredentials
  * @returns {Promise<{ok: boolean, login: {username: string, session: string}, message: string}>}
  */
-async function login({ username, password }) {
+async function login({ username, password, token }) {
     const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGIN}`, {
         credentials: "include",
         method: "POST",
@@ -46,17 +45,17 @@ async function login({ username, password }) {
             "Accept": "application/json",
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password, token: readCookie("login_token") }),
+        body: JSON.stringify({ username, password, token }),
     });
-    return await response.json();
+    return response.json();
 }
 
 /**
  * POST /signup
- * @param {{username: string, password: string}} userCredentials
+ * @param {{username: string, password: string, token: string}} userCredentials
  * @returns {Promise<{ok:boolean,signup:{username:string},message:string}>}
  */
-async function signup({ username, password }) {
+async function signup({ username, password, token }) {
     const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.SIGNUP}`, {
         credentials: "include",
         method: "POST",
@@ -64,9 +63,9 @@ async function signup({ username, password }) {
             "Accept": "application/json",
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password, token: readCookie("signup_token") }),
+        body: JSON.stringify({ username, password, token }),
     });
-    return await response.json();
+    return response.json();
 }
 
 /**
@@ -85,7 +84,7 @@ async function logout({ username }) {
         body: JSON.stringify({ username })
     });
 
-    return await response.json();
+    return response.json();
 }
 
 export { login, signup, logout, prelogin, presignup };

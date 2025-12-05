@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { hasUserSession } from "../utils/session";
 import { preSignupAction } from "../actions/authActions";
 import { Link } from "../components/Link";
+import { ServiceError } from "../components/Error";
 
 function Signup({ onSignup }) {
     const [signup_password, set_signup_password] = useState("");
     const [signup_username, set_signup_username] = useState("");
+    const [presignupError, setPresignupError] = useState("");
 
     function updateSignupPassword(password) {
         if (!password) {
@@ -30,13 +32,19 @@ function Signup({ onSignup }) {
     useEffect(() => {
         (async function () {
             if (!hasUserSession()) {
-                await preSignupAction();
+                const result = await preSignupAction();
+                if (!result.ok) {
+                    setPresignupError(result.message);
+                } else {
+                    setPresignupError("");
+                }
             }
         })();
     }, []);
 
     return (<div className="form signup vflex">
         <h2>Signup</h2>
+        {presignupError && <ServiceError hasError={true} message={presignupError}></ServiceError>}
         <div>
             <label htmlFor="signup_username" className="vflex">
                 <>Username</>
