@@ -19,12 +19,13 @@ import { setupAuthHandlers } from "./handlers/authHandler.js";
 import { setupGracefulShutdown } from "./utils/gracefulSetup.js";
 import { setupUploadHandler } from "./handlers/uploadHandler.js";
 import { setupUserAccountHandler } from "./handlers/userAccountHandler.js";
+import { setupUserProfileHandler } from "./handlers/userProfileHandler.js";
+import { setupEventHandler } from "./handlers/eventHandler.js";
 
 import { setupDirectories } from "./utils/fs.js";
 import { loadEnv } from "./utils/env.js";
 import { projectRoot } from "./utils/projectRoot.js";
 import { dbStart } from "./database/db.js";
-import { setupUserProfileHandler } from "./handlers/userProfileHandler.js";
 
 const app = express();
 const cookieParser = cookieParserPkg.default;
@@ -55,6 +56,7 @@ setupAuthHandlers(app);
 setupUploadHandler(app);
 setupUserAccountHandler(app);
 setupUserProfileHandler(app);
+setupEventHandler(app);
 
 // Reject All Unsupported Routes
 app.use((req, res) => {
