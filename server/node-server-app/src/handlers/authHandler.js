@@ -24,9 +24,10 @@ async function signupHandlerGET(req, res) {
     const token = uuidv4();
     res.cookie("signup_token", token, {
         sameSite: "strict",
-        httpOnly: false,
-        secure: false,
-        maxAge: 2 * 60 * 1000
+        httpOnly: true,
+        secure: true,
+        maxAge: 2 * 60 * 1000,
+        path: "/",
     });
     await tokenStore.store(token, (new Date()).toUTCString());
     res.status(200).json({ ok: true, token });
@@ -61,9 +62,10 @@ async function loginHandlerGET(req, res) {
     const token = uuidv4();
     res.cookie("login_token", token, {
         sameSite: "strict",
-        httpOnly: false,
-        secure: false,
-        maxAge: 2 * 60 * 1000
+        httpOnly: true,
+        secure: true,
+        maxAge: 2 * 60 * 1000,
+        path: "/",
     });
     await tokenStore.store(token, (new Date()).toUTCString());
     res.json({ ok: true, token });

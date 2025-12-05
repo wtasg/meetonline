@@ -25,6 +25,8 @@ function Login({ onLogin }) {
     const [fromSignup, _] = useState(location.retrieve("path")?.endsWith("#signup:true") || false);
     const [failedLogin, setFailedLogin] = useState(false);
 
+    const [preloginError, setPreloginError] = useState("");
+
     function updateLoginPassword(password) {
         if (!password) {
             return;
@@ -53,7 +55,12 @@ function Login({ onLogin }) {
     useEffect(() => {
         (async function () {
             if (!hasUserSession()) {
-                await preLoginAction();
+                const result = await preLoginAction();
+                if (!result.ok) {
+                    setPreloginError(result.message);
+                } else {
+                    setPreloginError("");
+                }
             }
         })();
     }, []);
@@ -68,6 +75,8 @@ function Login({ onLogin }) {
 
     return (<div className="form login vflex">
         <h2>Login</h2>
+
+        {preloginError && <ServiceError hasError={true} message={preloginError}></ServiceError>}
         {failedLogin && <ServiceError hasError={true} message="login failed"></ServiceError>}
         {fromSignup && <p style={{ color: "green" }}>Signup was successful!</p>}
         <div>
