@@ -130,14 +130,7 @@ async function loginHandlerPOST(req, res) {
         maxAge: 36 * 60 * 60 * 1000,
         path: "/",
     });
-    /*
-    console.log("successful login.", {
-        login: {
-            username: candidateUsername,
-            session: session_id
-        }
-    });
-    */
+
     return res.status(200)
         .json({
             ok: true,

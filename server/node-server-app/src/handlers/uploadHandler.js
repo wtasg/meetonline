@@ -1,7 +1,7 @@
 import { upload } from "../middlewares/uploadMiddleware.js";
 
 function setupUploadHandler(app) {
-    app.post("/api/upload", (req, res) => {
+    app.post("/upload", (req, res) => {
         upload.single("file")(req, res, (err) => {
             if (err) {
                 return res.status(400).json({

@@ -53,7 +53,7 @@ async function userProfilePOST(req, res) {
             return res.status(500)
                 .json({
                     ok: false,
-                    user_profile,
+                    user_profile: false,
                     message: "Cannot fetch proper user profile."
                 });
         }
