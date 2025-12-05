@@ -48,13 +48,19 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan(isProduction ? "combined" : "dev"));
 
-/* Endpoint Handlers */
+/* Handlers */
 app.use("/uploads", express.static(pathResolve(projectRoot, "uploads")));
 setupRootHandlers(app);
 setupAuthHandlers(app);
 setupUploadHandler(app);
 setupUserAccountHandler(app);
 setupUserProfileHandler(app);
+
+// Reject All Unsupported Routes
+app.use((req, res) => {
+    console.log(Date.now(), req.path);
+    res.status(404).end();
+});
 
 /* Setting up Servers */
 const { SERVER_HTTP_PORT, SERVER_HTTPS_PORT } = process.env;

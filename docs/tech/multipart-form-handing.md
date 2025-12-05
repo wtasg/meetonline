@@ -1,18 +1,17 @@
-#tech #expressjs 
-
 # multipart form upload
+
+#tech #expressjs
 
 How to parse multi-part form data using multer and/or body-parser
 
 - body parser is inbuilt in express 5
 - `npm install multer`
 
-
 Curl Example
 
 ```bash
 # ~/src/meetonline/server/node-server-app
-curl -v -X POST http://localhost:9006/api/upload \
+curl -v -X POST http://localhost:9006/upload \
   -F "file=@/mnt/c/Users/anura/Downloads/download.jpg" \
   -F "username=nerd" \
   -F "note=hello-multer"

@@ -7,6 +7,7 @@
   "main": "src/server.js",
   "scripts": {
     "build": "mkdir -p certs && mkdir -p tmp",
+    "build:certs": "openssl req -x509 -newkey rsa:4096 -nodes -keyout certs/server.key -out certs/server.crt -subj \"/CN=localhost\" -days 365",
     "lint": "./node_modules/.bin/eslint .",
     "lint:fix": "./node_modules/.bin/eslint . --fix",
     "test:jest": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" ./node_modules/.bin/jest --runInBand",
@@ -14,9 +15,9 @@
     "test:jest:watch": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" ./node_modules/.bin/jest --runInBand --watch",
     "cover:jest": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" ./node_modules/.bin/jest --runInBand --coverage",
     "cover": "npm run cover:jest",
-    "build:certs": "npm run build && openssl req -x509 -newkey rsa:4096 -nodes -keyout certs/server.key -out certs/server.crt -subj \"/CN=localhost\" -days 365",
     "start": "npm run build && NODE_ENV=production node src/server.js",
-    "dev": "npm run build && npm run build:certs && NODE_ENV=development node src/server.js"
+    "dev": "npm run build && NODE_ENV=development DB_HOST=localhost node src/server.js",
+    "dev:certs": "npm run build && npm run build:certs && NODE_ENV=development DB_HOST=localhost node src/server.js"
   },
   "keywords": [],
   "author": "wtasg",
