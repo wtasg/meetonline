@@ -1,10 +1,34 @@
 # meetonline
 
+<p align="center">
+
+<!-- ⭐ GitHub Stars -->
+<a href="https://github.com/wtasg/meetonline/stargazers">
+  <img src="https://img.shields.io/github/stars/wtasg/meetonline?style=for-the-badge&color=yellow" />
+</a>
+
+<!-- 🍴 Forks -->
+<a href="https://github.com/wtasg/meetonline/network/members">
+  <img src="https://img.shields.io/github/forks/wtasg/meetonline?style=for-the-badge&color=blue" />
+</a>
+
+<!-- 🐛 Open Issues -->
+<a href="https://github.com/wtasg/meetonline/issues">
+  <img src="https://img.shields.io/github/issues/wtasg/meetonline?style=for-the-badge&color=red" />
+</a>
+
+<!-- 🔒 License -->
+<a href="https://github.com/wtasg/meetonline/blob/main/LICENSE">
+  <img src="https://img.shields.io/github/license/wtasg/meetonline?style=for-the-badge&color=green" />
+</a>
+
+</p>
+
 An app to let you build and find online communities.
 
 ## Reporting bugs
 
-- Read up, copy-paste from [Bug Report template](./docs/bug-report-template.md)
+-   Read up, copy-paste from [Bug Report template](./docs/bug-report-template.md)
 
 ## Discussions
 
@@ -14,14 +38,14 @@ Start with introducing yourself [here](https://github.com/wtasg/meetonline/discu
 
 ### good first issues
 
-- Feel free to work on them. You don't need our permission for working on GFIs.
-- If you need help, ask, maybe once a day.
-- [check GFIs here](https://github.com/wtasg/meetonline/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22)
+-   Feel free to work on them. You don't need our permission for working on GFIs.
+-   If you need help, ask, maybe once a day.
+-   [check GFIs here](https://github.com/wtasg/meetonline/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22)
 
 ### Checklists
 
-- [Review Checklist](https://github.com/wtasg/meetonline/discussions/298)
-- [Dev Checklist](https://github.com/wtasg/meetonline/discussions/211)
+-   [Review Checklist](https://github.com/wtasg/meetonline/discussions/298)
+-   [Dev Checklist](https://github.com/wtasg/meetonline/discussions/211)
 
 ### manual compose
 
@@ -61,9 +85,9 @@ Documentation is available in `docs/`. Visit [Documentation Home](./docs/Home.md
 
 ## Social
 
-- [YouTube playlist](https://www.youtube.com/playlist?list=PLbUtscuRQ61xiGmjCL00Ime9z5sJEZu4M)
-- [Discord invite](https://discord.gg/QFBPAseR)
-- We might be slow to respond, don't hesitate to ping again.
+-   [YouTube playlist](https://www.youtube.com/playlist?list=PLbUtscuRQ61xiGmjCL00Ime9z5sJEZu4M)
+-   [Discord invite](https://discord.gg/QFBPAseR)
+-   We might be slow to respond, don't hesitate to ping again.
 
 ## LICENSE
 
