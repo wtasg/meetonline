@@ -28,20 +28,17 @@ function Login({ onLogin }) {
     const [preloginError, setPreloginError] = useState("");
 
     function updateLoginPassword(password) {
-        if (!password) {
-            return;
-        }
         set_login_password(password);
     }
 
     function updateLoginUsername(username) {
-        if (!username) {
-            return;
-        }
         set_login_username(username);
     }
 
     async function onLoginLocal() {
+        if (!login_password || !login_username) {
+            return;
+        }
         const ok = await onLogin({ username: login_username, password: login_password });
         if (!ok) {
             setFailedLogin(true);
@@ -73,34 +70,52 @@ function Login({ onLogin }) {
         }
     }, [login_password, login_username]);
 
-    return (<div className="form login vflex">
-        <h2>Login</h2>
+    return (
+        <div className="flex hac vac w80">
+            <div className="form login vflex w40p">
+                <h2>Login</h2>
 
-        {preloginError && <ServiceError hasError={true} message={preloginError}></ServiceError>}
-        {failedLogin && <ServiceError hasError={true} message="login failed"></ServiceError>}
-        {fromSignup && <p style={{ color: "green" }}>Signup was successful!</p>}
-        <div>
-            <label htmlFor="login_username" className="vflex">
-                <>Username</>
-                <input type="text" id="login_username" name="login_username" placeholder="login_username" value={login_username} onChange={e => updateLoginUsername(e.target.value)} />
-            </label>
-        </div>
-        <div>
-            <label htmlFor="login_password" className="vflex">
-                <>Password</>
-                <input type="password" id="login_password" name="login_password" placeholder="login_password" value={login_password} onChange={e => updateLoginPassword(e.target.value)} />
-            </label>
-        </div>
-        <div>
-            <button {...btn_options}
-                type="button"
-                className="cta"
-                onClick={onLoginLocal}>Login</button>
-        </div>
-        <div>
-            <Link to="/signup">create a new account</Link>
-        </div>
-    </div>);
+                {preloginError && <ServiceError hasError={true} message={preloginError}></ServiceError>}
+                {failedLogin && <ServiceError hasError={true} message="login failed"></ServiceError>}
+                {fromSignup && <p style={{ color: "green" }}>Signup was successful!</p>}
+                <div>
+                    <label htmlFor="login_username" className="vflex">
+                        <>Username</>
+                        <input
+                            type="text"
+                            id="login_username"
+                            name="login_username"
+                            placeholder="login_username"
+                            value={login_username}
+                            onChange={e => updateLoginUsername(e.target.value)}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <label htmlFor="login_password" className="vflex">
+                        <>Password</>
+                        <input
+
+                            type="password"
+                            id="login_password"
+                            name="login_password"
+                            placeholder="login_password"
+                            value={login_password}
+                            onChange={e => updateLoginPassword(e.target.value)}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <button {...btn_options}
+                        type="button"
+                        className="cta"
+                        onClick={onLoginLocal}>Login</button>
+                </div>
+                <div>
+                    <Link to="/signup">create a new account</Link>
+                </div>
+            </div>
+        </div>);
 }
 
 export { Login };

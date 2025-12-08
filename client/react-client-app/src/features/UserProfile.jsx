@@ -37,71 +37,81 @@ function UserProfile() {
     }
 
 
-    return (<div className="vflex">
-        <h2>User Profile</h2>
-        <ServiceError {...serviceError} />
-        <div className="flex">
-            <div className="w30p">Profile Name</div>
-            <div>
-                <EditableValue
-                    initialValue={profile.profileName}
-                    onChangeFn={(value) => updateProfileDetail("profileName", value)} />
-            </div>
-        </div>
-        <div className="flex">
-            <div className="w30p">Display Name </div>
-            <div>
-                <EditableValue
-                    initialValue={profile.displayName}
-                    onChangeFn={(value) => updateProfileDetail("displayName", value)} />
-            </div>
-        </div>
-        <div className="flex">
-            <div className="w30p">Phone Number </div>
-            <div>
-                <EditableValue
-                    initialValue={profile.phoneNumber}
-                    onChangeFn={(value) => updateProfileDetail("phoneNumber", value)} />
-            </div>
-        </div>
-        <div className="flex">
-            <div className="w30p">Email </div>
-            <div>
-                <EditableValue
-                    valueType={"email"}
-                    initialValue={profile.email}
-                    onChangeFn={(value) => updateProfileDetail("email", value)} />
-            </div>
+    return (
+        <div className="flex hac vac w80p">
+            <div className="vflex">
+                <h2>User Profile</h2>
+                <ServiceError {...serviceError} />
+                <div className="flex">
+                    <div className="w30p">Profile Name</div>
+                    <div>
+                        <EditableValue
+                            klass="w60p"
+                            initialValue={profile.profileName}
+                            onChangeFn={(value) => updateProfileDetail("profileName", value)} />
+                    </div>
+                </div>
+                <div className="flex">
+                    <div className="w30p">Display Name </div>
+                    <div>
+                        <EditableValue
+                            klass="w60p"
+                            initialValue={profile.displayName}
+                            onChangeFn={(value) => updateProfileDetail("displayName", value)} />
+                    </div>
+                </div>
+                <div className="flex">
+                    <div className="w30p">Phone Number </div>
+                    <div>
+                        <EditableValue
+                            klass="w60p"
+                            initialValue={profile.phoneNumber}
+                            onChangeFn={(value) => updateProfileDetail("phoneNumber", value)} />
+                    </div>
+                </div>
+                <div className="flex">
+                    <div className="w30p">Email </div>
+                    <div>
+                        <EditableValue
+                            klass="w60p"
+                            valueType={"email"}
+                            initialValue={profile.email}
+                            onChangeFn={(value) => updateProfileDetail("email", value)} />
+                    </div>
 
-        </div>
-        <div className="flex">
-            <div className="w30p">Address </div>
-            <div>
-                <EditableValue
-                    initialValue={profile.address}
-                    onChangeFn={(value) => updateProfileDetail("address", value)} />
+                </div>
+                <div className="flex">
+                    <div className="w30p">Address </div>
+                    <div>
+                        <EditableValue
+                            klass="w60p"
+                            initialValue={profile.address}
+                            onChangeFn={(value) => updateProfileDetail("address", value)} />
+                    </div>
+
+                </div>
+                <div className="flex">
+                    <div className="w30p">Website URL </div>
+                    <div>
+                        <EditableValue
+                            klass="w60p"
+                            initialValue={profile.websiteUrl}
+                            onChangeFn={(value) => updateProfileDetail("websiteUrl", value)} />
+                    </div>
+
+                </div>
+                <div className="flex">
+                    <div className="w30p">Created At </div>
+                    <div>{profile.createdAt}</div>
+
+                </div>
+                <div className="flex">
+                    <div className="w30p">Modified At </div>
+                    <div>{profile.modifiedAt}</div>
+                </div>
             </div>
-
         </div>
-        <div className="flex">
-            <div className="w30p">Website URL </div>
-            <div>
-                <EditableValue
-                    initialValue={profile.websiteUrl}
-                    onChangeFn={(value) => updateProfileDetail("websiteUrl", value)} />
-            </div>
-
-        </div>
-        <div className="flex">
-            <div className="w30p">Created At </div>
-            <div>{profile.createdAt}</div>
-
-        </div>
-        <div className="flex">
-            <div className="w30p">Modified At </div>
-            <div>{profile.modifiedAt}</div>
-        </div>
-    </div>);
+    );
 }
 
 export { UserProfile };

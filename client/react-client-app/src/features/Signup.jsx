@@ -10,20 +10,17 @@ function Signup({ onSignup }) {
     const [presignupError, setPresignupError] = useState("");
 
     function updateSignupPassword(password) {
-        if (!password) {
-            return;
-        }
         set_signup_password(password);
     }
 
     function updateSignupUsername(username) {
-        if (!username) {
-            return;
-        }
         set_signup_username(username);
     }
 
     async function onSignupLocal() {
+        if (!signup_password || !signup_username) {
+            return;
+        }
         await onSignup({ username: signup_username, password: signup_password });
         set_signup_password("");
         set_signup_username("");
@@ -42,28 +39,46 @@ function Signup({ onSignup }) {
         })();
     }, []);
 
-    return (<div className="form signup vflex">
-        <h2>Signup</h2>
-        {presignupError && <ServiceError hasError={true} message={presignupError}></ServiceError>}
-        <div>
-            <label htmlFor="signup_username" className="vflex">
-                <>Username</>
-                <input type="text" id="signup_username" name="signup_username" placeholder="signup_username" value={signup_username} onChange={e => updateSignupUsername(e.target.value)} />
-            </label>
-        </div>
-        <div>
-            <label htmlFor="signup_password" className="vflex">
-                <>Password</>
-                <input type="password" id="signup_password" name="signup_password" placeholder="signup_password" value={signup_password} onChange={e => updateSignupPassword(e.target.value)} />
-            </label>
-        </div>
-        <div>
-            <button type="button" className="cta" onClick={onSignupLocal}>Signup</button>
-        </div>
-        <div>
-            <Link to="/login">login instead</Link>
-        </div>
-    </div>);
+    return (
+        <div className="flex hac vac w80">
+            <div className="form signup vflex w40p">
+                <h2>Signup</h2>
+                {presignupError && <ServiceError hasError={true} message={presignupError}></ServiceError>}
+                <div>
+                    <label htmlFor="signup_username" className="vflex">
+                        <>Username</>
+                        <input
+                            type="text"
+                            id="signup_username"
+                            name="signup_username"
+                            placeholder="signup_username"
+                            value={signup_username}
+                            onChange={e => updateSignupUsername(e.target.value)}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <label htmlFor="signup_password" className="vflex">
+                        <>Password</>
+                        <input
+                            type="password"
+                            id="signup_password"
+                            name="signup_password"
+                            placeholder="signup_password"
+                            value={signup_password}
+                            onChange={e => updateSignupPassword(e.target.value)}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <button type="button" className="cta" onClick={onSignupLocal}>Signup</button>
+                </div>
+                <div>
+                    <Link to="/login">login instead</Link>
+                </div>
+            </div>
+        </div >
+    );
 }
 
 export { Signup };

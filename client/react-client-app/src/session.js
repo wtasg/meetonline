@@ -2,8 +2,9 @@ import { Storage } from "./utils/storage.js";
 
 const user_session = new Storage(["session", "local"]);
 
-const location = new Storage(["memory"]);
+const location = new Storage(["local"]);
 
-location.store("path", "/");
+const existingLocation = location?.retrieve("path") ?? "/";
+location.store("path", existingLocation);
 
 export { user_session, location };

@@ -28,7 +28,7 @@ async function login(page, username, password) {
     }
     // load page
     await page.goto(`${APP_ROOT}`);
-    await page.getByRole("link", { name: "login" }).filter({ visible: true }).click();
+    await page.getByRole("link", { name: "login" }).filter({ visible: true }).first().click();
 
     // expect elements on the page
     await expect(page.locator("h2")).toBeVisible();

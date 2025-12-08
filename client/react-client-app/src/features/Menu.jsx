@@ -4,8 +4,8 @@ import { Link } from "../components/Link.jsx";
 function Menu() {
     const hasSession = hasUserSession();
 
-    return <nav role="navigation" className="vflex menu sidebar">
-        <ul>
+    return <nav role="navigation" className="flex">
+        <ul className="flex">
             <li>
                 <Link to={"/"}>Home</Link>
             </li>
@@ -22,7 +22,7 @@ function Menu() {
                 </li>
             }
         </ul>
-        <ul>
+        <ul className="flex">
             {!hasSession &&
                 <li>
                     <Link to={"/login"}>login</Link>
