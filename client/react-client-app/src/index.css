@@ -1,19 +1,4 @@
 :root {
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
-
-    color-scheme: dark light;
-    margin: 0 auto;
-    max-width: 1280px;
-
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
-
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 
     --min-gap: 4px;
     --margin: var(--min-gap);
@@ -26,6 +11,55 @@
     --min-input-height: 40px;
 
     --flex-gap: 10px;
+
+    --color-blue: #0d6efd;
+    --color-indigo: #6610f2;
+    --color-purple: #6f42c1;
+    --color-pink: #d63384;
+    --color-red: #dc3545;
+    --color-orange: #fd7e14;
+    --color-yellow: #ffc107;
+    --color-green: #198754;
+    --color-teal: #20c997;
+    --color-cyan: #0dcaf0;
+    --color-black: #000;
+    --color-white: #fff;
+    --color-gray: #6c757d;
+    --color-gray-dark: #343a40;
+    --color-gray-100: #f8f9fa;
+    --color-gray-200: #e9ecef;
+    --color-gray-300: #dee2e6;
+    --color-gray-400: #ced4da;
+    --color-gray-500: #adb5bd;
+    --color-gray-600: #6c757d;
+    --color-gray-700: #495057;
+    --color-gray-800: #343a40;
+    --color-gray-900: #212529;
+    --color-primary: #0d6efd;
+    --color-secondary: #6c757d;
+    --color-success: #198754;
+    --color-info: #0dcaf0;
+    --color-warning: #ffc107;
+    --color-danger: #dc3545;
+    --color-light: #f8f9fa;
+    --color-dark: #212529;
+
+
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    color-scheme: dark light;
+    margin: 0 auto;
+    max-width: 1280px;
+
+    color: var(--color-gray-200);
+    background-color: #242424;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 @media (prefers-color-scheme: light) {
@@ -56,8 +90,6 @@
     }
 }
 
-
-
 body {
     min-width: 1000px;
 
@@ -86,7 +118,7 @@ a.btn,
     }
 
     &.cta {
-        border: thick double purple;
+        border: thick double var(--color-purple);
         background-color: var(--cta-btn-background-color);
     }
 }
@@ -233,7 +265,7 @@ input {
     border: thin solid var(--app-background-color);
 
     &.error {
-        border: thin solid red;
+        border: thin solid var(--color-red);
     }
 }
 
