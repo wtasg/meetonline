@@ -11,7 +11,7 @@ import { UserProfile } from "./UserProfile";
 import { useRoute } from "../hooks/useRoute";
 import { useNavigate } from "../hooks/useNavigate";
 
-function Top() {
+function Content() {
     const [hasSession, setHasSession] = useState(hasUserSession());
     const navigate = useNavigate();
 
@@ -69,4 +69,4 @@ function Top() {
 
 }
 
-export { Top };
+export { Content };

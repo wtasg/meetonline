@@ -2,15 +2,42 @@
     min-height: calc(1.2 * var(--min-input-height));
 }
 
-.menu {
-    min-height: 600px;
-    min-width: 200px;
+[role="navigation"] {
+    height: fit-content;
+    width: fit-content;
+
+    & ul {
+        padding: 0;
+
+        & li {
+            list-style: none
+        }
+    }
 }
 
-.menu[role="navigation"] ul {
-    padding: 0;
+header.header,
+footer.footer {
+    min-height: 60px;
+}
 
-    & li {
-        list-style: none
-    }
+header.header {
+    color: var(--color-gray-100);
+    padding: 10px;
+}
+
+section.content {
+    padding: 50px 10px;
+    min-height: 600px;
+    margin-bottom: 100px;
+}
+
+footer.footer {
+    position: fixed;
+    padding: 10px;
+    bottom: 10px;
+    width: calc(100vw - 20px);
+    left: 10px;
+    right: 10px;
+    background-color: var(--color-gray-900);
+    border-radius: 8px;
 }

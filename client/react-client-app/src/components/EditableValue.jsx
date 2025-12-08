@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function EditableValue({ initialValue, onChangeFn, valueType }) {
+function EditableValue({ initialValue, onChangeFn, valueType, klass }) {
     const [localValue, setLocalValue] = useState(initialValue || "");
     const [dirty, setDirty] = useState(false);
 
@@ -13,13 +13,13 @@ function EditableValue({ initialValue, onChangeFn, valueType }) {
         setLocalValue(initialValue || "");
     }, [initialValue]);
 
-    return <div className="editable flex" style={{ borderBottom: "1px dashed green" }}>
+    return <div className={`editable flex ${klass}`} style={{ borderBottom: "1px dashed green" }}>
         <input
             type={valueType || "text"}
             onChange={e => { setDirty(true); setLocalValue(e.target.value); }}
             onKeyDown={(e) => { if (e.key === "Enter" && localValue.length > 0) onValueChange(); }}
             value={localValue}
-            style={{ border: dirty ? "thin solid red" : "" }}
+            style={{ border: dirty ? "thin solid red" : "", width: "100%", minHeight: "56px" }}
         />
         {dirty && <span style={{ color: "red" }}>*</span>}
     </div>;

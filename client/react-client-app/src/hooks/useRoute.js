@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import { location } from "../session";
+import { location } from "../session.js";
 
 function useRoute() {
     const subscribe = (callback) => {

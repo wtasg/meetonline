@@ -1,7 +1,8 @@
 function Logout({ username, onLogout }) {
-    return (<>
-        <button onClick={onLogout}>Logout {username()}</button>
-    </>);
+    return (
+        <div>
+            <button onClick={onLogout}>Logout {username()}</button>
+        </div>);
 }
 
 export { Logout };

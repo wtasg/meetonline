@@ -27,7 +27,7 @@ docker run \
     --workdir /app \
     --publish $PORT:$PORT \
     --detach node:25-bullseye \
-    bash -c "npm install && npm run build:certs && npm run dev -- --host"
+    bash -c "npm run dev -- --host"
 
 echo "Dev client is running. Hit CTRL+C to exit."
 
