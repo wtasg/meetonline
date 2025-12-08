@@ -24,10 +24,15 @@ jobs:
             const pattern = new RegExp(process.env.BRANCH_PATTERN);
             const mode = process.env.MODE || 'block';
             const botId = process.env.BOT_IDENTIFIER || 'branch-name-enforcer';
+            const pr = context.payload && context.payload.pull_request;
 
-            const pr = github.context.payload.pull_request;
             if (!pr) {
               core.info('No pull_request object on the event, exiting.');
+              return;
+            }
+
+            if (!pr.head || !pr.head.ref) {
+              core.info('PR head ref missing; exiting.')
               return;
             }
 
@@ -35,37 +40,37 @@ jobs:
             core.info(`PR #${pr.number} head ref: ${headRef}`);
             const ok = pattern.test(headRef);
 
-            const failureMessage = `:x: **Branch name not allowed**
-              The PR's source branch \`${headRef}\` does not match the required pattern:
-              \`\`\`
-              ${process.env.BRANCH_PATTERN}
-              \`\`\`
+            const failureMessage = `
+            :x: **Branch name not allowed**
+            The PR's source branch \`${headRef}\` does not match the required pattern:
+            \`\`\`
+            ${process.env.BRANCH_PATTERN}
+            \`\`\`
+            Allowed characters: letters, digits, underscore (_), hyphen (-). **No slashes (/) or emoji** by default.
+            **How to fix:** rename your branch locally and push the new name.
+            Example:
+            \`\`\`bash
+            git branch -m "${headRef}" new-branch-name
+            git push origin new-branch-name
+            git push origin --delete "${headRef}"
+            \`\`\`
+            If you believe this is a false positive, please contact the maintainers.
+            `.trim();
 
-              Allowed characters: letters, digits, underscore (_), hyphen (-). **No slashes (/) or emoji** by default.
-
-              **How to fix:** rename your branch locally and push the new name, then update the PR (or open a new PR).
-
-              Example rename commands:
-              \`\`\`bash
-              git branch -m "${headRef}" new-branch-name
-              git push origin new-branch-name
-              git push origin --delete "${headRef}"
-              \`\`\`
-
-              If you believe this is a false positive, please contact the maintainers.
-              `;
             const body = ok
               ? `Branch name \`${headRef}\` matches required pattern.`
               : failureMessage;
 
-            const comments = await github.rest.issues.listComments({
+            const response = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: pr.number,
               per_page: 100
             });
 
-            const botComment = comments.data.find(c => c.user && c.user.type === 'Bot' && c.body && c.body.includes(botId));
+            const comments = response.data;
+
+            const botComment = comments.find(c => c.user && c.user.type === 'Bot' && c.body && c.body.includes(botId));
 
             if (!ok) {
               const commentBody = `<!-- ${botId} -->\n${body}`;
