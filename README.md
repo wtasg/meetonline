@@ -55,6 +55,20 @@ docker compose --file compose.yml down
 # docker volume list | grep meetonline | awk '{print $2}' | xargs -n1 docker volume rm
 ```
 
+## Branch naming rules
+
+- Repository enforces branch naming pattern: `^[A-Za-z][A-Za-z0-9_-]+$`.
+- Allowed characters: ASCII letters, digits, hyphen (-), underscore (_).
+- Not allowed: slashes (/), emoji, spaces, other non-ASCII characters.
+
+- If your PR fails the branch-name check, rename the branch locally:
+
+```bash
+git branch -m old-name new-name
+git push origin new-name
+git push origin --delete old-name
+```
+
 ## Documentation
 
 Documentation is available in `docs/`. Visit [Documentation Home](./docs/Home.md)
