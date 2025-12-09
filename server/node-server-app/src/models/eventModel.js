@@ -1,6 +1,10 @@
 import { pojo } from "@wtasnorg/node-lib";
+import { toISOStringOrEmpty } from "../utils/dateUtils.js";
 
 const updateEvent = (event, updates) => {
+    if (!event || typeof event !== "object" || Array.isArray(event)) {
+        throw new Error("Invalid event object passed to updateEvent.");
+    }
     return {
         ...event,
         ...updates,
@@ -85,26 +89,26 @@ class EventModel {
         }
         const instance = new EventModel();
 
-        instance.id = row.id ?? null;
-        instance.organiserId = row.organiser_id ?? null;
-        instance.organisers = row.organisers ?? null;
-        instance.title = row.title ?? null;
-        instance.description = row.description ?? null;
-        instance.onlineLocation = row.online_location ?? null;
-        instance.startAt = row.start_at ? new Date(row.start_at).toISOString() : null;
-        instance.endAt = row.end_at ? new Date(row.end_at).toISOString() : null;
+        instance.id = row.id ?? 0;
+        instance.organiserId = row.organiser_id ?? 0;
+        instance.organisers = row.organisers ?? "";
+        instance.title = row.title ?? "default event";
+        instance.description = row.description ?? "";
+        instance.onlineLocation = row.online_location ?? "";
+        instance.startAt = toISOStringOrEmpty(row.start_at);
+        instance.endAt = toISOStringOrEmpty(row.end_at);
         instance.isPaid = Boolean(row.is_paid);
         instance.isBroadcast = Boolean(row.is_broadcast);
-        instance.broadcastType = row.broadcast_type ?? null;
-        instance.tags = row.tags ?? null;
-        instance.categories = row.categories ?? null;
+        instance.broadcastType = row.broadcast_type ?? "";
+        instance.tags = row.tags ?? "";
+        instance.categories = row.categories ?? "";
         instance.isInteractive = Boolean(row.is_interactive);
         instance.isAnonymous = Boolean(row.is_anonymous);
-        instance.interested = row.interested ?? null;
-        instance.attachedDocuments = row.attached_documents ?? null;
-        instance.groupId = row.group_id ?? null;
-        instance.createdAt = row.created_at ? (new Date(row.created_at)).toISOString() : null;
-        instance.modifiedAt = row.modified_at ? (new Date(row.modified_at)).toISOString() : null;
+        instance.interested = row.interested ?? "";
+        instance.attachedDocuments = row.attached_documents ?? "";
+        instance.groupId = row.group_id ?? 0;
+        instance.createdAt = toISOStringOrEmpty(row.created_at);
+        instance.modifiedAt = toISOStringOrEmpty(row.modified_at);
         instance.isDeleted = Boolean(row.is_deleted);
         instance.isHidden = Boolean(row.is_hidden);
         instance.isArchived = Boolean(row.is_archived);
@@ -136,7 +140,7 @@ class EventModel {
         instance.isAnonymous = false;
         instance.interested = "";
         instance.attachedDocuments = "";
-        instance.groupId = "";
+        instance.groupId = 0;
         instance.createdAt = new Date().toISOString();
         instance.modifiedAt = new Date().toISOString();
         instance.isDeleted = false;
