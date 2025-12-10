@@ -116,7 +116,7 @@ runup() {
         fi
 
         docker run \
-            --user $(id -u):$(id -g) \
+            --user "$(id -u)":"$(id -g)" \
             --name manual-meetonline-database \
             --env DB_INIT_FILE:database/init/schema.sql \
             --env-file database/local.env \
@@ -126,7 +126,7 @@ runup() {
             --detach localhost/meetonline-database:manual
 
         docker run \
-            --user $(id -u):$(id -g) \
+            --user "$(id -u)":"$(id -g)" \
             --name manual-meetonline-adminer \
             --publish 54320:8080 \
             --detach adminer
@@ -136,7 +136,7 @@ runup() {
 
     ! $no_server_flag &&
         docker run \
-            --user $(id -u):$(id -g) \
+            --user "$(id -u)":"$(id -g)" \
             --name manual-meetonline-server \
             --env-file server/node-server-app/local.env \
             --network manual-meetonline-network \
@@ -147,7 +147,7 @@ runup() {
 
     ! $no_client_flag &&
         docker run \
-            --user $(id -u):$(id -g) \
+            --user "$(id -u)":"$(id -g)" \
             --name manual-meetonline-client \
             --env-file client/react-client-app/local.env \
             --network manual-meetonline-network \

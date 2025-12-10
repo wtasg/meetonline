@@ -27,7 +27,7 @@ Start with introducing yourself [here](https://github.com/wtasg/meetonline/discu
 
 ```bash
 ## make certificates
-./scripts/make-certs.sh 
+./scripts/make.certs.sh 
 
 # docker compose --file compose.yml down
 # docker volume list | sed '1d' | awk '{print $2}' | xargs -n1 docker volume rm

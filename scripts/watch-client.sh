@@ -19,7 +19,7 @@ trap cleanup INT TERM
 echo "Starting Vite dev server in Docker with live reload..."
 
 docker run \
-    --user $(id -u):$(id -g) \
+    --user "$(id -u)":"$(id -g)" \
     --name "$CONTAINER_NAME" \
     --network manual-meetonline-network \
     --env-file "$CLIENT_DIR/local.env" \
