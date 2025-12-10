@@ -16,11 +16,13 @@ export default defineConfig([
             sourceType: "module"
         },
         rules: {
-            semi: ["error", "always"],
-            "no-extra-semi": "error",
-            "no-multiple-empty-lines": ["error", { max: 1, maxEOF: 0 }],
             "@stylistic/indent": ["error", 4],
             "@stylistic/quotes": ["error", "double"],
+            "no-extra-semi": "error",
+            "no-multiple-empty-lines": ["error", { max: 1, maxEOF: 0 }],
+            "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
+            "object-curly-spacing": ["error", "always"],
+            "semi": ["error", "always"],
         }
     }
 ]);

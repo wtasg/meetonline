@@ -3,7 +3,7 @@ import { CONF } from "./net-conf.js";
 /**
  * Fetches User Profile
  * @param {{username: string}} options
- * @returns {Promise<{id: number, profileName: string, displayName: string, phoneNumber: string, email: string, address: string, websiteUrl: string, createdAt: string, modifiedAt: string}>}
+ * @returns {Promise<{ok: boolean, user_profile: boolean, message: string}>}
  */
 async function userProfile({ username }) {
     try {
@@ -20,13 +20,13 @@ async function userProfile({ username }) {
         if (!json.ok) {
             console.error(json);
         }
+        console.log({ json });
         return json;
     } catch (err) {
         console.error(err);
         return { ok: false, message: err.message };
     }
 }
-
 
 /**
  *

@@ -14,5 +14,4 @@ function useNavigate() {
     }, []);
 }
 
-
 export { useNavigate, navigateTo };

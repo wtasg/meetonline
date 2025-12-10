@@ -33,9 +33,13 @@ export default defineConfig([
             },
         },
         rules: {
-            semi: ["error", "always"],
+            "@stylistic/indent": ["error", 4],
+            "@stylistic/quotes": ["error", "double"],
+            "no-extra-semi": "error",
+            "no-multiple-empty-lines": ["error", { max: 1, maxEOF: 0 }],
             "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
-            "@stylistic/quotes": ["error", "double"]
+            "object-curly-spacing": ["error", "always"],
+            "semi": ["error", "always"],
         },
     },
 ]);

@@ -15,7 +15,6 @@ describe("date utils", () => {
 
     describe("UTC.", () => {
 
-
         it("today() returns current date as UTC string", () => {
             expect(typeof UTC.today()).toBe("string");
             expect(UTC.today()).toBe(new Date(base).toUTCString());

@@ -132,7 +132,6 @@ class CookieStorage {
     }
 }
 
-
 export {
     Storage
 };

@@ -7,10 +7,10 @@ import { userProfile, updateUserProfile } from "../net/userProfile.js";
  */
 async function fetchUserProfile() {
     const username = user_session.retrieve("username");
-    const ua = await userProfile({ username });
-    return ua;
+    const profile = await userProfile({ username });
+    console.log({ ua: profile });
+    return profile;
 }
-
 async function updateProfileName(value) {
     const key = "profileName";
     const username = user_session.retrieve("username");

@@ -36,7 +36,6 @@ function UserProfile() {
         setProfile({ ...profile });
     }
 
-
     return (
         <div className="flex hac vac w80p">
             <div className="vflex">
