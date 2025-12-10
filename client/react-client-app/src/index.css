@@ -291,6 +291,9 @@ input[type="password"] {
     cursor: text;
 }
 
+.clickable {
+    cursor: pointer;
+}
 
 /* margins start */
 .m0_2 {

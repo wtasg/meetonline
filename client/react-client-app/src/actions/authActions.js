@@ -1,5 +1,5 @@
 import { login, signup, logout, prelogin, presignup } from "../net/auth";
-import { user_session } from "../session";
+import { resetLocation, resetUserSession, user_session } from "../session";
 
 /**
  *
@@ -97,12 +97,12 @@ async function logoutAction() {
     if (!usernameInSession) {
         throw new Error("Username not found!");
     }
-    user_session.eject("username");
-    user_session.eject("session");
+    resetUserSession();
+    resetLocation();
     // server session destruction
     const result = await logout({ username: usernameInSession });
     if (!result.ok) {
-        throw new Error("Could not logout from server!");
+        console.error(result.message);
     }
     return result;
 }

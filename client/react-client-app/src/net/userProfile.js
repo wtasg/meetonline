@@ -2,38 +2,32 @@ import { CONF } from "./net-conf.js";
 
 /**
  * Fetches User Profile
- * @param {{username: string}} options
- * @returns {Promise<{ok: boolean, user_profile: boolean, message: string}>}
+ * @returns {Promise<{ok: true, message: string, user_profile: {id: string, profileName: string, displayName: string, phoneNumber: string, email: string, address: string, websiteUrl: string, createdAt: string, modifiedAt: string}}|{ok: false, message: string, user_profile: false}>}
  */
-async function userProfile({ username }) {
+async function fetchUserProfile() {
     try {
         const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.USER_PROFILE}`, {
             credentials: "include",
-            method: "POST",
+            method: "GET",
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ username }),
+            }
         });
         const json = await response.json();
-        if (!json.ok) {
-            console.error(json);
-        }
-        console.log({ json });
         return json;
     } catch (err) {
         console.error(err);
-        return { ok: false, message: err.message };
+        return { ok: false, message: err.message, user_profile: false };
     }
 }
 
 /**
  *
- * @param {{username: string, key: string, value: string}} options
- * @returns {Promise<{ok: boolean, user_profile: boolean, message: string}>}
+ * @param {{key: string, value: string}} options
+ * @returns {Promise<{ok: boolean, message: string, user_profile: {id: string, profileName: string, displayName: string, phoneNumber: string, email: string, address: string, websiteUrl: string, createdAt: string, modifiedAt: string}}>}
  */
-async function updateUserProfile({ username, key, value }) {
+async function updateUserProfile({ key, value }) {
     try {
         const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.USER_PROFILE}`, {
             credentials: "include",
@@ -42,7 +36,7 @@ async function updateUserProfile({ username, key, value }) {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ username, key, value }),
+            body: JSON.stringify({ key, value }),
         });
         const json = await response.json();
         if (!json.ok) {
@@ -57,6 +51,6 @@ async function updateUserProfile({ username, key, value }) {
 }
 
 export {
-    userProfile,
+    fetchUserProfile,
     updateUserProfile
 };

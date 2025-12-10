@@ -1,4 +1,4 @@
-import { user_session } from "../session";
+import { user_session, resetUserSession, resetLocation } from "../session";
 import { isNonEmptyString } from "./string";
 
 function hasUserSession() {
@@ -7,4 +7,9 @@ function hasUserSession() {
         isNonEmptyString(user_session.retrieve("session"));
 }
 
-export { hasUserSession };
+function destroySession() {
+    resetUserSession();
+    resetLocation();
+}
+
+export { hasUserSession, destroySession };

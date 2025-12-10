@@ -1,10 +1,22 @@
 import { Storage } from "./utils/storage.js";
 
-const user_session = new Storage(["session", "local"]);
+const user_session = new Storage(["session"]);
 
 const location = new Storage(["local"]);
 
 const existingLocation = location?.retrieve("path") ?? "/";
 location.store("path", existingLocation);
 
-export { user_session, location };
+const resetLocation = () => {
+    location.eject("path");
+    location.store("path", "/");
+    window.location.assign("/");
+    window.location.reload();
+};
+
+const resetUserSession = () => {
+    user_session.eject("username");
+    user_session.eject("session");
+};
+
+export { user_session, location, resetLocation, resetUserSession };
