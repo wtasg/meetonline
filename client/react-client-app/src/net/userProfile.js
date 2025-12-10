@@ -2,7 +2,7 @@ import { CONF } from "./net-conf.js";
 
 /**
  * Fetches User Profile
- * @returns {Promise<{ok: true, message: string, user_profile: {id: string, profileName: string, displayName: string, phoneNumber: string, email: string, address: string, websiteUrl: string, createdAt: string, modifiedAt: string}}>}
+ * @returns {Promise<{ok: boolean, message: string, user_profile: {id: string, profileName: string, displayName: string, phoneNumber: string, email: string, address: string, websiteUrl: string, createdAt: string, modifiedAt: string}}>}
  */
 async function fetchUserProfile() {
     try {

@@ -125,10 +125,11 @@ async function userProfilePATCH(req, res) {
                 });
         }
 
+        const profile = await getUserProfileByUsername(username);
         return res.status(200)
             .json({
                 ok: true,
-                user_profile: true,
+                user_profile: profile.toClient(),
                 message: "Success"
             });
     } catch (err) {
