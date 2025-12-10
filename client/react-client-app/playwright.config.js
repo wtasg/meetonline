@@ -2,7 +2,6 @@
 import { defineConfig, devices } from "@playwright/test";
 import process from "node:process";
 
-
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -45,7 +44,6 @@ export default defineConfig({
         ignoreHTTPSErrors: true, // ✅ Trust self-signed certs
         headless: true,
     },
-
 
     /* Configure projects for major browsers */
     projects: [
@@ -92,4 +90,3 @@ export default defineConfig({
     //   reuseExistingServer: !process.env.CI,
     // },
 });
-

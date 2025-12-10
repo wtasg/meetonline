@@ -13,6 +13,6 @@ function Link({ to, children, klass }) {
             {children}
         </a>
     );
-};
+}
 
 export { Link };
