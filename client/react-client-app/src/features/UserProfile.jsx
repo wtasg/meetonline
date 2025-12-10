@@ -9,12 +9,12 @@ function UserProfile() {
     const [serviceError, setServiceError] = useState({ hasError: false, message: "" });
     const [profile, setProfile] = useState({ profileName: "", displayName: "", phoneNumber: "", email: "", address: "", websiteUrl: "", createdAt: "", modifiedAt: "" });
     useEffect(() => {
-        let isMounted = true; // 1. Track mount status
+        let isMounted = true;
 
         (async function () {
             try {
                 const profile = await fetchUserProfile();
-                if (!isMounted) return; // 2. Stop if unmounted
+                if (!isMounted) return;
 
                 const sessionErrorMessages = [
                     "Missing Cookie Headers.",
@@ -23,11 +23,10 @@ function UserProfile() {
                 ];
 
                 if (!profile.ok) {
-                    // Check specific session errors first
                     if (sessionErrorMessages.includes(profile.message)) {
                         resetUserSession();
                         resetLocation();
-                        return; // 3. Return early to avoid setting service error if redirecting
+                        return;
                     }
 
                     setServiceError({ hasError: true, message: profile.message });
@@ -45,8 +44,9 @@ function UserProfile() {
             }
         })();
 
-        return () => { isMounted = false; }; // 4. Cleanup function
-    }, [resetUserSession, resetLocation]); // 5. Add dependencies
+        return () => { isMounted = false; };
+    }, [resetUserSession, resetLocation]);
+
     function updateProfileDetail(key, value) {
         if (key === "profileName") {
             updateProfileName(value);

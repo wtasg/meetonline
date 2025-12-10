@@ -10,8 +10,6 @@ location.store("path", existingLocation);
 const resetLocation = () => {
     location.eject("path");
     location.store("path", "/");
-    window.location.assign("/");
-    window.location.reload();
 };
 
 const resetUserSession = () => {
