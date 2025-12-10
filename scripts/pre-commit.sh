@@ -23,4 +23,5 @@ if [[ "$SERVER_RESULT" -ne 0 || "$CLIENT_RESULT" -ne 0 ]]; then
 fi
 
 echo "Lint passed — proceeding with commit."
+
 exit 0

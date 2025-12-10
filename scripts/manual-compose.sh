@@ -104,7 +104,7 @@ runup() {
     $netcreated && sleep 2
 
     ## checking and/or building a volume for postgres
-    ! $no_db_flag && {
+    (! $no_db_flag && {
         volcreated=false
 
         if docker volume inspect manual-meetonline-pgdata >/dev/null 2>&1; then
@@ -132,9 +132,10 @@ runup() {
             --detach adminer
 
         ($did_shutdown_db || $volcreated) && sleep 3
-    } || true
+    }
+    ) || true
 
-    ! $no_server_flag &&
+    (! $no_server_flag && {
         docker run \
             --user "$(id -u)":"$(id -g)" \
             --name manual-meetonline-server \
@@ -144,8 +145,10 @@ runup() {
             --publish 9443:9443 \
             --detach localhost/meetonline-server:manual &&
         sleep 2
+        }
+    ) || true
 
-    ! $no_client_flag &&
+    (! $no_client_flag && {
         docker run \
             --user "$(id -u)":"$(id -g)" \
             --name manual-meetonline-client \
@@ -154,6 +157,8 @@ runup() {
             --publish 5173:5173 \
             --detach localhost/meetonline-client:manual &&
         sleep 1
+        }
+    ) || true
 }
 
 usage() {
@@ -191,6 +196,8 @@ if ! $clean_flag && ! $build_flag && ! $run_flag; then
     run_flag=true
 fi
 
-$clean_flag && cleanup
-$build_flag && buildup
+($clean_flag && cleanup) || true
+($build_flag && buildup) || true
 $run_flag && runup
+
+exit 0

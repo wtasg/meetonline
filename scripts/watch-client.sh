@@ -37,3 +37,5 @@ echo "Stopping container."
 
 docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
 docker rm "$CONTAINER_NAME" >/dev/null 2>&1 || true
+
+exit 0

@@ -13,3 +13,5 @@ cd client/react-client-app
 npm install --no-fund
 npm run build:certs
 cd ../..
+
+exit 0
