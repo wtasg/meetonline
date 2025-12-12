@@ -3,16 +3,23 @@
 ## Around People
 
 - Be nice
-- Disagree factually and polietly.
+- Disagree factually and politely.
 
 ## Git Branching
 
-- Use feature branches for **bigger** tasks/stories.
-  - feature_fe/fe for frontend
-  - feature_be/be for backend
-  - feature_db/db for database
-  - branch name should contain underscores (instead of slashes)
-- Use `task_issuenumber` or `b_ni` for smaller tasks or PR.
+- Feature branches: for large tasks or complete features
+  - `feature_fe` or `fe` - frontend features
+  - `feature_be` or `be` - backend features
+  - `feature_db` or `db` - database features
+- Task/Chore branches: for smaller tasks or targeting single issue
+  - `b_issuenumber`
+- Bot branches: if you are a bot
+  - `BOTNAME__ISSUENUMBER`:
+    - example `copilot__333` when bot is copilot and issue fixed is 333
+- Other branches:
+  - `maintenance_tag`: when maintaining repo, non code changes.
+  - `fix_issuenumber`: when fixing an issue
+  - `fix_tag`: when fixing a non-issue `tag` work.
 - Main branch
   - Do not use `main` to push code.
   - Use `main` branch only to `pull --rebase` code.

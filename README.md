@@ -8,9 +8,15 @@ An app to let you build and find online communities.
 
 ## Discussions
 
-Start with introducing yourself [here](https://github.com/wtasg/meetonline/discussions/84).
+[Start with introducing yourself here](https://github.com/wtasg/meetonline/discussions/84).
 
 ## Development/Run
+
+### AI / LLM
+
+- Take help of AI/LLMs; then implement yourself.
+- AI code/documentation PR by user will be closed.
+- Create AI PRs via AI-bots.
 
 ### good first issues
 
@@ -24,7 +30,7 @@ Start with introducing yourself [here](https://github.com/wtasg/meetonline/discu
 - Allowed characters: ASCII letters, digits, hyphen (-), underscore (_).
 - Not allowed: slashes (/), emoji, spaces, other non-ASCII characters.
 
-- If your PR fails the branch-name check, rename the branch locally:
+If your PR fails the branch-name check, rename the branch locally:
 
 ```bash
 git branch -m old-name new-name
@@ -79,8 +85,8 @@ Documentation is available in `docs/`. Visit [Documentation Home](./docs/Home.md
 ## Social
 
 - [YouTube Playlist: software-development](https://www.youtube.com/playlist?list=PLbUtscuRQ61xiGmjCL00Ime9z5sJEZu4M)
-- [Discord Invite: discord.gg/QFBPAseR](https://discord.gg/Zfxr8pwKcq)
-- We might be slow to respond, don't hesitate to ping again.
+- [Discord Invite: discord.gg/Zfxr8pwKcq](https://discord.gg/Zfxr8pwKcq)
+- Lead developer discord: @wtasd
 
 ## LICENSE
 

@@ -20,4 +20,4 @@
 
 ## Other
 
-- [multipart-form-handing](multipart-form-handing.md)
+- [multipart-form-handling](multipart-form-handling.md)

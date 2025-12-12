@@ -1,8 +1,9 @@
 {
-    "recommendations": [
-        "editorconfig.editorconfig",
-        "jebbs.plantuml",
-        "dbaeumer.vscode-eslint",
-        "redhat.vscode-yaml"
-    ]
+  "recommendations": [
+    "editorconfig.editorconfig",
+    "jebbs.plantuml",
+    "dbaeumer.vscode-eslint",
+    "redhat.vscode-yaml",
+    "DavidAnson.vscode-markdownlint"
+  ]
 }
