@@ -239,7 +239,7 @@ Use the template at [docs/bug-report-template.md](docs/bug-report-template.md):
 ## Community
 
 - **GitHub Discussions**: Start by introducing yourself at [Discussion #84](https://github.com/wtasg/meetonline/discussions/84)
-- **Discord**: [discord.gg/QFBPAseR](https://discord.gg/Zfxr8pwKcq)
+- **Discord**: [discord.gg/Zfxr8pwKcq](https://discord.gg/Zfxr8pwKcq)
 - **YouTube**: [software-development playlist](https://www.youtube.com/playlist?list=PLbUtscuRQ61xiGmjCL00Ime9z5sJEZu4M)
 - **Good First Issues**: [Check here](https://github.com/wtasg/meetonline/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22)
 
