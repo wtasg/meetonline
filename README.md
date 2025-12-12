@@ -18,6 +18,20 @@ Start with introducing yourself [here](https://github.com/wtasg/meetonline/discu
 - If you need help, ask, maybe once a day.
 - [check GFIs here](https://github.com/wtasg/meetonline/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22)
 
+### Branch naming rules
+
+- Repository enforces branch naming pattern: `^[A-Za-z][A-Za-z0-9_-]+$`.
+- Allowed characters: ASCII letters, digits, hyphen (-), underscore (_).
+- Not allowed: slashes (/), emoji, spaces, other non-ASCII characters.
+
+- If your PR fails the branch-name check, rename the branch locally:
+
+```bash
+git branch -m old-name new-name
+git push origin new-name
+git push origin --delete old-name
+```
+
 ### Checklists
 
 - [Review Checklist](https://github.com/wtasg/meetonline/discussions/298)
@@ -58,28 +72,14 @@ docker compose --file compose.yml down
 # docker volume list | grep meetonline | awk '{print $2}' | xargs -n1 docker volume rm
 ```
 
-## Branch naming rules
-
-- Repository enforces branch naming pattern: `^[A-Za-z][A-Za-z0-9_-]+$`.
-- Allowed characters: ASCII letters, digits, hyphen (-), underscore (_).
-- Not allowed: slashes (/), emoji, spaces, other non-ASCII characters.
-
-- If your PR fails the branch-name check, rename the branch locally:
-
-```bash
-git branch -m old-name new-name
-git push origin new-name
-git push origin --delete old-name
-```
-
 ## Documentation
 
 Documentation is available in `docs/`. Visit [Documentation Home](./docs/Home.md)
 
 ## Social
 
-- [YouTube playlist](https://www.youtube.com/playlist?list=PLbUtscuRQ61xiGmjCL00Ime9z5sJEZu4M)
-- [Discord invite](https://discord.gg/QFBPAseR)
+- [YouTube Playlist: software-development](https://www.youtube.com/playlist?list=PLbUtscuRQ61xiGmjCL00Ime9z5sJEZu4M)
+- [Discord Invite: discord.gg/QFBPAseR](https://discord.gg/Zfxr8pwKcq)
 - We might be slow to respond, don't hesitate to ping again.
 
 ## LICENSE
