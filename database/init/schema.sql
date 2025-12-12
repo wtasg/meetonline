@@ -191,3 +191,71 @@ create index if not exists event_is_archived_index
 create index if not exists event_created_at_desc_index
     on event (created_at desc);
 -- EVENT : END
+
+
+-- GROUP : START
+create table if not exists "group"
+(
+    id                         bigserial,
+    user_profile_id            bigint                              not null,
+    group_name                 varchar(256)                        not null,
+    description                text,
+    is_public                  boolean   default true              not null,
+    members                    text,
+    tags                       text,
+    categories                 text,
+    created_at                 timestamp default CURRENT_TIMESTAMP not null,
+    modified_at                timestamp default CURRENT_TIMESTAMP not null,
+    is_deleted                 boolean   default false             not null,
+    is_hidden                  boolean   default false             not null,
+    is_archived                boolean   default false             not null
+);
+
+comment on table "group" is 'Groups created by user profiles';
+comment on column "group".id is 'Primary key for groups table';
+comment on column "group".user_profile_id is 'FK: profile_id who created the group';
+comment on column "group".group_name is 'Name of the group';
+comment on column "group".description is 'Description of the group';
+comment on column "group".is_public is 'Whether the group is publicly searchable';
+comment on column "group".members is 'JSON array of member user_profile_ids';
+comment on column "group".tags is 'Tags for the group';
+comment on column "group".categories is 'Categories for the group';
+comment on column "group".created_at is 'Record creation timestamp';
+comment on column "group".modified_at is 'Record update timestamp';
+comment on column "group".is_deleted is 'Soft delete flag';
+comment on column "group".is_hidden is 'Whether group is hidden from public listing';
+comment on column "group".is_archived is 'Whether group is archived';
+
+alter table "group"
+    owner to myuser;
+
+-- Primary Key
+alter table "group"
+    add constraint group_pk
+        primary key (id);
+
+-- Foreign Keys
+alter table "group"
+    add constraint group_user_profile_id_fk
+        foreign key (user_profile_id) references user_profile(id);
+
+-- Indexes
+create index if not exists group_user_profile_id_index
+    on "group" (user_profile_id);
+
+create index if not exists group_group_name_index
+    on "group" (group_name);
+
+create index if not exists group_is_public_index
+    on "group" (is_public);
+
+create index if not exists group_is_hidden_index
+    on "group" (is_hidden);
+
+create index if not exists group_is_archived_index
+    on "group" (is_archived);
+
+create index if not exists group_created_at_desc_index
+    on "group" (created_at desc);
+
+-- GROUP : END
