@@ -18,7 +18,7 @@ The project follows a multi-service architecture:
 
 ### Directory Structure
 
-```
+```text
 meetonline/
 ├── client/react-client-app/    # Frontend React application
 ├── server/node-server-app/     # Backend Node.js/Express server
@@ -31,12 +31,14 @@ meetonline/
 ## Technology Stack
 
 ### Frontend
+
 - **Framework**: React 19.x
 - **Build Tool**: Vite
 - **Testing**: Vitest (unit), Playwright (e2e)
 - **Linting**: ESLint with stylistic plugin
 
 ### Backend
+
 - **Runtime**: Node.js (ES modules)
 - **Framework**: Express 5.x
 - **Testing**: Jest
@@ -52,10 +54,12 @@ meetonline/
   - `morgan` - HTTP logging
 
 ### Database
+
 - **Database**: PostgreSQL
 - **Schema**: Located in `database/init/schema.sql`
 
 ### DevOps
+
 - **Containerization**: Docker & Docker Compose
 - **HTTPS**: Self-signed certificates (development)
 - **Pre-commit**: Custom git hooks via `scripts/pre-commit.sh`
@@ -63,27 +67,32 @@ meetonline/
 ## Development Setup
 
 ### Prerequisites
+
 - Docker and Docker Compose
 - Node.js (for local development)
 - Git with proper configuration
 
 ### Initial Setup
 
-1. Make scripts executable:
+First of all, Step 1. Make scripts executable:
+
 ```bash
 chmod u+x ./scripts/pre-commit.sh
 chmod u+x ./scripts/make.certs.sh
 chmod u+x ./scripts/make.env.sh
 ```
 
-2. Set up git hooks:
+Then, Step 2. Set up git hooks:
+
 ```bash
 # Add to .git/hooks/pre-commit
+
 #!/usr/bin/env bash
 bash ./scripts/pre-commit.sh
 ```
 
-3. Generate certificates and environment files:
+Then, Step 3. Generate certificates and environment files:
+
 ```bash
 ./scripts/make.certs.sh
 ./scripts/make.env.sh
@@ -92,6 +101,7 @@ bash ./scripts/pre-commit.sh
 ### Running the Application
 
 **Docker Compose (recommended):**
+
 ```bash
 docker compose --file compose.yml build
 docker compose --file compose.yml up
@@ -101,6 +111,7 @@ cd client/react-client-app && npm run build -- --watch
 ```
 
 **Manual Compose:**
+
 ```bash
 # Run all services
 ./scripts/manual-compose.sh --all
@@ -114,6 +125,7 @@ cd client/react-client-app && npm run build -- --watch
 ## Code Conventions
 
 ### General Rules
+
 - **Be nice and disagree politely** - from [rules.md](docs/rules.md)
 - **Code formatting**: Follow `.editorconfig` settings
   - Indent: 4 spaces (default)
@@ -127,22 +139,25 @@ cd client/react-client-app && npm run build -- --watch
 ### Git Workflow
 
 #### Branch Naming
+
 - Pattern: `^[A-Za-z][A-Za-z0-9_-]+$`
 - Allowed: ASCII letters, digits, hyphen (-), underscore (_)
 - **NOT allowed**: slashes (/), emoji, spaces, non-ASCII characters
 
 #### Branch Types
-- `feature_fe` or `fe` - frontend features
-- `feature_be` or `be` - backend features
-- `feature_db` or `db` - database features
-- `task_issuenumber` or `b_ni` - smaller tasks/PRs
+
+- Bot branches: if you are a bot
+  - `BOTNAME__ISSUENUMBER`:
+    - example `copilot__333` when bot is copilot and issue fixed is 333
 
 #### Branch Strategy
+
 - **Do NOT** push directly to `main`
 - **Do NOT** merge locally - use `rebase` instead
 - Use `main` branch only to `pull --rebase` code
 
 #### Merging PRs
+
 - Merge with **only one commit** (squash locally or in PRs)
 - Merge with Squash if commits are low quality
 - Merge with commits if commits are good quality
@@ -150,6 +165,7 @@ cd client/react-client-app && npm run build -- --watch
 - Do not hide or overtake someone else's work
 
 ### JavaScript/TypeScript Conventions
+
 - **Type**: ES Modules (`"type": "module"` in package.json)
 - **Linting**: Use ESLint with the project configuration
 - **Fix linting**: `npm run lint:fix`
@@ -157,20 +173,22 @@ cd client/react-client-app && npm run build -- --watch
 ### Testing
 
 #### Server Tests (Jest)
+
 ```bash
 cd server/node-server-app
-npm run test          # Run tests
-npm run test:jest:watch  # Watch mode
-npm run cover         # Coverage report
+npm run test                # Run tests
+npm run test:jest:watch     # Watch mode
+npm run cover               # Coverage report
 ```
 
 #### Client Tests
+
 ```bash
 cd client/react-client-app
-npm run test          # Run Vitest tests
-npm run test:ui       # Vitest UI
-npm run test:coverage # Coverage report
-npm run e2e           # Playwright e2e tests
+npm run test                # Run Vitest tests
+npm run test:ui             # Vitest UI
+npm run test:coverage       # Coverage report
+npm run e2e                 # Playwright e2e tests
 ```
 
 ### Authentication Architecture
@@ -190,10 +208,12 @@ See [Authentication Architecture](docs/architecture/Authentication%20Architectur
 ## Common Tasks
 
 ### Adding Dependencies
+
 - Server: `cd server/node-server-app && npm install <package>`
 - Client: `cd client/react-client-app && npm install <package>`
 
 ### Running Linters
+
 ```bash
 # Server
 cd server/node-server-app && npm run lint
@@ -203,6 +223,7 @@ cd client/react-client-app && npm run lint
 ```
 
 ### Building
+
 ```bash
 # Server
 cd server/node-server-app && npm run build
@@ -212,6 +233,9 @@ cd client/react-client-app && npm run build
 ```
 
 ### Certificate Generation
+
+`./scripts/make.certs.sh` OR
+
 ```bash
 # Server certificates
 cd server/node-server-app && npm run build:certs
@@ -223,6 +247,7 @@ cd client/react-client-app && npm run build:certs
 ## Bug Reports
 
 Use the template at [docs/bug-report-template.md](docs/bug-report-template.md):
+
 - Describe the problem with checkboxes
 - Explain expected behavior
 - Provide step-by-step reproduction
@@ -245,8 +270,10 @@ Use the template at [docs/bug-report-template.md](docs/bug-report-template.md):
 
 ## Checklists
 
-- **Review Checklist**: [Discussion #298](https://github.com/wtasg/meetonline/discussions/298)
-- **Dev Checklist**: [Discussion #211](https://github.com/wtasg/meetonline/discussions/211)
+- [Review Checklist Discussion](https://github.com/wtasg/meetonline/discussions/298)
+  - [Review Checklist Document](./docs/checklists/review-checklist.md)
+- [Dev Checklist Discussion](https://github.com/wtasg/meetonline/discussions/211)
+  - [Dev Checklist Document](./docs/checklists/dev-checklist.md)
 
 ## License
 

@@ -12,6 +12,16 @@ meetonline is a full-stack web application for building and finding online commu
 
 ## Code Style & Formatting
 
+### Branch naming conventions
+
+**IMPORTANT**
+
+- Branch name must meet this regex criteria `^[A-Za-z][A-Za-z0-9_-]+$`
+  - For bots, use `BOTNAME__` as prefix for branch
+  - Otherwise, try `b_ISSUE_NUMBER` if any issue is assigned.
+  - For bots when assigned an issue, branch name becomes `BOTNAME__ISSUE_NUMBER` e.g. `copilot__333`.
+
+
 ### General Formatting
 - **Indentation**: 4 spaces (general), 2 spaces (JSON/YAML)
 - **Line endings**: LF (Unix-style)
@@ -33,28 +43,54 @@ meetonline is a full-stack web application for building and finding online commu
 - **Functions**: camelCase for functions and variables
 - **Constants**: UPPER_SNAKE_CASE for constants
 - **Database**: snake_case for table and column names
+- **Branches**: `^[A-Za-z][A-Za-z0-9_-]+$`
+  - For bots, use `BOTNAME__` as prefix for branch
+  - Otherwise, try `b_ISSUE_NUMBER` if any issue is assigned.
+  - For bots when assigned an issue, branch name becomes `BOTNAME__ISSUE_NUMBER` e.g. `copilot__333`.
 
 ## Architecture Patterns
 
 ### Frontend (React)
 - **Component Structure**: Functional components with hooks
-- **State Management**: Use React hooks (useState, useEffect, useContext)
+  - Components are broken logically in two parts: plain component in components/ and logic-based (business or programming) in features/
+  - features/ also have larger components
+  - feature/ Components are supposed to be standalone feature (except hooks, network) 
+  - components/ Components are supposed to do one thing only
+- **State Management**: Use React hooks (useState, useEffect, useContext) and client/react-client-app/src/session.js
 - **Routing**: Client-side routing (check existing patterns)
 - **Forms**: Use controlled components
-- **API Calls**: Use fetch API with async/await
+- **API Calls**: Use fetch API with async/await; 
+  - put fetch calls in client/react-client-app/src/net/ functions
+  - call net/ from actions/ functions
+  - call actions/ from feature/ components
 
 ### Backend (Express)
 - **Route Handlers**: Use async/await for asynchronous operations
+  - server/node-server-app/src/handlers/
 - **Error Handling**: Use try-catch blocks and pass errors to Express error handlers
 - **Middleware**: Chain middleware functions for reusable logic
+  - server/node-server-app/src/middlewares/
 - **Database**: Use parameterized queries to prevent SQL injection
+  - server/node-server-app/src/database/
+- **Models**: Database and client objects that handlers or other server code can use, understand, and work with
+  - server/node-server-app/src/models/
+  - Each model corresponds to a database table
+  - Models provide `.fromDatabaseRow()` to parse DB results
+  - Models provide `.toClient()` to format data for API responses
+  - Models provide `.null()` to return a null object
+  - Models provide `.default()` to return a default object
 - **Authentication**: Token-based authentication with session cookies
+  - server/node-server-app/src/utils/store.js for local store implementation
+  - server/node-server-app/src/utils/session.js for session implementation
 
 ### Database (PostgreSQL)
 - **Schema**: Defined in `database/init/schema.sql`
 - **Queries**: Always use parameterized queries via `pg` library
 - **Transactions**: Use transactions for multi-step operations
 - **Naming**: Use snake_case for tables and columns
+- **Indexes**: Use appropriate indexes.
+- **IDs**: Table where ids can apply need to be bigserial; treat id in server code as strings.
+
 
 ## Security Guidelines
 
@@ -78,27 +114,59 @@ meetonline is a full-stack web application for building and finding online commu
 ## Common Patterns
 
 ### Error Handling (Server)
+
 ```javascript
-try {
-    // Database or async operation
-    const result = await db.query('SELECT * FROM table WHERE id = $1', [id]);
-    res.json(result.rows);
-} catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-}
+// sample for /user_account endpoint
+ try {
+        const query = "SELECT * FROM user_account WHERE username = $1";
+        const values = [username];
+        const res = await pool.query(query, values);
+        // verify res has rows.
+        return UserAccountModel.fromDatabaseRow(res.rows[0]);
+    }
+    catch (error) {
+        console.error("Error fetching user account by username:", error);
+        return UserAccountModel.default();
+    }
 ```
 
 ### API Response Format
-```javascript
-// Success
-res.json({ success: true, data: result });
 
-// Error
-res.status(400).json({ success: false, error: 'Error message' });
+In api response, `end_point` is a placeholder for actual endpoint-specific name.
+
+```javascript
+// Success - generic response pattern
+res.json({ ok: true, end_point: {}, message: string });
+
+// Error - generic response pattern
+res.status(400).json({ ok: false, end_point: [{}|false], message: string });
 ```
 
+#### sample: PATCH /user_profile
+
+```javascript
+// Success
+const profile = await getUserProfileByUsername(username);
+return res.status(200)
+    .json({
+        ok: true,
+        user_profile: profile.toClient(),
+        message: "Success"
+    });
+
+// Error
+console.error(err);
+return res.status(500)
+    .json({
+        ok: false,
+        user_profile: UserProfileModel.null().toClient(),
+        message: "CAUGHT ERROR."
+    });
+```
+
+
 ### Database Queries
+
 ```javascript
 // Always use parameterized queries
 const result = await pool.query(
@@ -108,6 +176,7 @@ const result = await pool.query(
 ```
 
 ### React Component Pattern
+
 ```javascript
 import { useState, useEffect } from 'react';
 
@@ -135,20 +204,22 @@ export default ComponentName;
 - Use `describe` and `it` blocks
 - Mock external dependencies
 - Test both success and error cases
-- Run with: `npm run test` in server directory
+- Test edge cases with null, undefined, empty string, NaN
+- Run with: `npm run test` in server/node-server-app directory
 
 ### Client Tests (Vitest)
 - Test files: `*.test.jsx` or `tests/**/*.test.jsx`
 - Use React Testing Library patterns
 - Test user interactions, not implementation details
 - Mock API calls
-- Run with: `npm run test` in client directory
+- Test edge cases with null, undefined, empty string, NaN
+- Run with: `npm run test` in client/react-client-app directory
 
 ### E2E Tests (Playwright)
 - Test files: `tests/**/*.spec.js`
 - Test complete user workflows
 - Use page object patterns
-- Run with: `npm run e2e` in client directory
+- Run with: `npm run e2e` in client/react-client-app directory
 
 ## Git Workflow
 
@@ -202,11 +273,13 @@ export default ComponentName;
 ```
 server/node-server-app/
 ├── src/
-│   ├── server.js          # Main server entry point
-│   ├── database/          # Database connection and queries
-│   ├── routes/            # Express route handlers
-│   └── middleware/        # Custom middleware
-├── tests-jest/            # Jest tests
+│   ├── server.js           # Main server entry point
+│   ├── database/           # Database connection and queries
+│   ├── handlers/           # Express route handlers
+│   ├── middleware/         # Custom middleware
+|   ├── models/             # 1:1 model for database/ .js 
+|   └── utils/              # Utilities
+├── tests-jest/             # Jest tests
 └── package.json
 ```
 
@@ -214,12 +287,36 @@ server/node-server-app/
 ```
 client/react-client-app/
 ├── src/
-│   ├── main.jsx           # React entry point
-│   ├── App.jsx            # Main App component
-│   ├── components/        # React components
-│   └── assets/            # Static assets
-├── tests/                 # Playwright e2e tests
+│   ├── main.jsx            # React entry point
+│   ├── App.jsx             # Main App component
+│   ├── components/         # React components, no logic
+│   ├── features/           # Components with logic
+│   ├── hooks/              # Hooks
+│   ├── net/                # network calls to server via fetch
+│   ├── actions/            # Component network-layer, talks to net/ layer
+│   ├── utils/              # Utility functions
+│   ├── assets/             # Static assets
+│   └── session.js          # Home grown store for data
+├── tests/                  # Playwright e2e tests
 └── package.json
+```
+
+### Database Structure
+```
+database/
+└── init/
+    └── schema.sql          # SQL init file for docker container
+```
+
+### Scripts
+```
+scripts
+├── compose.sh
+├── make.certs.sh
+├── make.env.sh
+├── manual-compose.sh
+├── pre-commit.sh
+└── watch-client.sh
 ```
 
 ## Documentation
@@ -227,6 +324,8 @@ client/react-client-app/
 When making significant changes:
 - Update relevant README files
 - Update architecture docs if patterns change
+  - Use plantuml code for diagrams
+  - Use valid markdown 
 - Add comments for complex logic only
 - Keep documentation in sync with code
 
@@ -269,3 +368,8 @@ cd client/react-client-app && npm run build
 # Docker Compose
 docker compose --file compose.yml up --build
 ```
+
+## Checklists
+
+- [Dev Checklist](../docs/checklists/dev-checklist.md)
+- [Review Checklist](../docs/checklists/review-checklist.md)
