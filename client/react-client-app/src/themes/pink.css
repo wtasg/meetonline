@@ -1,0 +1,14 @@
+/* Theme: Pink */
+[data-theme="pink"] {
+    --app-background-color: #3d1f2e;
+    --app-text-color: #fce4ec;
+    color: var(--app-text-color);
+    background-color: var(--app-background-color);
+    --btn-background-color: #d63384;
+    --btn-text-color: #fce4ec;
+    --cta-btn-background-color: #f48fb1;
+    --cta-btn-text-color: #3d1f2e;
+    --link-hover-text-color: #f48fb1;
+    --color-gray-100: #fce4ec;
+    --color-gray-900: #3d1f2e;
+}
