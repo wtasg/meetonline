@@ -41,7 +41,7 @@ async function createGroup({ userProfileId, groupName, description = "", isPubli
  */
 async function getGroupById(groupId) {
     try {
-        const query = 'SELECT * FROM public."group" WHERE id = $1 AND is_deleted = false';
+        const query = "SELECT * FROM public.\"group\" WHERE id = $1 AND is_deleted = false";
         const values = [groupId];
         const result = await pool.query(query, values);
         
@@ -136,7 +136,7 @@ async function updateGroup(groupId, updates) {
             return getGroupById(groupId);
         }
         
-        setClause.push(`modified_at = CURRENT_TIMESTAMP`);
+        setClause.push("modified_at = CURRENT_TIMESTAMP");
         values.push(groupId);
         
         const query = `
