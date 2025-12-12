@@ -8,6 +8,7 @@ const CONF = {
         LOGOUT: "logout",
         USER_ACCOUNT: "user_account",
         USER_PROFILE: "user_profile",
+        USER_SETTINGS: "user_settings",
     }
 };
 

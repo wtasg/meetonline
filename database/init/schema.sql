@@ -191,3 +191,64 @@ create index if not exists event_is_archived_index
 create index if not exists event_created_at_desc_index
     on event (created_at desc);
 -- EVENT : END
+
+-- USER SETTINGS : START
+create table if not exists user_settings
+(
+    id                  bigserial,
+    user_profile_id     bigint                              not null,
+    theme               varchar(64)   default 'system'      not null,
+    font_size           varchar(32)   default 'medium'      not null,
+    font_family         varchar(128)  default 'system-ui'   not null,
+    font_contrast       varchar(32)   default 'normal'      not null,
+    notifications       boolean       default true          not null,
+    online_presence     boolean       default true          not null,
+    sounds              boolean       default true          not null,
+    created_at          timestamp     default CURRENT_TIMESTAMP not null,
+    modified_at         timestamp     default CURRENT_TIMESTAMP not null
+);
+
+comment on table user_settings is 'User settings per profile';
+comment on column user_settings.id is 'Primary key for user_settings table';
+comment on column user_settings.user_profile_id is 'FK: user_profile.id';
+comment on column user_settings.theme is 'UI theme: system, light, dark, high-contrast-light, high-contrast-dark, teal, pink, red, sepia, gray';
+comment on column user_settings.font_size is 'Font size: small, medium, large, x-large';
+comment on column user_settings.font_family is 'Font family';
+comment on column user_settings.font_contrast is 'Font contrast: low, normal, high';
+comment on column user_settings.notifications is 'Enable notifications';
+comment on column user_settings.online_presence is 'Show online presence';
+comment on column user_settings.sounds is 'Enable sounds';
+comment on column user_settings.created_at is 'Record creation timestamp';
+comment on column user_settings.modified_at is 'Record update timestamp';
+
+alter table user_settings
+    owner to myuser;
+
+alter table user_settings
+    add constraint user_settings_pk
+        primary key (id);
+
+alter table user_settings
+    add constraint user_settings_user_profile_id_uindex
+        unique (user_profile_id);
+
+alter table user_settings
+    add constraint user_settings_user_profile_id_fk
+        foreign key (user_profile_id) references user_profile (id);
+
+alter table user_settings
+    add constraint user_settings_theme_check
+        check (theme IN ('system', 'light', 'dark', 'high-contrast-light', 'high-contrast-dark', 'teal', 'pink', 'red', 'sepia', 'gray'));
+
+alter table user_settings
+    add constraint user_settings_font_size_check
+        check (font_size IN ('small', 'medium', 'large', 'x-large'));
+
+alter table user_settings
+    add constraint user_settings_font_contrast_check
+        check (font_contrast IN ('low', 'normal', 'high'));
+
+create index if not exists user_settings_user_profile_id_index
+    on user_settings (user_profile_id);
+
+-- USER SETTINGS : END
