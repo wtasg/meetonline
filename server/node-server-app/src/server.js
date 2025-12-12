@@ -25,6 +25,7 @@ import { loadEnv } from "./utils/env.js";
 import { projectRoot } from "./utils/projectRoot.js";
 import { dbStart } from "./database/db.js";
 import { setupUserProfileHandler } from "./handlers/userProfileHandler.js";
+import { setupGroupHandler } from "./handlers/groupHandler.js";
 
 const app = express();
 const cookieParser = cookieParserPkg.default;
@@ -55,6 +56,7 @@ setupAuthHandlers(app);
 setupUploadHandler(app);
 setupUserAccountHandler(app);
 setupUserProfileHandler(app);
+setupGroupHandler(app);
 
 // Reject All Unsupported Routes
 app.use((req, res) => {

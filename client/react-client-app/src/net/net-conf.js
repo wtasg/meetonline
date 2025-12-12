@@ -8,6 +8,9 @@ const CONF = {
         LOGOUT: "logout",
         USER_ACCOUNT: "user_account",
         USER_PROFILE: "user_profile",
+        GROUP: "group",
+        GROUPS: "groups",
+        GROUP_SEARCH: "group/search",
     }
 };
 
