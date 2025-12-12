@@ -4,7 +4,7 @@ import { APP_ROOT } from "./common.js";
 
 test("has title", async ({ page }) => {
     await page.goto(APP_ROOT);
-    await expect(page).toHaveTitle(/meet online client react app/);
+    await expect(page).toHaveTitle(/Meet Online/);
 });
 
 test("has home, login, and signup links", async ({ page }) => {
