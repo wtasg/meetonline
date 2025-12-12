@@ -5,6 +5,7 @@ This file provides context and guidelines for GitHub Copilot when working on the
 ## Project Context
 
 meetonline is a full-stack web application for building and finding online communities. The project emphasizes:
+
 - Clean, maintainable code
 - Security best practices (HTTPS, secure authentication)
 - Modern web technologies (React, Node.js, PostgreSQL)
@@ -14,15 +15,13 @@ meetonline is a full-stack web application for building and finding online commu
 
 ### Branch naming conventions
 
-**IMPORTANT**
-
-- Branch name must meet this regex criteria `^[A-Za-z][A-Za-z0-9_-]+$`
+- **IMPORTANT** Branch name must meet this regex criteria `^[A-Za-z][A-Za-z0-9_-]+$`
   - For bots, use `BOTNAME__` as prefix for branch
   - Otherwise, try `b_ISSUE_NUMBER` if any issue is assigned.
   - For bots when assigned an issue, branch name becomes `BOTNAME__ISSUE_NUMBER` e.g. `copilot__333`.
 
-
 ### General Formatting
+
 - **Indentation**: 4 spaces (general), 2 spaces (JSON/YAML)
 - **Line endings**: LF (Unix-style)
 - **Max line length**: 120 characters
@@ -31,6 +30,7 @@ meetonline is a full-stack web application for building and finding online commu
 - **Character encoding**: UTF-8
 
 ### JavaScript/TypeScript Style
+
 - Use **ES Modules** (`import`/`export`, not `require`)
 - Prefer `const` over `let`, avoid `var`
 - Use template literals for string interpolation
@@ -38,6 +38,7 @@ meetonline is a full-stack web application for building and finding online commu
 - Follow ESLint rules defined in project configs
 
 ### Naming Conventions
+
 - **Files**: Use kebab-case for files (e.g., `user-account.js`)
 - **Components**: PascalCase for React components
 - **Functions**: camelCase for functions and variables
@@ -51,20 +52,22 @@ meetonline is a full-stack web application for building and finding online commu
 ## Architecture Patterns
 
 ### Frontend (React)
+
 - **Component Structure**: Functional components with hooks
   - Components are broken logically in two parts: plain component in components/ and logic-based (business or programming) in features/
   - features/ also have larger components
-  - feature/ Components are supposed to be standalone feature (except hooks, network) 
+  - feature/ Components are supposed to be standalone feature (except hooks, network)
   - components/ Components are supposed to do one thing only
 - **State Management**: Use React hooks (useState, useEffect, useContext) and client/react-client-app/src/session.js
 - **Routing**: Client-side routing (check existing patterns)
 - **Forms**: Use controlled components
-- **API Calls**: Use fetch API with async/await; 
+- **API Calls**: Use fetch API with async/await;
   - put fetch calls in client/react-client-app/src/net/ functions
   - call net/ from actions/ functions
   - call actions/ from feature/ components
 
 ### Backend (Express)
+
 - **Route Handlers**: Use async/await for asynchronous operations
   - server/node-server-app/src/handlers/
 - **Error Handling**: Use try-catch blocks and pass errors to Express error handlers
@@ -84,6 +87,7 @@ meetonline is a full-stack web application for building and finding online commu
   - server/node-server-app/src/utils/session.js for session implementation
 
 ### Database (PostgreSQL)
+
 - **Schema**: Defined in `database/init/schema.sql`
 - **Queries**: Always use parameterized queries via `pg` library
 - **Transactions**: Use transactions for multi-step operations
@@ -91,22 +95,24 @@ meetonline is a full-stack web application for building and finding online commu
 - **Indexes**: Use appropriate indexes.
 - **IDs**: Table where ids can apply need to be bigserial; treat id in server code as strings.
 
-
 ## Security Guidelines
 
 ### Authentication & Authorization
+
 - Use `bcrypt` for password hashing (already configured)
 - Implement CSRF protection with tokens
 - Use secure, httpOnly cookies for sessions
 - Validate all user input on the server side
 
 ### Data Validation
+
 - Validate and sanitize all user inputs
 - Use prepared statements for database queries
 - Implement rate limiting for authentication endpoints
 - Escape output to prevent XSS attacks
 
 ### HTTPS/TLS
+
 - Use HTTPS for all connections (configured in compose)
 - Certificates are generated via `make.certs.sh` scripts
 - Self-signed certificates for development only
@@ -114,6 +120,10 @@ meetonline is a full-stack web application for building and finding online commu
 ## Common Patterns
 
 ### Error Handling (Server)
+
+Note: This is a sample. You have to sanitize, validate, authenticate, authorize requests and then process response accordingly.
+
+Note: Below is sample call to database from server.
 
 ```javascript
 // sample for /user_account endpoint
@@ -134,6 +144,8 @@ meetonline is a full-stack web application for building and finding online commu
 
 In api response, `end_point` is a placeholder for actual endpoint-specific name.
 
+Note: Below is sample code. This shows types for success and failure cases.
+
 ```javascript
 // Success - generic response pattern
 res.json({ ok: true, end_point: {}, message: string });
@@ -143,6 +155,8 @@ res.status(400).json({ ok: false, end_point: [{}|false], message: string });
 ```
 
 #### sample: PATCH /user_profile
+
+Note: This is a sample code.
 
 ```javascript
 // Success
@@ -164,8 +178,9 @@ return res.status(500)
     });
 ```
 
-
 ### Database Queries
+
+Note: This is a sample code.
 
 ```javascript
 // Always use parameterized queries
@@ -176,6 +191,8 @@ const result = await pool.query(
 ```
 
 ### React Component Pattern
+
+Note: This is a sample code.
 
 ```javascript
 import { useState, useEffect } from 'react';
@@ -200,6 +217,7 @@ export default ComponentName;
 ## Testing Guidelines
 
 ### Server Tests (Jest)
+
 - Test files: `tests-jest/**/*.test.js`
 - Use `describe` and `it` blocks
 - Mock external dependencies
@@ -208,6 +226,7 @@ export default ComponentName;
 - Run with: `npm run test` in server/node-server-app directory
 
 ### Client Tests (Vitest)
+
 - Test files: `*.test.jsx` or `tests/**/*.test.jsx`
 - Use React Testing Library patterns
 - Test user interactions, not implementation details
@@ -216,6 +235,7 @@ export default ComponentName;
 - Run with: `npm run test` in client/react-client-app directory
 
 ### E2E Tests (Playwright)
+
 - Test files: `tests/**/*.spec.js`
 - Test complete user workflows
 - Use page object patterns
@@ -224,17 +244,20 @@ export default ComponentName;
 ## Git Workflow
 
 ### Commits
+
 - Write clear, descriptive commit messages
 - Keep commits focused on a single change
 - Squash commits before merging if they're low quality
 
 ### Branches
+
 - Use descriptive branch names with underscores/hyphens
 - Pattern: `^[A-Za-z][A-Za-z0-9_-]+$`
 - Examples: `feature_user_profile`, `fix_login_bug`, `task_123`
 - NO slashes, emoji, or non-ASCII characters
 
 ### Pull Requests
+
 - Reference related issues
 - Provide clear description of changes
 - Ensure all tests pass
@@ -244,6 +267,7 @@ export default ComponentName;
 ## Dependencies
 
 ### Adding New Dependencies
+
 1. Evaluate necessity - prefer existing libraries
 2. Check license compatibility (project is Unlicensed/Public Domain)
 3. Check for security vulnerabilities
@@ -253,6 +277,7 @@ export default ComponentName;
 5. Update documentation if significant dependency
 
 ### Existing Key Dependencies
+
 - **Server**: express, pg, bcrypt, helmet, cors, multer, cookie-parser
 - **Client**: react, react-dom, vite
 - **Testing**: jest, vitest, playwright
@@ -270,7 +295,8 @@ export default ComponentName;
 ## File Organization
 
 ### Server Structure
-```
+
+```text
 server/node-server-app/
 ├── src/
 │   ├── server.js           # Main server entry point
@@ -284,7 +310,8 @@ server/node-server-app/
 ```
 
 ### Client Structure
-```
+
+```text
 client/react-client-app/
 ├── src/
 │   ├── main.jsx            # React entry point
@@ -302,14 +329,16 @@ client/react-client-app/
 ```
 
 ### Database Structure
-```
+
+```text
 database/
 └── init/
     └── schema.sql          # SQL init file for docker container
 ```
 
 ### Scripts
-```
+
+```text
 scripts
 ├── compose.sh
 ├── make.certs.sh
@@ -322,10 +351,11 @@ scripts
 ## Documentation
 
 When making significant changes:
+
 - Update relevant README files
 - Update architecture docs if patterns change
   - Use plantuml code for diagrams
-  - Use valid markdown 
+  - Use valid markdown
 - Add comments for complex logic only
 - Keep documentation in sync with code
 

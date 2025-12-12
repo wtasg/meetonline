@@ -22,16 +22,16 @@
 
 ## How do you check if there are new `console.log`s in your code?
 
-`git diff | grep "+.*console.log"`
+`git diff | grep -nE '^\+.*console\.log'`
 
 Example:
 ![example checking for console.log in code](https://github.com/user-attachments/assets/6f8df126-4837-479f-94ce-dfd08309344a)
 
 ---
 
-## How do you self review?
+## How do you self-review?
 
-Follow [Review Checklist Discussion](https://github.com/wtasg/meetonline/discussions/298) or [Review Checklist Document](docs/checklists/review-checklist.md)
+Follow [Review Checklist Discussion](https://github.com/wtasg/meetonline/discussions/298) or [Review Checklist Document](./review-checklist.md)
 
 ---
 

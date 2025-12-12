@@ -12,6 +12,12 @@ An app to let you build and find online communities.
 
 ## Development/Run
 
+### AI / LLM
+
+- Take help of AI/LLMs; then implement yourself.
+- AI code/documentation PR by user will be closed.
+- Create AI PRs via AI-bots.
+
 ### good first issues
 
 - Feel free to work on them. You don't need our permission for working on GFIs.
