@@ -8,6 +8,7 @@ import { hasUserSession } from "../utils/session";
 import { useState } from "react";
 import { UserAccount } from "./UserAccount";
 import { UserProfile } from "./UserProfile";
+import Group from "./Group";
 import { useRoute } from "../hooks/useRoute";
 import { useNavigate } from "../hooks/useNavigate";
 
@@ -57,6 +58,8 @@ function Content() {
         return hasSession && <UserAccount />;
     } else if (pathname.startsWith("/profile")) {
         return hasSession && <UserProfile />;
+    } else if (pathname.startsWith("/groups")) {
+        return hasSession && <Group />;
     } else if (pathname.startsWith("/logout")) {
         return hasSession ? <Logout onLogout={onLogout} username={() => user_session.retrieve("username")} /> : <div>You are logged out.</div>;
     } else if (pathname.startsWith("/")) {

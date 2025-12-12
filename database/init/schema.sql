@@ -255,6 +255,9 @@ create index if not exists group_is_hidden_index
 create index if not exists group_is_archived_index
     on "group" (is_archived);
 
+create index if not exists group_is_deleted_index
+    on "group" (is_deleted);
+
 create index if not exists group_created_at_desc_index
     on "group" (created_at desc);
 

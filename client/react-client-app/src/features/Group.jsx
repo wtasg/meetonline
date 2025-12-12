@@ -64,11 +64,11 @@ function Group() {
         if (!selectedGroup) return;
         
         const updates = {};
-        if (formData.groupName) updates.group_name = formData.groupName;
-        if (formData.description) updates.description = formData.description;
-        if (formData.isPublic !== undefined) updates.is_public = formData.isPublic;
-        if (formData.tags) updates.tags = formData.tags;
-        if (formData.categories) updates.categories = formData.categories;
+        if (formData.groupName !== undefined) updates.groupName = formData.groupName;
+        if (formData.description !== undefined) updates.description = formData.description;
+        if (formData.isPublic !== undefined) updates.isPublic = formData.isPublic;
+        if (formData.tags !== undefined) updates.tags = formData.tags;
+        if (formData.categories !== undefined) updates.categories = formData.categories;
 
         const response = await updateGroup(selectedGroup.id, updates);
         if (response.ok) {
@@ -82,7 +82,7 @@ function Group() {
     };
 
     const handleDeleteGroup = async (groupId) => {
-        if (!confirm("Are you sure you want to delete this group?")) return;
+        if (!window.confirm("Are you sure you want to delete this group?")) return;
         
         const response = await deleteGroup(groupId);
         if (response.ok) {

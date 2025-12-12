@@ -21,6 +21,12 @@ function Menu() {
                     <Link to={"/profile"}>profile</Link>
                 </li>
             }
+            {
+                hasSession &&
+                <li>
+                    <Link to={"/groups"}>groups</Link>
+                </li>
+            }
         </ul>
         <ul className="flex">
             {!hasSession &&

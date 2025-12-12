@@ -18,13 +18,13 @@ import { getUserProfileByUsername } from "../database/user_profile.js";
  */
 function setupGroupHandler(app) {
     app.post("/group", groupPOST);
+    app.get("/group/search", groupSearchGET);
     app.get("/group/:id", groupGET);
     app.get("/groups", groupsGET);
     app.patch("/group/:id", groupPATCH);
     app.delete("/group/:id", groupDELETE);
     app.post("/group/:id/join", groupJoinPOST);
     app.post("/group/:id/leave", groupLeavePOST);
-    app.get("/group/search", groupSearchGET);
 }
 
 /**
@@ -68,11 +68,11 @@ async function groupPOST(req, res) {
             });
         }
 
-        if (!groupName) {
+        if (!groupName || !groupName.trim()) {
             return res.status(400).json({
                 ok: false,
                 group: GroupModel.null().toClient(),
-                message: "Group name is required."
+                message: "Group name is required and cannot be empty."
             });
         }
 
@@ -254,7 +254,7 @@ async function groupsGET(req, res) {
 async function groupPATCH(req, res) {
     try {
         const { id } = req.params;
-        const updates = req.body;
+        const clientUpdates = req.body;
         const { cookies } = req;
         
         if (!cookies) {
@@ -308,7 +308,7 @@ async function groupPATCH(req, res) {
             });
         }
 
-        if (existingGroup.userProfileId !== userProfile.id) {
+        if (String(existingGroup.userProfileId) !== String(userProfile.id)) {
             return res.status(403).json({
                 ok: false,
                 group: GroupModel.null().toClient(),
@@ -316,7 +316,17 @@ async function groupPATCH(req, res) {
             });
         }
 
-        const group = await updateGroup(id, updates);
+        // Convert camelCase to snake_case for database
+        const dbUpdates = {};
+        if (clientUpdates.groupName !== undefined) dbUpdates.group_name = clientUpdates.groupName;
+        if (clientUpdates.description !== undefined) dbUpdates.description = clientUpdates.description;
+        if (clientUpdates.isPublic !== undefined) dbUpdates.is_public = clientUpdates.isPublic;
+        if (clientUpdates.tags !== undefined) dbUpdates.tags = clientUpdates.tags;
+        if (clientUpdates.categories !== undefined) dbUpdates.categories = clientUpdates.categories;
+        if (clientUpdates.isHidden !== undefined) dbUpdates.is_hidden = clientUpdates.isHidden;
+        if (clientUpdates.isArchived !== undefined) dbUpdates.is_archived = clientUpdates.isArchived;
+
+        const group = await updateGroup(id, dbUpdates);
         if (group.__isNull) {
             return res.status(500).json({
                 ok: false,
@@ -394,7 +404,7 @@ async function groupDELETE(req, res) {
             });
         }
 
-        if (existingGroup.userProfileId !== userProfile.id) {
+        if (String(existingGroup.userProfileId) !== String(userProfile.id)) {
             return res.status(403).json({
                 ok: false,
                 message: "Not authorized to delete this group."
@@ -469,6 +479,24 @@ async function groupJoinPOST(req, res) {
                 ok: false,
                 group: GroupModel.null().toClient(),
                 message: "Cannot fetch user profile."
+            });
+        }
+
+        // Check if group exists and is public
+        const existingGroup = await getGroupById(id);
+        if (existingGroup.__isNull) {
+            return res.status(404).json({
+                ok: false,
+                group: GroupModel.null().toClient(),
+                message: "Group not found."
+            });
+        }
+
+        if (!existingGroup.isPublic) {
+            return res.status(403).json({
+                ok: false,
+                group: GroupModel.null().toClient(),
+                message: "Cannot join a private group."
             });
         }
 
