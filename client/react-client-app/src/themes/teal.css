@@ -1,0 +1,14 @@
+/* Theme: Teal */
+[data-theme="teal"] {
+    --app-background-color: #0d3b3b;
+    --app-text-color: #e0f7f7;
+    color: var(--app-text-color);
+    background-color: var(--app-background-color);
+    --btn-background-color: #20c997;
+    --btn-text-color: #0d3b3b;
+    --cta-btn-background-color: #0dcaf0;
+    --cta-btn-text-color: #0d3b3b;
+    --link-hover-text-color: #20c997;
+    --color-gray-100: #e0f7f7;
+    --color-gray-900: #0d3b3b;
+}

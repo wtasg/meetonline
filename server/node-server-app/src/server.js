@@ -26,6 +26,7 @@ import { projectRoot } from "./utils/projectRoot.js";
 import { dbStart } from "./database/db.js";
 import { setupUserProfileHandler } from "./handlers/userProfileHandler.js";
 import { setupGroupHandler } from "./handlers/groupHandler.js";
+import { setupUserSettingsHandler } from "./handlers/userSettingsHandler.js";
 
 const app = express();
 const cookieParser = cookieParserPkg.default;
@@ -57,6 +58,7 @@ setupUploadHandler(app);
 setupUserAccountHandler(app);
 setupUserProfileHandler(app);
 setupGroupHandler(app);
+setupUserSettingsHandler(app);
 
 // Reject All Unsupported Routes
 app.use((req, res) => {

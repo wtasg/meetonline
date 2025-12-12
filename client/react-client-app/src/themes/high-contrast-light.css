@@ -1,0 +1,14 @@
+/* Theme: High Contrast Light */
+[data-theme="high-contrast-light"] {
+    --app-background-color: #fff;
+    --app-text-color: #000;
+    color: var(--app-text-color);
+    background-color: var(--app-background-color);
+    --btn-text-color: #000;
+    --btn-background-color: #fff;
+    --cta-btn-text-color: #fff;
+    --cta-btn-background-color: #000;
+    --link-hover-text-color: #0000ff;
+    --color-gray-100: #fff;
+    --color-gray-900: #000;
+}
