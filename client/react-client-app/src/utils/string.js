@@ -1,16 +1,16 @@
 function isEmptyOrNull(inputStr) {
-    return typeof inputStr === "string" &&
-        (inputStr === "" || inputStr === null);
+    return inputStr === null ||
+        inputStr === undefined ||
+        (typeof inputStr === "string" && inputStr.trim() === "");
 }
 
 function isEmptyString(inputStr) {
-    return typeof inputStr === "string" && inputStr === "";
+    return typeof inputStr === "string" && inputStr.trim() === "";
 }
 
 function isNonEmptyString(inputStr) {
-    return inputStr !== undefined &&
-        typeof inputStr === "string" &&
-        inputStr.length > 0;
+    return typeof inputStr === "string" &&
+        inputStr.trim().length > 0;
 }
 
 export {
