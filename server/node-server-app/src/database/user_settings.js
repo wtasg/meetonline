@@ -46,6 +46,14 @@ async function getUserSettingsByUsername(username) {
 }
 
 /**
+ * Allowed database column names for user_settings updates
+ */
+const ALLOWED_DB_COLUMNS = new Set([
+    "theme", "font_size", "font_family", "font_contrast",
+    "notifications", "online_presence", "sounds"
+]);
+
+/**
  * Update a single setting for a user
  * @param {string} username
  * @param {string} key
@@ -54,7 +62,7 @@ async function getUserSettingsByUsername(username) {
  */
 async function updateUserSettings(username, key, value) {
     const dbKey = userSettingsKeyMap[key];
-    if (!dbKey) {
+    if (!dbKey || !ALLOWED_DB_COLUMNS.has(dbKey)) {
         console.error("Invalid key:", key);
         return false;
     }
@@ -78,6 +86,7 @@ async function updateUserSettings(username, key, value) {
             return false;
         }
 
+        // dbKey is validated against ALLOWED_DB_COLUMNS whitelist above
         const q1 = `UPDATE public.user_settings SET ${dbKey} = $1, modified_at = CURRENT_TIMESTAMP WHERE user_profile_id = $2`;
         const v1 = [value, profileId];
         await pool.query(q1, v1);

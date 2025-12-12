@@ -4,7 +4,7 @@ import {
 } from "../net/userSettings.js";
 
 async function fetchUserSettings() {
-    return netFetchUserSettings({});
+    return netFetchUserSettings();
 }
 
 async function updateTheme(value) {

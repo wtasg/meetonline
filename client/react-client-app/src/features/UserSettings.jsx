@@ -38,6 +38,22 @@ const FONT_CONTRASTS = [
     { value: "high", label: "High" }
 ];
 
+const VALID_THEMES = THEMES.map(t => t.value);
+const VALID_FONT_SIZES = FONT_SIZES.map(f => f.value);
+const VALID_FONT_CONTRASTS = FONT_CONTRASTS.map(f => f.value);
+
+function validateSettings(settings) {
+    return {
+        theme: VALID_THEMES.includes(settings?.theme) ? settings.theme : "system",
+        fontSize: VALID_FONT_SIZES.includes(settings?.fontSize) ? settings.fontSize : "medium",
+        fontFamily: typeof settings?.fontFamily === "string" ? settings.fontFamily : "system-ui",
+        fontContrast: VALID_FONT_CONTRASTS.includes(settings?.fontContrast) ? settings.fontContrast : "normal",
+        notifications: typeof settings?.notifications === "boolean" ? settings.notifications : true,
+        onlinePresence: typeof settings?.onlinePresence === "boolean" ? settings.onlinePresence : true,
+        sounds: typeof settings?.sounds === "boolean" ? settings.sounds : true
+    };
+}
+
 function UserSettings({ isOpen, onClose }) {
     const [serviceError, setServiceError] = useState({ hasError: false, message: "" });
     const [settings, setSettings] = useState({
@@ -89,13 +105,13 @@ function UserSettings({ isOpen, onClose }) {
                     return;
                 }
 
-                const { theme, fontSize, fontFamily, fontContrast, notifications, onlinePresence, sounds } = result.user_settings;
-                setSettings({ theme, fontSize, fontFamily, fontContrast, notifications, onlinePresence, sounds });
+                const validatedSettings = validateSettings(result.user_settings);
+                setSettings(validatedSettings);
 
                 // Apply settings
-                applyTheme(theme);
-                applyFontSize(fontSize);
-                applyFontContrast(fontContrast);
+                applyTheme(validatedSettings.theme);
+                applyFontSize(validatedSettings.fontSize);
+                applyFontContrast(validatedSettings.fontContrast);
 
             } catch (error) {
                 console.log({ error });

@@ -48,7 +48,7 @@ async function userSettingsGET(req, res) {
         }
 
         const user_settings = await getUserSettingsByUsername(username);
-        if (user_settings.__isDefault || user_settings.__isNull) {
+        if (user_settings.__isNull) {
             return res.status(500).json({
                 ok: false,
                 user_settings: UserSettingsModel.null().toClient(),
