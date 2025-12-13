@@ -16,7 +16,7 @@ import {
     revokeJwtToken,
     revokeAllJwtTokensForUser
 } from "../database/jwt_tokens.js";
-import { jwtAuthMiddleware } from "../middlewares/jwtMiddleware.js";
+import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
 
 /**
  *
@@ -27,7 +27,7 @@ function setupAuthHandlers(app) {
     app.post("/signup", signupHandlerPOST);
     app.get("/login", loginHandlerGET);
     app.post("/login", loginHandlerPOST);
-    app.post("/logout", jwtAuthMiddleware, logoutHandlerPOST);
+    app.post("/logout", hybridAuthMiddleware, logoutHandlerPOST);
     app.post("/auth_token", authTokenHandlerPOST);
     app.post("/auth_refresh", authRefreshHandlerPOST);
 }
@@ -160,9 +160,8 @@ async function loginHandlerPOST(req, res) {
 }
 
 async function logoutHandlerPOST(req, res) {
-    // JWT-based logout
+    // Revoke JWT tokens if user is authenticated via JWT
     if (req.user && req.user.userId) {
-        // Revoke all JWT tokens for the user
         await revokeAllJwtTokensForUser(req.user.userId);
     }
     
