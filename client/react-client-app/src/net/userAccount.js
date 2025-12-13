@@ -1,4 +1,5 @@
 import { CONF } from "./net-conf.js";
+import { authenticatedFetch } from "./authenticatedFetch.js";
 
 /**
  *
@@ -7,7 +8,7 @@ import { CONF } from "./net-conf.js";
  */
 async function userAccount({ username }) {
     try {
-        return await (await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.USER_ACCOUNT}`, {
+        return await (await authenticatedFetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.USER_ACCOUNT}`, {
             credentials: "include",
             method: "POST",
             headers: {

@@ -1,4 +1,4 @@
-import { getAccessToken, isAccessTokenExpired, getRefreshToken } from "../utils/jwt.js";
+import { getAccessToken, isAccessTokenExpired, getRefreshToken, storeTokens, getUsername } from "../utils/jwt.js";
 import { authRefresh } from "./auth.js";
 
 /**
@@ -23,13 +23,13 @@ async function authenticatedFetch(url, options = {}) {
                 
                 if (result.ok && result.auth_refresh) {
                     // Update tokens in storage
-                    const { storeTokens } = await import("../utils/jwt.js");
+                    const username = getUsername();
                     storeTokens({
                         accessToken: result.auth_refresh.accessToken,
                         refreshToken: result.auth_refresh.refreshToken,
                         accessTokenExpiresAt: result.auth_refresh.accessTokenExpiresAt,
                         refreshTokenExpiresAt: result.auth_refresh.refreshTokenExpiresAt,
-                        username: getUsername()
+                        username: username
                     });
                     
                     accessToken = result.auth_refresh.accessToken;
@@ -52,15 +52,6 @@ async function authenticatedFetch(url, options = {}) {
         ...options,
         headers
     });
-}
-
-/**
- * Helper to get username from tokens
- * @returns {string|null}
- */
-function getUsername() {
-    const { getUsername: getUser } = require("../utils/jwt.js");
-    return getUser();
 }
 
 export { authenticatedFetch };
