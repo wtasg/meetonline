@@ -1,6 +1,6 @@
 import { user_session, resetUserSession, resetLocation } from "../session";
 import { isNonEmptyString } from "./string";
-import { hasValidTokens } from "./jwt";
+import { hasValidTokens, clearTokens } from "./jwt";
 
 function hasUserSession() {
     // Check JWT tokens first
@@ -19,7 +19,6 @@ function destroySession() {
     resetLocation();
     
     // Also clear JWT tokens if they exist
-    const { clearTokens } = require("./jwt");
     clearTokens();
 }
 

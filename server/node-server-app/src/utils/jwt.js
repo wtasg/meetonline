@@ -2,7 +2,13 @@ import jwt from "jsonwebtoken";
 import { randomBytes } from "node:crypto";
 
 // JWT configuration
-const JWT_SECRET = process.env.JWT_SECRET || randomBytes(64).toString("hex");
+const JWT_SECRET = process.env.JWT_SECRET || (() => {
+    if (process.env.NODE_ENV === "production") {
+        throw new Error("JWT_SECRET environment variable must be set in production");
+    }
+    console.warn("WARNING: JWT_SECRET not set, using random secret. Tokens will be invalidated on server restart.");
+    return randomBytes(64).toString("hex");
+})();
 const JWT_ACCESS_TOKEN_EXPIRY = process.env.JWT_ACCESS_TOKEN_EXPIRY || "15m"; // 15 minutes
 const JWT_REFRESH_TOKEN_EXPIRY = process.env.JWT_REFRESH_TOKEN_EXPIRY || "7d"; // 7 days
 

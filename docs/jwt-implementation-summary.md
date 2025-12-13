@@ -17,7 +17,7 @@ This document summarizes the implementation of JWT (JSON Web Token) authenticati
 ### Server (`server/node-server-app`)
 
 #### New Dependencies
-- `jsonwebtoken` (v9.0.2) - JWT token generation and verification
+- `jsonwebtoken` (v9.0.3) - JWT token generation and verification
 
 #### New Files
 - `src/models/jwtTokenModel.js` - JWT token data model
