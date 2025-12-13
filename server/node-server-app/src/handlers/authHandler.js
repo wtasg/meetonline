@@ -2,6 +2,21 @@ import { createUserAccount, getUserAccountByUsername } from "../database/user_ac
 import { comparePassword, hashWithSalt, saltWithRounds } from "../utils/hash.js";
 import { v4 as uuidv4 } from "uuid";
 import { authStore, tokenStore } from "../utils/store.js";
+import {
+    generateAccessToken,
+    generateRefreshToken,
+    verifyToken,
+    getTokenExpirationDate,
+    JWT_ACCESS_TOKEN_EXPIRY,
+    JWT_REFRESH_TOKEN_EXPIRY
+} from "../utils/jwt.js";
+import {
+    createJwtTokenPair,
+    getJwtTokenByRefreshToken,
+    revokeJwtToken,
+    revokeAllJwtTokensForUser
+} from "../database/jwt_tokens.js";
+import { jwtAuthMiddleware } from "../middlewares/jwtMiddleware.js";
 
 /**
  *
@@ -12,7 +27,9 @@ function setupAuthHandlers(app) {
     app.post("/signup", signupHandlerPOST);
     app.get("/login", loginHandlerGET);
     app.post("/login", loginHandlerPOST);
-    app.post("/logout", logoutHandlerPOST);
+    app.post("/logout", jwtAuthMiddleware, logoutHandlerPOST);
+    app.post("/auth_token", authTokenHandlerPOST);
+    app.post("/auth_refresh", authRefreshHandlerPOST);
 }
 
 /**
@@ -143,6 +160,13 @@ async function loginHandlerPOST(req, res) {
 }
 
 async function logoutHandlerPOST(req, res) {
+    // JWT-based logout
+    if (req.user && req.user.userId) {
+        // Revoke all JWT tokens for the user
+        await revokeAllJwtTokensForUser(req.user.userId);
+    }
+    
+    // Also destroy cookie-based session for backward compatibility
     await destroySession(req, res);
 
     res.status(200)
@@ -163,6 +187,188 @@ async function destroySession(req, res) {
         if (storedSession === sessionId) {
             await authStore.eject(`session_for_${username}`);
         }
+    }
+}
+
+/**
+ * POST /auth_token - JWT-based authentication
+ * Authenticates user and returns JWT tokens
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ */
+async function authTokenHandlerPOST(req, res) {
+    const { username: candidateUsername, password: candidatePassword } = req.body;
+    
+    if (!candidateUsername || !candidatePassword) {
+        return res.status(400).json({
+            ok: false,
+            message: "Missing username or password",
+            auth_token: false
+        });
+    }
+    
+    // Get user from database
+    const dbuser = await getUserAccountByUsername(candidateUsername);
+    if (dbuser.__isDefault || dbuser.__isNull || !dbuser.isActive || dbuser.isDeleted || dbuser.isBlocked) {
+        return res.status(401).json({
+            ok: false,
+            auth_token: false,
+            message: "Account not found or inactive."
+        });
+    }
+    
+    // Verify password
+    const { salt, password } = dbuser;
+    try {
+        if (!(await comparePassword(candidatePassword, salt, password))) {
+            return res.status(401).json({
+                ok: false,
+                message: "Invalid credentials.",
+                auth_token: false
+            });
+        }
+    } catch (error) {
+        console.error("Error hashing input password:", error);
+        return res.status(500).json({
+            ok: false,
+            message: "Internal Server Error",
+            auth_token: false
+        });
+    }
+    
+    // Generate JWT tokens
+    const payload = {
+        userId: dbuser.id.toString(),
+        username: dbuser.username
+    };
+    
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
+    
+    // Calculate expiration dates
+    const accessTokenExpiresAt = getTokenExpirationDate(JWT_ACCESS_TOKEN_EXPIRY);
+    const refreshTokenExpiresAt = getTokenExpirationDate(JWT_REFRESH_TOKEN_EXPIRY);
+    
+    // Store tokens in database
+    try {
+        await createJwtTokenPair(
+            dbuser.id,
+            accessToken,
+            refreshToken,
+            accessTokenExpiresAt,
+            refreshTokenExpiresAt
+        );
+        
+        return res.status(200).json({
+            ok: true,
+            auth_token: {
+                accessToken,
+                refreshToken,
+                accessTokenExpiresAt: accessTokenExpiresAt.toISOString(),
+                refreshTokenExpiresAt: refreshTokenExpiresAt.toISOString(),
+                username: candidateUsername
+            },
+            message: "Authentication successful!"
+        });
+    } catch (error) {
+        console.error("Error storing JWT tokens:", error);
+        return res.status(500).json({
+            ok: false,
+            message: "Internal Server Error",
+            auth_token: false
+        });
+    }
+}
+
+/**
+ * POST /auth_refresh - Refresh JWT access token
+ * Uses refresh token to get new access token
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ */
+async function authRefreshHandlerPOST(req, res) {
+    const { refreshToken } = req.body;
+    
+    if (!refreshToken) {
+        return res.status(400).json({
+            ok: false,
+            message: "Missing refresh token",
+            auth_refresh: false
+        });
+    }
+    
+    // Verify refresh token
+    const decoded = verifyToken(refreshToken);
+    if (!decoded) {
+        return res.status(401).json({
+            ok: false,
+            message: "Invalid or expired refresh token",
+            auth_refresh: false
+        });
+    }
+    
+    // Check if refresh token exists in database and is not revoked
+    const dbToken = await getJwtTokenByRefreshToken(refreshToken);
+    if (dbToken.__isNull || dbToken.isRevoked) {
+        return res.status(401).json({
+            ok: false,
+            message: "Refresh token has been revoked",
+            auth_refresh: false
+        });
+    }
+    
+    // Check if refresh token is expired
+    if (new Date(dbToken.refreshTokenExpiresAt) < new Date()) {
+        return res.status(401).json({
+            ok: false,
+            message: "Refresh token has expired",
+            auth_refresh: false
+        });
+    }
+    
+    // Revoke old token pair
+    await revokeJwtToken(dbToken.id);
+    
+    // Generate new tokens
+    const payload = {
+        userId: decoded.userId,
+        username: decoded.username
+    };
+    
+    const newAccessToken = generateAccessToken(payload);
+    const newRefreshToken = generateRefreshToken(payload);
+    
+    // Calculate expiration dates
+    const accessTokenExpiresAt = getTokenExpirationDate(JWT_ACCESS_TOKEN_EXPIRY);
+    const refreshTokenExpiresAt = getTokenExpirationDate(JWT_REFRESH_TOKEN_EXPIRY);
+    
+    // Store new tokens in database
+    try {
+        await createJwtTokenPair(
+            decoded.userId,
+            newAccessToken,
+            newRefreshToken,
+            accessTokenExpiresAt,
+            refreshTokenExpiresAt
+        );
+        
+        return res.status(200).json({
+            ok: true,
+            auth_refresh: {
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken,
+                accessTokenExpiresAt: accessTokenExpiresAt.toISOString(),
+                refreshTokenExpiresAt: refreshTokenExpiresAt.toISOString()
+            },
+            message: "Token refresh successful!"
+        });
+    } catch (error) {
+        console.error("Error refreshing JWT tokens:", error);
+        return res.status(500).json({
+            ok: false,
+            message: "Internal Server Error",
+            auth_refresh: false
+        });
     }
 }
 

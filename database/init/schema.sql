@@ -324,3 +324,54 @@ create index if not exists user_settings_user_profile_id_index
     on user_settings (user_profile_id);
 
 -- USER SETTINGS : END
+
+
+-- JWT TOKENS : START
+create table if not exists jwt_tokens
+(
+    id                          bigserial,
+    user_id                     bigint                              not null,
+    access_token                varchar(1024)                       not null,
+    refresh_token               varchar(1024)                       not null,
+    access_token_expires_at     timestamp                           not null,
+    refresh_token_expires_at    timestamp                           not null,
+    is_revoked                  boolean   default false             not null,
+    created_at                  timestamp default CURRENT_TIMESTAMP not null,
+    modified_at                 timestamp default CURRENT_TIMESTAMP not null
+);
+
+comment on table jwt_tokens is 'JWT tokens for user authentication';
+comment on column jwt_tokens.id is 'Primary key for jwt_tokens table';
+comment on column jwt_tokens.user_id is 'FK: user_account.id';
+comment on column jwt_tokens.access_token is 'JWT access token';
+comment on column jwt_tokens.refresh_token is 'JWT refresh token';
+comment on column jwt_tokens.access_token_expires_at is 'Access token expiration timestamp';
+comment on column jwt_tokens.refresh_token_expires_at is 'Refresh token expiration timestamp';
+comment on column jwt_tokens.is_revoked is 'Whether the token pair has been revoked';
+comment on column jwt_tokens.created_at is 'Record creation timestamp';
+comment on column jwt_tokens.modified_at is 'Record update timestamp';
+
+alter table jwt_tokens
+    owner to myuser;
+
+alter table jwt_tokens
+    add constraint jwt_tokens_pk
+        primary key (id);
+
+alter table jwt_tokens
+    add constraint jwt_tokens_user_id_fk
+        foreign key (user_id) references user_account(id);
+
+create index if not exists jwt_tokens_user_id_index
+    on jwt_tokens (user_id);
+
+create index if not exists jwt_tokens_access_token_index
+    on jwt_tokens (access_token);
+
+create index if not exists jwt_tokens_refresh_token_index
+    on jwt_tokens (refresh_token);
+
+create index if not exists jwt_tokens_is_revoked_index
+    on jwt_tokens (is_revoked);
+
+-- JWT TOKENS : END
