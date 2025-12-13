@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { hasUserSession } from "../utils/session";
-import { preLoginAction } from "../actions/authActions";
+import { preLoginAction, authTokenAction } from "../actions/authActions";
 import { ServiceError } from "../components/Error";
 import { location } from "../session";
 import { Link } from "../components/Link";
@@ -26,6 +26,7 @@ function Login({ onLogin }) {
     const [failedLogin, setFailedLogin] = useState(false);
 
     const [preloginError, setPreloginError] = useState("");
+    const [useJwt] = useState(true); // Use JWT by default
 
     function updateLoginPassword(password) {
         set_login_password(password);
@@ -39,11 +40,25 @@ function Login({ onLogin }) {
         if (!login_password || !login_username) {
             return;
         }
-        const ok = await onLogin({ username: login_username, password: login_password });
+        
+        let ok = false;
+        
+        if (useJwt) {
+            // Use JWT-based authentication
+            ok = await authTokenAction({ username: login_username, password: login_password });
+        } else {
+            // Use legacy cookie-based authentication
+            ok = await onLogin({ username: login_username, password: login_password });
+        }
+        
         if (!ok) {
             setFailedLogin(true);
         } else {
             setFailedLogin(false);
+            // Call onLogin for compatibility with parent component
+            if (useJwt) {
+                await onLogin({ username: login_username, password: login_password });
+            }
         }
         set_login_password("");
         set_login_username("");
@@ -52,15 +67,17 @@ function Login({ onLogin }) {
     useEffect(() => {
         (async function () {
             if (!hasUserSession()) {
-                const result = await preLoginAction();
-                if (!result.ok) {
-                    setPreloginError(result.message);
-                } else {
-                    setPreloginError("");
+                if (!useJwt) {
+                    const result = await preLoginAction();
+                    if (!result.ok) {
+                        setPreloginError(result.message);
+                    } else {
+                        setPreloginError("");
+                    }
                 }
             }
         })();
-    }, []);
+    }, [useJwt]);
 
     useEffect(() => {
         if (areUserCredentialsValid(login_username, login_password)) {
