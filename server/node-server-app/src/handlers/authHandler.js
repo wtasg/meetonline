@@ -1,6 +1,7 @@
 import { createUserAccount, getUserAccountByUsername } from "../database/user_account.js";
 import { comparePassword, hashWithSalt, saltWithRounds } from "../utils/hash.js";
 import { v4 as uuidv4 } from "uuid";
+import rateLimit from "express-rate-limit";
 import { authStore, tokenStore } from "../utils/store.js";
 import {
     generateAccessToken,
@@ -22,12 +23,20 @@ import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
  *
  * @param {Express.Application} app
  */
+
+// Rate limiter for sensitive auth routes (e.g., 5 requests per minute per IP)
+const authRateLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute window
+    max: 5, // Limit each IP to 5 requests per windowMs
+    message: { ok: false, message: "Too many requests, please try again later." }
+});
+
 function setupAuthHandlers(app) {
     app.get("/signup", signupHandlerGET);
     app.post("/signup", signupHandlerPOST);
     app.get("/login", loginHandlerGET);
     app.post("/login", loginHandlerPOST);
-    app.post("/logout", hybridAuthMiddleware, logoutHandlerPOST);
+    app.post("/logout", authRateLimiter, hybridAuthMiddleware, logoutHandlerPOST);
     app.post("/auth_token", authTokenHandlerPOST);
     app.post("/auth_refresh", authRefreshHandlerPOST);
 }
