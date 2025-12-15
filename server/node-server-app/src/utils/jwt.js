@@ -79,7 +79,7 @@ function getTokenExpirationDate(expiresIn) {
     const match = expiresIn.match(/^(\d+)([smhd])$/);
     
     if (!match) {
-        throw new Error("Invalid expiry format");
+        throw new Error("Invalid expiry format. Expected format: <number><unit> where unit is s (seconds), m (minutes), h (hours), or d (days). Example: 15m");
     }
     
     const value = parseInt(match[1], 10);
