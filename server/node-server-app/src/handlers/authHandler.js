@@ -37,8 +37,8 @@ function setupAuthHandlers(app) {
     app.get("/login", loginHandlerGET);
     app.post("/login", loginHandlerPOST);
     app.post("/logout", authRateLimiter, hybridAuthMiddleware, logoutHandlerPOST);
-    app.post("/auth_token", authTokenHandlerPOST);
-    app.post("/auth_refresh", authRefreshHandlerPOST);
+    app.post("/auth_token", authRateLimiter, authTokenHandlerPOST);
+    app.post("/auth_refresh", authRateLimiter, authRefreshHandlerPOST);
 }
 
 /**

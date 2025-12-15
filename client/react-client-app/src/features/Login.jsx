@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { hasUserSession } from "../utils/session";
-import { preLoginAction, authTokenAction } from "../actions/authActions";
+import { authTokenAction } from "../actions/authActions";
 import { ServiceError } from "../components/Error";
 import { location } from "../session";
 import { Link } from "../components/Link";
@@ -25,9 +25,6 @@ function Login({ onLogin }) {
     const [fromSignup, _] = useState(location.retrieve("path")?.endsWith("#signup:true") || false);
     const [failedLogin, setFailedLogin] = useState(false);
 
-    const [preloginError, setPreloginError] = useState("");
-    const [useJwt] = useState(true); // Use JWT by default
-
     function updateLoginPassword(password) {
         set_login_password(password);
     }
@@ -41,43 +38,17 @@ function Login({ onLogin }) {
             return;
         }
         
-        let ok = false;
-        
-        if (useJwt) {
-            // Use JWT-based authentication
-            ok = await authTokenAction({ username: login_username, password: login_password });
-        } else {
-            // Use legacy cookie-based authentication
-            ok = await onLogin({ username: login_username, password: login_password });
-        }
+        // Use JWT-based authentication
+        const ok = await authTokenAction({ username: login_username, password: login_password });
         
         if (!ok) {
             setFailedLogin(true);
         } else {
             setFailedLogin(false);
-            // Call onLogin for compatibility with parent component
-            if (useJwt) {
-                await onLogin({ username: login_username, password: login_password });
-            }
         }
         set_login_password("");
         set_login_username("");
     }
-
-    useEffect(() => {
-        (async function () {
-            if (!hasUserSession()) {
-                if (!useJwt) {
-                    const result = await preLoginAction();
-                    if (!result.ok) {
-                        setPreloginError(result.message);
-                    } else {
-                        setPreloginError("");
-                    }
-                }
-            }
-        })();
-    }, [useJwt]);
 
     useEffect(() => {
         if (areUserCredentialsValid(login_username, login_password)) {
@@ -92,7 +63,6 @@ function Login({ onLogin }) {
             <div className="form login vflex w40p">
                 <h2>Login</h2>
 
-                {preloginError && <ServiceError hasError={true} message={preloginError}></ServiceError>}
                 {failedLogin && <ServiceError hasError={true} message="login failed"></ServiceError>}
                 {fromSignup && <p style={{ color: "green" }}>Signup was successful!</p>}
                 <div>

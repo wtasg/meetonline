@@ -1,5 +1,6 @@
 import { jwtAuthMiddleware } from "./jwtMiddleware.js";
 import { userSession } from "../utils/session.js";
+import { getUserAccountByUsername } from "../database/user_account.js";
 
 /**
  * Hybrid authentication middleware that supports both JWT and cookie-based auth
@@ -53,8 +54,12 @@ async function hybridAuthMiddleware(req, res, next) {
             });
         }
         
-        // Attach user info to request (similar to JWT middleware)
+        // Get userId from database to maintain consistency with JWT auth
+        const userAccount = await getUserAccountByUsername(username);
+        
+        // Attach user info to request (consistent with JWT middleware)
         req.user = {
+            userId: userAccount.id ? userAccount.id.toString() : null,
             username: username
         };
         
