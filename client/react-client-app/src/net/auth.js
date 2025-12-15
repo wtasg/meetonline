@@ -143,4 +143,3 @@ async function logoutJwt(accessToken) {
 }
 
 export { login, signup, logout, prelogin, presignup, authToken, authRefresh, logoutJwt };
-

@@ -214,4 +214,3 @@ export {
     isAuthenticated,
     getCurrentUsername
 };
-
