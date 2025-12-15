@@ -76,7 +76,7 @@ async function loginAction({ username, password }) {
  */
 async function authTokenAction({ username, password }) {
     if (!username || !password) {
-        return Promise.reject("Username and password are required");
+        return Promise.reject(new Error("Username and password are required"));
     }
     
     try {
