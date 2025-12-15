@@ -59,7 +59,7 @@ async function hybridAuthMiddleware(req, res, next) {
         
         // Attach user info to request (consistent with JWT middleware)
         req.user = {
-            userId: userAccount.id ? userAccount.id.toString() : null,
+            userId: (userAccount && userAccount.id) ? userAccount.id.toString() : null,
             username: username
         };
         
