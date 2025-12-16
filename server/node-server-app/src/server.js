@@ -70,7 +70,13 @@ app.use((req, res) => {
 const { SERVER_HTTP_PORT, SERVER_HTTPS_PORT } = process.env;
 
 const httpServer = createHttpServer(app);
-httpServer.listen(SERVER_HTTP_PORT);
+httpServer.listen(SERVER_HTTP_PORT, (err) => {
+    if (err) {
+        console.error(`Failed to start HTTP server on port ${SERVER_HTTP_PORT}:`, err);
+        process.exit(1);
+    }
+    console.log(`HTTP server listening on port ${SERVER_HTTP_PORT}`);
+});
 setupGracefulShutdown(httpServer);
 
 try {
@@ -79,7 +85,13 @@ try {
         cert: readFileSync(pathResolve(projectRoot, "certs/server.crt")),
     };
     const httpsServer = createHttpsServer(sslOptions, app);
-    httpsServer.listen(SERVER_HTTPS_PORT);
+    httpsServer.listen(SERVER_HTTPS_PORT, (err) => {
+        if (err) {
+            console.error(`Failed to start HTTPS server on port ${SERVER_HTTPS_PORT}:`, err);
+            process.exit(1);
+        }
+        console.log(`HTTPS server listening on port ${SERVER_HTTPS_PORT}`);
+    });
     setupGracefulShutdown(httpsServer);
 } catch (error) {
     console.warn(error.message);
