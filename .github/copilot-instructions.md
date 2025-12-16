@@ -15,10 +15,11 @@ meetonline is a full-stack web application for building and finding online commu
 
 ### Branch naming conventions
 
-- **IMPORTANT** Branch name must meet this regex criteria `^[A-Za-z][A-Za-z0-9_-]+$`
+- **IMPORTANT** Branch name must meet this regex criteria `^[A-Za-z][A-Za-z0-9_/-]+$`
   - For bots, use `BOTNAME__` as prefix for branch
   - Otherwise, try `b_ISSUE_NUMBER` if any issue is assigned.
   - For bots when assigned an issue, branch name becomes `BOTNAME__ISSUE_NUMBER` e.g. `copilot__333`.
+  - But copilot uses `copilot/` prefix for branches.
 
 ### General Formatting
 
@@ -44,7 +45,7 @@ meetonline is a full-stack web application for building and finding online commu
 - **Functions**: camelCase for functions and variables
 - **Constants**: UPPER_SNAKE_CASE for constants
 - **Database**: snake_case for table and column names
-- **Branches**: `^[A-Za-z][A-Za-z0-9_-]+$`
+- **Branches**: `^[A-Za-z][A-Za-z0-9_/-]+$`
   - For bots, use `BOTNAME__` as prefix for branch
   - Otherwise, try `b_ISSUE_NUMBER` if any issue is assigned.
   - For bots when assigned an issue, branch name becomes `BOTNAME__ISSUE_NUMBER` e.g. `copilot__333`.
@@ -252,9 +253,9 @@ export default ComponentName;
 ### Branches
 
 - Use descriptive branch names with underscores/hyphens
-- Pattern: `^[A-Za-z][A-Za-z0-9_-]+$`
-- Examples: `feature_user_profile`, `fix_login_bug`, `task_123`
-- NO slashes, emoji, or non-ASCII characters
+- Pattern: `^[A-Za-z][A-Za-z0-9_/-]+$`
+- Examples: `feature/user_profile`, `fix/login_bug`, `task/123`, `feature_user_profile`
+- NO emoji, or non-ASCII characters
 
 ### Pull Requests
 

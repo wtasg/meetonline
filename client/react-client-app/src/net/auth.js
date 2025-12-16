@@ -2,7 +2,7 @@ import { CONF } from "./net-conf.js";
 
 /**
  * GET login tokens
- * @returns {Response}
+ * @returns {Promise<{ok: boolean, token?: string, message?: string}>}
  */
 async function prelogin() {
     const res = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGIN}`, {
@@ -18,7 +18,7 @@ async function prelogin() {
 
 /**
  * GET signup tokens
- * @returns {Response}
+ * @returns {Promise<{ok: boolean, token?: string, message?: string}>}
  */
 async function presignup() {
     const res = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.SIGNUP}`, {

@@ -9,7 +9,7 @@ permissions:
   pull-requests: write
 
 env:
-  BRANCH_PATTERN: "^[A-Za-z][A-Za-z0-9_-/]+$"
+  BRANCH_PATTERN: "^[A-Za-z][A-Za-z0-9_/-]+$"
   MODE: "block"
   BOT_IDENTIFIER: "branch-name-enforcer"
 
@@ -46,7 +46,7 @@ jobs:
             \`\`\`
             ${process.env.BRANCH_PATTERN}
             \`\`\`
-            Allowed characters: letters, digits, underscore (_), hyphen (-). **No slashes (/) or emoji** by default.
+            Allowed characters: letters, digits, underscore (_), hyphen (-), slash (/). **No emoji** by default.
             **How to fix:** rename your branch locally and push the new name.
             Example:
             \`\`\`bash

@@ -33,6 +33,7 @@ const authRateLimiter = rateLimit({
 });
 
 function setupAuthHandlers(app) {
+    app.get("/login", authRateLimiter, loginHandlerGET);
     app.get("/signup", authRateLimiter, signupHandlerGET);
     app.post("/signup", authRateLimiter, signupHandlerPOST);
     app.post("/logout", authRateLimiter, hybridAuthMiddleware, logoutHandlerPOST);
@@ -41,14 +42,42 @@ function setupAuthHandlers(app) {
 }
 
 /**
- *
+ * GET /login - Generate and return login token
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ */
+async function loginHandlerGET(req, res) {
+    const token = uuidv4();
+    await tokenStore.store(token, (new Date()).toUTCString());
+    
+    // Set secure cookie
+    res.cookie("login_token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 120000 // 2 minutes (120 seconds)
+    });
+    
+    res.status(200).json({ ok: true, token });
+}
+
+/**
+ * GET /signup - Generate and return signup token
  * @param {Express.Request} req
  * @param {Express.Response} res
  */
 async function signupHandlerGET(req, res) {
     const token = uuidv4();
-    // Cookie removed as part of security cleanup
     await tokenStore.store(token, (new Date()).toUTCString());
+    
+    // Set secure cookie
+    res.cookie("signup_token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 120000 // 2 minutes (120 seconds)
+    });
+    
     res.status(200).json({ ok: true, token });
 }
 
