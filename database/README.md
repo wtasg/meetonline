@@ -6,22 +6,11 @@ This project uses [sqlfluff](https://www.sqlfluff.com/) for SQL linting. sqlfluf
 
 ### Requirements
 
-- Python 3.x
-- pip
+- Docker
 
-### Installation
+### Setup
 
-Install sqlfluff globally or locally:
-
-```bash
-pip install sqlfluff
-```
-
-Or install it in the user directory:
-
-```bash
-pip install --user sqlfluff
-```
+The SQL linting runs inside a Docker container, so you don't need to install sqlfluff locally. The Docker image will be built automatically when you first run the linting commands.
 
 ### Usage
 
@@ -33,9 +22,6 @@ npm run lint
 
 # Or directly from repository root
 ./scripts/sql-lint.sh
-
-# Or directly with sqlfluff
-cd database && sqlfluff lint init/schema.sql
 ```
 
 Auto-fix linting issues where possible:
@@ -46,9 +32,6 @@ npm run lint:fix
 
 # Or directly from repository root
 ./scripts/sql-lint-fix.sh
-
-# Or directly with sqlfluff
-cd database && sqlfluff fix init/schema.sql
 ```
 
 ### Configuration
@@ -63,6 +46,14 @@ SQL linting is configured in `.sqlfluff` in the repository root. The configurati
 ### Integration
 
 SQL linting is automatically run as part of the pre-commit hook in `scripts/pre-commit.sh`.
+
+### Docker Image
+
+The SQL linting uses a dedicated Docker image defined in `database/Dockerfile.lint`. The image:
+- Based on `python:3.12-slim`
+- Includes sqlfluff version 3.5.0
+- Is built automatically when needed
+- Can be manually built with: `docker build -t meetonline-sql-lint:latest -f database/Dockerfile.lint database/`
 
 ## Database Access
 

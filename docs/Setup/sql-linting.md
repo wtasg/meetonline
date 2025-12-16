@@ -11,29 +11,22 @@ The project uses [sqlfluff](https://www.sqlfluff.com/) for SQL linting. sqlfluff
 - Can automatically fix many formatting issues
 - Integrates with CI/CD pipelines
 
+**Important**: SQL linting runs inside a Docker container. You do not need to install Python or sqlfluff locally.
+
 ## Installation
 
 ### Prerequisites
 
-- Python 3.x
-- pip (Python package manager)
+- Docker (required)
 
-### Install sqlfluff
+### Setup
 
-Install sqlfluff using pip:
+The SQL linting Docker image will be built automatically the first time you run linting commands. No manual installation is needed.
 
-```bash
-# Install globally
-pip install sqlfluff
-
-# Or install in user directory (recommended)
-pip install --user sqlfluff
-```
-
-Verify installation:
+To manually build the Docker image:
 
 ```bash
-sqlfluff --version
+docker build -t meetonline-sql-lint:latest -f database/Dockerfile.lint database/
 ```
 
 ## Usage
@@ -53,13 +46,6 @@ From the repository root:
 ./scripts/sql-lint.sh
 ```
 
-Using sqlfluff directly:
-
-```bash
-cd database
-sqlfluff lint init/schema.sql
-```
-
 ### Auto-fixing Issues
 
 Many linting issues can be automatically fixed:
@@ -77,12 +63,19 @@ From the repository root:
 ./scripts/sql-lint-fix.sh
 ```
 
-Using sqlfluff directly:
+## How It Works
 
-```bash
-cd database
-sqlfluff fix init/schema.sql
-```
+The SQL linting scripts use a Docker container to run sqlfluff:
+
+1. **Image**: A lightweight Python Docker image (`python:3.12-slim`) with sqlfluff installed
+2. **Volume Mounting**: The repository is mounted into the container as a volume
+3. **Configuration**: The `.sqlfluff` config file is mounted read-only
+4. **Execution**: sqlfluff runs inside the container against the SQL files
+
+### Script Behavior
+
+- `sql-lint.sh`: Mounts the repository as read-only and runs lint checks
+- `sql-lint-fix.sh`: Mounts the repository as read-write to allow auto-fixing
 
 ## Configuration
 
@@ -115,15 +108,23 @@ git commit --no-verify
 
 ## Common Issues
 
-### sqlfluff not found
+### Docker not found
 
-If you get a "command not found" error:
+If you get a "Docker is not installed" error:
 
-1. Make sure sqlfluff is installed: `pip install --user sqlfluff`
-2. Check if `~/.local/bin` is in your PATH
-3. Add it to your PATH if needed:
+1. Install Docker following the [official installation guide](https://docs.docker.com/get-docker/)
+2. Ensure Docker daemon is running
+3. Verify installation: `docker --version`
+
+### Docker image build fails
+
+If the image fails to build:
+
+1. Check your internet connection (needs to download base image and packages)
+2. Ensure you have sufficient disk space
+3. Try building manually to see detailed errors:
    ```bash
-   export PATH="$HOME/.local/bin:$PATH"
+   docker build -t meetonline-sql-lint:latest -f database/Dockerfile.lint database/
    ```
 
 ### Linting errors
@@ -135,8 +136,26 @@ If linting fails:
 3. For issues that can't be auto-fixed, manually adjust the SQL code
 4. If a rule seems incorrect for the project, consider excluding it in `.sqlfluff`
 
+### Permission issues
+
+If you encounter permission issues with Docker:
+
+1. Ensure your user is in the `docker` group (Linux)
+2. On Windows/Mac, ensure Docker Desktop is running with proper permissions
+
+## Docker Image Details
+
+**Location**: `database/Dockerfile.lint`
+
+**Base Image**: `python:3.12-slim`
+
+**Installed Packages**: `sqlfluff==3.5.0`
+
+**Size**: Approximately 150MB (base + sqlfluff and dependencies)
+
 ## Resources
 
 - [sqlfluff Documentation](https://docs.sqlfluff.com/)
 - [sqlfluff GitHub](https://github.com/sqlfluff/sqlfluff)
 - [PostgreSQL Dialect Rules](https://docs.sqlfluff.com/en/stable/dialects.html#postgresql)
+- [Docker Documentation](https://docs.docker.com/)

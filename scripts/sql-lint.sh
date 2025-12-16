@@ -1,20 +1,31 @@
 #!/usr/bin/env bash
-# SQL linting script using sqlfluff
+# SQL linting script using sqlfluff in Docker
 
 set -e
 
-# Move to database directory
+# Move to repo root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-cd "$REPO_ROOT/database" || exit 1
+cd "$REPO_ROOT" || exit 1
 
-# Check if sqlfluff is installed
-if ! command -v sqlfluff &> /dev/null; then
-    echo "Error: sqlfluff is not installed."
-    echo "Please install it with: pip install sqlfluff"
+# Check if Docker is available
+if ! command -v docker &> /dev/null; then
+    echo "Error: Docker is not installed."
+    echo "Please install Docker to run SQL linting."
     exit 1
 fi
 
-# Run sqlfluff lint
+# Build the SQL lint image if it doesn't exist
+if ! docker images | grep -q "meetonline-sql-lint"; then
+    echo "Building SQL lint Docker image..."
+    docker build -t meetonline-sql-lint:latest -f database/Dockerfile.lint database/
+fi
+
+# Run sqlfluff lint in Docker
 echo "Running SQL lint..."
-sqlfluff lint init/schema.sql
+docker run --rm \
+    -v "$REPO_ROOT:/workspace:ro" \
+    -v "$REPO_ROOT/.sqlfluff:/workspace/.sqlfluff:ro" \
+    -w /workspace \
+    meetonline-sql-lint:latest \
+    sqlfluff lint database/init/schema.sql
