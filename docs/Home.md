@@ -1,21 +1,20 @@
-# Documentation home
-
-Start here: [Rules](./rules.md)
+# 🏠 Documentation Home
+Start here: **[Rules](./rules.md)**
 
 ---
 
-## Development
+## 💻 Development
 
 ### Setup repo and environment for development
 
 - [Setup repo](./Setup/setup-repo.md)
 - [Set up WSL for dev](./Setup/setup-wsl-for-dev.md)
-- [docker](./Setup/docker.md)
+- [Docker](./Setup/docker.md)
 
 ### Working with Repo
 
-- [bug-report-template](bug-report-template.md)
-- checklists
+- 🐛 [bug-report-template](bug-report-template.md)
+- 📋 Checklists
   - [Review Checklist Discussion](https://github.com/wtasg/meetonline/discussions/298)
     - [Review Checklist Document](./checklists/review-checklist.md)
   - [Dev Checklist Discussion](https://github.com/wtasg/meetonline/discussions/211)
@@ -23,21 +22,21 @@ Start here: [Rules](./rules.md)
 
 ---
 
-## Architecture and Design documents
+## 🏗️ Architecture and Design
 
-Use these to help yourself in understanding the code structure
+Use these to help yourself in understanding the code structure.
 
 ### Architecture
 
 - [Authentication Architecture](./architecture/Authentication%20Architecture.md)
 
-### Drawings
+### 🎨 Drawings
 
 - [database-events.excalidraw](Excalidraw/database-events.excalidraw.md)
 
 ---
 
-## Daily and Weekly progress
+## 📅 Daily and Weekly Progress
 
 - [daily-sync](daily-sync.md)
 - [2025.11.04](./Daily/2025.11.04.md)
@@ -46,10 +45,10 @@ Use these to help yourself in understanding the code structure
 
 ---
 
-## Extra / Also take a look at
+## 🌟 Extra / Also take a look at
 
 - [tech-index](./tech/tech-index.md)
-- drawings
+- 🖊️ Drawings
   - [git-branches.excalidraw](Excalidraw/git-branches.excalidraw.md)
   - [git-rebase.excalidraw](Excalidraw/git-rebase.excalidraw.md)
   - [git-staging.excalidraw](Excalidraw/git-staging.excalidraw.md)
