@@ -117,7 +117,7 @@ class MemoryStorage {
 }
 
 class CookieStorage {
-    constructor(options = { prefix: "K_", Expires: 7, Path: "/", "Max-Age": 7, SameSite: "strict" }) {
+    constructor(options = { prefix: "K_", Path: "/", "Max-Age": 7, SameSite: "strict" }) {
         this.options = options;
     }
 

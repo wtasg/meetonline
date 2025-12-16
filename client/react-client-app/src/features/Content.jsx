@@ -1,25 +1,24 @@
 import { Welcome } from "../components/Welcome";
 import { Login } from "./Login";
 import { Signup } from "./Signup";
-import { loginAction, signupAction, logoutAction } from "../actions/authActions";
+import { authTokenAction, signupAction, logoutAction } from "../actions/authActions";
 import { Logout } from "./Logout";
 import { user_session } from "../session";
-import { hasUserSession } from "../utils/session";
-import { useState } from "react";
 import { UserAccount } from "./UserAccount";
 import { UserProfile } from "./UserProfile";
 import Group from "./Group";
 import { useRoute } from "../hooks/useRoute";
 import { useNavigate } from "../hooks/useNavigate";
+import { useSession } from "../hooks/useSession";
 
 function Content() {
-    const [hasSession, setHasSession] = useState(hasUserSession());
+    const { hasSession, login, logout } = useSession();
     const navigate = useNavigate();
 
     async function onLogout() {
         try {
             await logoutAction();
-            setHasSession(false);
+            logout(); // Update global session state
             navigate("/");
         } catch (err) {
             console.error(err);
@@ -28,17 +27,16 @@ function Content() {
     }
 
     async function onLogin({ username, password }) {
-        const isLoggedIn = await loginAction({ username, password });
-        if (isLoggedIn) {
-            setHasSession(true);
+        const result = await authTokenAction({ username, password });
+        if (result) {
+            login(); // Update global session state
             navigate("/");
         } else {
-            setHasSession(false);
+            throw new Error("Login failed. Please check your credentials.");
         }
     }
 
     async function onSignup({ username, password }) {
-        setHasSession(false);
         const { ok, signup } = await signupAction({ username, password });
         if (ok && signup) {
             navigate("/login#signup:true");

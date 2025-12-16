@@ -1,8 +1,8 @@
-import { hasUserSession } from "../utils/session.js";
+import { useSession } from "../hooks/useSession";
 import { Link } from "../components/Link.jsx";
 
 function Menu() {
-    const hasSession = hasUserSession();
+    const { hasSession } = useSession();
 
     return <nav className="flex">
         <ul className="flex">

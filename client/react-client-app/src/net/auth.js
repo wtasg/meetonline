@@ -1,30 +1,5 @@
 import { CONF } from "./net-conf.js";
-
-/**
- * GET login tokens
- * @returns {Promise<{ok: boolean, token?: string, message?: string}>}
- */
-async function prelogin() {
-    try {
-        const res = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGIN}`, {
-            credentials: "include",
-            method: "GET",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-        });
-        
-        if (!res.ok) {
-            return { ok: false, message: `HTTP error! status: ${res.status}` };
-        }
-        
-        return await res.json();
-    } catch (error) {
-        console.error("prelogin error:", error);
-        return { ok: false, message: error.message };
-    }
-}
+import { ensureCsrfToken, getCsrfHeaders } from "./csrf.js";
 
 /**
  * GET signup tokens
@@ -40,42 +15,14 @@ async function presignup() {
                 "Content-Type": "application/json",
             }
         });
-        
+
         if (!res.ok) {
             return { ok: false, message: `HTTP error! status: ${res.status}` };
         }
-        
+
         return await res.json();
     } catch (error) {
         console.error("presignup error:", error);
-        return { ok: false, message: error.message };
-    }
-}
-
-/**
- * POST /login
- * @param {{username: string, password: string, token: string}} userCredentials
- * @returns {Promise<{ok: boolean, login?: {username: string, session: string}, message?: string}>}
- */
-async function login({ username, password, token }) {
-    try {
-        const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGIN}`, {
-            credentials: "include",
-            method: "POST",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ username, password, token }),
-        });
-        
-        if (!response.ok) {
-            return { ok: false, message: `HTTP error! status: ${response.status}` };
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error("login error:", error);
         return { ok: false, message: error.message };
     }
 }
@@ -87,20 +34,22 @@ async function login({ username, password, token }) {
  */
 async function signup({ username, password, token }) {
     try {
+        await ensureCsrfToken();
         const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.SIGNUP}`, {
             credentials: "include",
             method: "POST",
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
+                ...getCsrfHeaders()
             },
             body: JSON.stringify({ username, password, token }),
         });
-        
+
         if (!response.ok) {
             return { ok: false, message: `HTTP error! status: ${response.status}` };
         }
-        
+
         return await response.json();
     } catch (error) {
         console.error("signup error:", error);
@@ -124,11 +73,11 @@ async function logout({ username }) {
             },
             body: JSON.stringify({ username })
         });
-        
+
         if (!response.ok) {
             return { ok: false, message: `HTTP error! status: ${response.status}` };
         }
-        
+
         return await response.json();
     } catch (error) {
         console.error("logout error:", error);
@@ -144,19 +93,21 @@ async function logout({ username }) {
  */
 async function authToken({ username, password }) {
     try {
+        await ensureCsrfToken();
         const response = await fetch(`${CONF.HTTPS_SERVER}/auth_token`, {
             method: "POST",
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
+                ...getCsrfHeaders()
             },
             body: JSON.stringify({ username, password }),
         });
-        
+
         if (!response.ok) {
             return { ok: false, message: `HTTP error! status: ${response.status}` };
         }
-        
+
         return await response.json();
     } catch (error) {
         console.error("authToken error:", error);
@@ -172,19 +123,21 @@ async function authToken({ username, password }) {
  */
 async function authRefresh({ refreshToken }) {
     try {
+        await ensureCsrfToken();
         const response = await fetch(`${CONF.HTTPS_SERVER}/auth_refresh`, {
             method: "POST",
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
+                ...getCsrfHeaders()
             },
             body: JSON.stringify({ refreshToken }),
         });
-        
+
         if (!response.ok) {
             return { ok: false, message: `HTTP error! status: ${response.status}` };
         }
-        
+
         return await response.json();
     } catch (error) {
         console.error("authRefresh error:", error);
@@ -199,20 +152,22 @@ async function authRefresh({ refreshToken }) {
  */
 async function logoutJwt(accessToken) {
     try {
+        await ensureCsrfToken();
         const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.LOGOUT}`, {
             method: "POST",
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `Bearer ${accessToken}`,
+                ...getCsrfHeaders()
             },
             body: JSON.stringify({})
         });
-        
+
         if (!response.ok) {
             return { ok: false, message: `HTTP error! status: ${response.status}` };
         }
-        
+
         return await response.json();
     } catch (error) {
         console.error("logoutJwt error:", error);
@@ -220,4 +175,4 @@ async function logoutJwt(accessToken) {
     }
 }
 
-export { login, signup, logout, prelogin, presignup, authToken, authRefresh, logoutJwt };
+export { signup, logout, presignup, authToken, authRefresh, logoutJwt };

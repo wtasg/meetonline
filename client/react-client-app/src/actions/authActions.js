@@ -1,27 +1,6 @@
-import { login, signup, logout, prelogin, presignup, authToken, logoutJwt } from "../net/auth";
+import { signup, logout, presignup, authToken, logoutJwt } from "../net/auth";
 import { resetLocation, resetUserSession, user_session } from "../session";
 import { storeTokens, clearTokens, getAccessToken, hasValidTokens, getUsername } from "../utils/jwt.js";
-
-/**
- *
- * @returns {Promise<{ok:true}|{ok:false,message:string}>}
- */
-async function preLoginAction() {
-    try {
-        const result = await prelogin();
-        if (result.ok) {
-            user_session.store("login_token", result.token);
-        } else {
-            result.message = "Cannot fetch login_token. Check Server.";
-        }
-        delete result.token;
-        return result;
-    }
-    catch (err) {
-        console.error(err);
-        return { ok: false, message: err.message };
-    }
-}
 
 /**
  *
@@ -44,36 +23,6 @@ async function preSignupAction() {
 }
 
 /**
- * POST /login action (legacy cookie-based)
- * @param {{username: string, password: string}} credentials
- * @returns {Promise<true|false>}
- */
-async function loginAction({ username, password }) {
-    if (!username || !password) {
-        return Promise.reject("Username and password are required");
-    }
-    const token = user_session.retrieve("login_token");
-    user_session.eject("login_token");
-    const result = await login({ username, password, token });
-    if (result.ok) {
-        if (!result.login) {
-            console.error("Unexpected response: missing login data");
-            return false;
-        }
-        user_session.store("username", result.login.username);
-        user_session.store("session", result.login.session);
-        return true;
-    }
-
-    // failed login
-    // refetching token when action fails
-    await preLoginAction();
-    user_session.eject("username");
-    console.error(result.error);
-    return false;
-}
-
-/**
  * POST /auth_token action (JWT-based authentication)
  * @param {{username: string, password: string}} credentials
  * @returns {Promise<true|false>}
@@ -82,10 +31,10 @@ async function authTokenAction({ username, password }) {
     if (!username || !password) {
         return Promise.reject(new Error("Username and password are required"));
     }
-    
+
     try {
         const result = await authToken({ username, password });
-        
+
         if (result.ok && result.auth_token) {
             // Store JWT tokens
             storeTokens({
@@ -95,13 +44,13 @@ async function authTokenAction({ username, password }) {
                 refreshTokenExpiresAt: result.auth_token.refreshTokenExpiresAt,
                 username: result.auth_token.username
             });
-            
+
             // Also store username in session for compatibility
             user_session.store("username", result.auth_token.username);
-            
+
             return true;
         }
-        
+
         console.error(result.message);
         return false;
     } catch (err) {
@@ -117,7 +66,7 @@ async function authTokenAction({ username, password }) {
  */
 async function signupAction({ username, password }) {
     if (!username || !password) {
-        return Promise.reject("Username and password are required");
+        return Promise.reject(new Error("Username and password are required"));
     }
     const token = user_session.retrieve("signup_token");
     user_session.eject("signup_token");
@@ -137,7 +86,7 @@ async function signupAction({ username, password }) {
 async function logoutAction() {
     // Check if using JWT authentication
     const accessToken = getAccessToken();
-    
+
     if (accessToken) {
         // JWT-based logout
         try {
@@ -145,11 +94,11 @@ async function logoutAction() {
             clearTokens();
             resetUserSession();
             resetLocation();
-            
+
             if (!result.ok) {
                 console.error(result.message);
             }
-            
+
             return result;
         } catch (error) {
             console.error("JWT logout failed:", error);
@@ -185,11 +134,11 @@ function isAuthenticated() {
     if (hasValidTokens()) {
         return true;
     }
-    
+
     // Fallback to cookie-based session
     const username = user_session.retrieve("username");
     const session = user_session.retrieve("session");
-    
+
     return !!(username && session);
 }
 
@@ -203,16 +152,14 @@ function getCurrentUsername() {
     if (jwtUsername) {
         return jwtUsername;
     }
-    
+
     // Fallback to session
     return user_session.retrieve("username");
 }
 
 export {
-    loginAction,
     signupAction,
     logoutAction,
-    preLoginAction,
     preSignupAction,
     authTokenAction,
     isAuthenticated,
