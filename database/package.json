@@ -1,0 +1,12 @@
+{
+  "name": "database",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Database schema and SQL linting",
+  "scripts": {
+    "lint": "../scripts/sql-lint.sh",
+    "lint:fix": "../scripts/sql-lint-fix.sh"
+  },
+  "author": "wtasg",
+  "license": "UNLICENSED"
+}
