@@ -1,6 +1,7 @@
 import { getUserSettingsByUsername, updateUserSettings } from "../database/user_settings.js";
 import { UserSettingsModel } from "../models/userSettingsModel.js";
 import { userSession } from "../utils/session.js";
+import { COOKIE_CLEAR_OPTIONS } from "../utils/cookieConfig.js";
 
 /**
  * Setup user settings handler routes
@@ -25,9 +26,9 @@ async function userSettingsGET(req, res) {
         const sessionId = cookies?.["session-1"];
         const username = cookies?.username;
         if (!sessionId || !username) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(400).json({
                 ok: false,
                 user_settings: UserSettingsModel.null().toClient(),
@@ -37,9 +38,9 @@ async function userSettingsGET(req, res) {
 
         const storedSession = (await userSession({ username })).session;
         if (storedSession !== sessionId) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(403).json({
                 ok: false,
                 user_settings: UserSettingsModel.null().toClient(),
@@ -87,9 +88,9 @@ async function userSettingsPATCH(req, res) {
         const sessionId = cookies?.["session-1"];
         const username = cookies?.username;
         if (!sessionId || !username) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(400).json({
                 ok: false,
                 user_settings: UserSettingsModel.null().toClient(),
@@ -99,9 +100,9 @@ async function userSettingsPATCH(req, res) {
 
         const storedSession = (await userSession({ username })).session;
         if (storedSession !== sessionId) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(403).json({
                 ok: false,
                 user_settings: UserSettingsModel.null().toClient(),
