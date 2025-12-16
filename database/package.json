@@ -4,8 +4,8 @@
   "private": true,
   "description": "Database schema and SQL linting",
   "scripts": {
-    "lint": "sqlfluff lint init/schema.sql",
-    "lint:fix": "sqlfluff fix init/schema.sql"
+    "lint": "../scripts/sql-lint.sh",
+    "lint:fix": "../scripts/sql-lint-fix.sh"
   },
   "author": "wtasg",
   "license": "UNLICENSED"

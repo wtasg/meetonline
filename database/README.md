@@ -31,8 +31,11 @@ Lint SQL files:
 # From database directory
 npm run lint
 
+# Or directly from repository root
+./scripts/sql-lint.sh
+
 # Or directly with sqlfluff
-sqlfluff lint init/schema.sql
+cd database && sqlfluff lint init/schema.sql
 ```
 
 Auto-fix linting issues where possible:
@@ -41,8 +44,11 @@ Auto-fix linting issues where possible:
 # From database directory
 npm run lint:fix
 
+# Or directly from repository root
+./scripts/sql-lint-fix.sh
+
 # Or directly with sqlfluff
-sqlfluff fix init/schema.sql
+cd database && sqlfluff fix init/schema.sql
 ```
 
 ### Configuration

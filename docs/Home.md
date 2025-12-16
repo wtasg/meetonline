@@ -11,6 +11,7 @@ Start here: [Rules](./rules.md)
 - [Setup repo](./Setup/setup-repo.md)
 - [Set up WSL for dev](./Setup/setup-wsl-for-dev.md)
 - [docker](./Setup/docker.md)
+- [SQL Linting](./Setup/sql-linting.md)
 
 ### Working with Repo
 
