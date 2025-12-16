@@ -27,9 +27,9 @@ An app to let you build and find online communities.
 
 ### 🌿 Branch naming rules
 
-- Repository enforces branch naming pattern: `^[A-Za-z][A-Za-z0-9_-]+$`.
-- Allowed characters: ASCII letters, digits, hyphen (-), underscore (_).
-- Not allowed: slashes (/), emoji, spaces, other non-ASCII characters.
+- Repository enforces branch naming pattern: `^[A-Za-z][A-Za-z0-9_/-]+$`.
+- Allowed characters: ASCII letters, digits, hyphen (-), underscore (_), slash (/).
+- Not allowed: emoji, spaces, other non-ASCII characters.
 
 If your PR fails the branch-name check, rename the branch locally:
 
