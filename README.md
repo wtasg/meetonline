@@ -1,30 +1,31 @@
-# meetonline
+# 👋 meetonline
+
+![License](https://img.shields.io/github/license/wtasg/meetonline) ![Issues](https://img.shields.io/github/issues/wtasg/meetonline) ![Pull Requests](https://img.shields.io/github/issues-pr/wtasg/meetonline)
 
 An app to let you build and find online communities.
 
-## Reporting bugs
+## 🐛 Reporting bugs
 
 - Read up, copy-paste from [Bug Report template](./docs/bug-report-template.md)
 
-## Discussions
+## 💬 Discussions
 
 [Start with introducing yourself here](https://github.com/wtasg/meetonline/discussions/84).
 
-## Development/Run
+## 🛠️ Development/Run
 
-### AI / LLM
+### 🤖 AI / LLM
 
-- Take help of AI/LLMs; then implement yourself.
-- AI code/documentation PR by user will be closed.
+- Take help of AI/LLMs; learn what they did and implement yourself.
 - Create AI PRs via AI-bots.
 
-### good first issues
+### 🌱 Good First Issues
 
 - Feel free to work on them. You don't need our permission for working on GFIs.
 - If you need help, ask, maybe once a day.
 - [check GFIs here](https://github.com/wtasg/meetonline/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22)
 
-### Branch naming rules
+### 🌿 Branch naming rules
 
 - Repository enforces branch naming pattern: `^[A-Za-z][A-Za-z0-9_-]+$`.
 - Allowed characters: ASCII letters, digits, hyphen (-), underscore (_).
@@ -38,12 +39,27 @@ git push origin new-name
 git push origin --delete old-name
 ```
 
-### Checklists
+### 📋 Checklists
 
 - [Review Checklist](https://github.com/wtasg/meetonline/discussions/298)
 - [Dev Checklist](https://github.com/wtasg/meetonline/discussions/211)
 
-### manual compose
+### 🐳 Docker Compose
+
+```bash
+# run services
+docker compose --file compose.yml build
+docker compose --file compose.yml up
+
+## +watch client changes
+cd client/react-client-app && npm run build -- --watch
+
+# cleanup
+docker compose --file compose.yml down
+# docker volume list | grep meetonline | awk '{print $2}' | xargs -n1 docker volume rm
+```
+
+### ⌨️ Manual Compose
 
 ```bash
 ## make certificates
@@ -64,30 +80,16 @@ git push origin --delete old-name
 /scripts/manual-compose.sh --clean --no-client
 ```
 
-### docker compose
+## 📚 Documentation
 
-```bash
-# run services
-docker compose --file compose.yml build
-docker compose --file compose.yml up
-## +watch client changes
-cd client/react-client-app && npm run build -- --watch
+Documentation is available in `docs/`. Visit **[Documentation Home](./docs/Home.md)**
 
-# cleanup
-docker compose --file compose.yml down
-# docker volume list | grep meetonline | awk '{print $2}' | xargs -n1 docker volume rm
-```
-
-## Documentation
-
-Documentation is available in `docs/`. Visit [Documentation Home](./docs/Home.md)
-
-## Social
+## 🌐 Social
 
 - [YouTube Playlist: software-development](https://www.youtube.com/playlist?list=PLbUtscuRQ61xiGmjCL00Ime9z5sJEZu4M)
 - [Discord Invite: discord.gg/Zfxr8pwKcq](https://discord.gg/Zfxr8pwKcq)
 - Lead developer discord: @wtasd
 
-## LICENSE
+## 📜 LICENSE
 
 [Read associated file: LICENSE](./LICENSE)
