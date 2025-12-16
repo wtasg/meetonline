@@ -140,9 +140,9 @@ cd client/react-client-app && npm run build -- --watch
 
 #### Branch Naming
 
-- Pattern: `^[A-Za-z][A-Za-z0-9_-]+$`
-- Allowed: ASCII letters, digits, hyphen (-), underscore (_)
-- **NOT allowed**: slashes (/), emoji, spaces, non-ASCII characters
+- Pattern: `^[A-Za-z][A-Za-z0-9_/-]+$`
+- Allowed: ASCII letters, digits, hyphen (-), underscore (_), slash (/)
+- **NOT allowed**: emoji, spaces, non-ASCII characters
 
 #### Branch Types
 
