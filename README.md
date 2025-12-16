@@ -14,8 +14,7 @@ An app to let you build and find online communities.
 
 ### AI / LLM
 
-- Take help of AI/LLMs; then implement yourself.
-- AI code/documentation PR by user will be closed.
+- Take help of AI/LLMs; learn what they did and implement yourself.
 - Create AI PRs via AI-bots.
 
 ### good first issues
