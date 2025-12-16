@@ -9,7 +9,7 @@ permissions:
   pull-requests: write
 
 env:
-  BRANCH_PATTERN: "^[A-Za-z][A-Za-z0-9_-]+$"
+  BRANCH_PATTERN: "^[A-Za-z][A-Za-z0-9_-/]+$"
   MODE: "block"
   BOT_IDENTIFIER: "branch-name-enforcer"
 
