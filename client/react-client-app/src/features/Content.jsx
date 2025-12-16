@@ -21,8 +21,6 @@ function Content() {
             await logoutAction();
             setHasSession(false);
             navigate("/");
-            // this is a hack. Need help here...
-            window.location.assign("/");
         } catch (err) {
             console.error(err);
             throw err;
@@ -34,8 +32,6 @@ function Content() {
         if (isLoggedIn) {
             setHasSession(true);
             navigate("/");
-            // this is a hack. Need help here...
-            window.location.assign("/");
         } else {
             setHasSession(false);
         }
