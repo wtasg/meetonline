@@ -11,6 +11,7 @@ import {
 import { GroupModel } from "../models/groupModel.js";
 import { userSession } from "../utils/session.js";
 import { getUserProfileByUsername } from "../database/user_profile.js";
+import { COOKIE_CLEAR_OPTIONS } from "../utils/cookieConfig.js";
 
 /**
  * Setup group handlers
@@ -46,9 +47,9 @@ async function groupPOST(req, res) {
         const sessionId = cookies?.["session-1"];
         const username = cookies?.username;
         if (!sessionId || !username) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(400).json({
                 ok: false,
                 group: GroupModel.null().toClient(),
@@ -58,9 +59,9 @@ async function groupPOST(req, res) {
 
         const storedSession = (await userSession({ username })).session;
         if (storedSession !== sessionId) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(403).json({
                 ok: false,
                 group: GroupModel.null().toClient(),
@@ -136,9 +137,9 @@ async function groupGET(req, res) {
         const sessionId = cookies?.["session-1"];
         const username = cookies?.username;
         if (!sessionId || !username) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(400).json({
                 ok: false,
                 group: GroupModel.null().toClient(),
@@ -148,9 +149,9 @@ async function groupGET(req, res) {
 
         const storedSession = (await userSession({ username })).session;
         if (storedSession !== sessionId) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(403).json({
                 ok: false,
                 group: GroupModel.null().toClient(),
@@ -200,9 +201,9 @@ async function groupsGET(req, res) {
         const sessionId = cookies?.["session-1"];
         const username = cookies?.username;
         if (!sessionId || !username) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(400).json({
                 ok: false,
                 groups: [],
@@ -212,9 +213,9 @@ async function groupsGET(req, res) {
 
         const storedSession = (await userSession({ username })).session;
         if (storedSession !== sessionId) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(403).json({
                 ok: false,
                 groups: [],
@@ -268,9 +269,9 @@ async function groupPATCH(req, res) {
         const sessionId = cookies?.["session-1"];
         const username = cookies?.username;
         if (!sessionId || !username) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(400).json({
                 ok: false,
                 group: GroupModel.null().toClient(),
@@ -280,9 +281,9 @@ async function groupPATCH(req, res) {
 
         const storedSession = (await userSession({ username })).session;
         if (storedSession !== sessionId) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(403).json({
                 ok: false,
                 group: GroupModel.null().toClient(),
@@ -368,9 +369,9 @@ async function groupDELETE(req, res) {
         const sessionId = cookies?.["session-1"];
         const username = cookies?.username;
         if (!sessionId || !username) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(400).json({
                 ok: false,
                 message: "Missing Session."
@@ -379,9 +380,9 @@ async function groupDELETE(req, res) {
 
         const storedSession = (await userSession({ username })).session;
         if (storedSession !== sessionId) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(403).json({
                 ok: false,
                 message: "Invalid Session."
@@ -451,9 +452,9 @@ async function groupJoinPOST(req, res) {
         const sessionId = cookies?.["session-1"];
         const username = cookies?.username;
         if (!sessionId || !username) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(400).json({
                 ok: false,
                 group: GroupModel.null().toClient(),
@@ -463,9 +464,9 @@ async function groupJoinPOST(req, res) {
 
         const storedSession = (await userSession({ username })).session;
         if (storedSession !== sessionId) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(403).json({
                 ok: false,
                 group: GroupModel.null().toClient(),
@@ -543,9 +544,9 @@ async function groupLeavePOST(req, res) {
         const sessionId = cookies?.["session-1"];
         const username = cookies?.username;
         if (!sessionId || !username) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(400).json({
                 ok: false,
                 group: GroupModel.null().toClient(),
@@ -555,9 +556,9 @@ async function groupLeavePOST(req, res) {
 
         const storedSession = (await userSession({ username })).session;
         if (storedSession !== sessionId) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(403).json({
                 ok: false,
                 group: GroupModel.null().toClient(),
@@ -617,9 +618,9 @@ async function groupSearchGET(req, res) {
         const sessionId = cookies?.["session-1"];
         const username = cookies?.username;
         if (!sessionId || !username) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(400).json({
                 ok: false,
                 groups: [],
@@ -629,9 +630,9 @@ async function groupSearchGET(req, res) {
 
         const storedSession = (await userSession({ username })).session;
         if (storedSession !== sessionId) {
-            res.clearCookie("session-1");
-            res.clearCookie("username");
-            res.clearCookie("loggedin");
+            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
             return res.status(403).json({
                 ok: false,
                 groups: [],
