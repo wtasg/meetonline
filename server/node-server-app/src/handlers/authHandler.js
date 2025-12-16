@@ -33,32 +33,11 @@ const authRateLimiter = rateLimit({
 });
 
 function setupAuthHandlers(app) {
-    app.get("/login", authRateLimiter, loginHandlerGET);
     app.get("/signup", authRateLimiter, signupHandlerGET);
     app.post("/signup", authRateLimiter, signupHandlerPOST);
     app.post("/logout", authRateLimiter, hybridAuthMiddleware, logoutHandlerPOST);
     app.post("/auth_token", authRateLimiter, authTokenHandlerPOST);
     app.post("/auth_refresh", authRateLimiter, authRefreshHandlerPOST);
-}
-
-/**
- * GET /login - Generate and return login token
- * @param {Express.Request} req
- * @param {Express.Response} res
- */
-async function loginHandlerGET(req, res) {
-    const token = uuidv4();
-    await tokenStore.store(token, (new Date()).toUTCString());
-
-    // Set secure cookie
-    res.cookie("login_token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        maxAge: 120000 // 2 minutes (120 seconds)
-    });
-
-    res.status(200).json({ ok: true, token });
 }
 
 /**
@@ -192,6 +171,9 @@ async function authTokenHandlerPOST(req, res) {
 
     // Store tokens in database
     try {
+        // Security: Revoke all previous tokens to enforce single session
+        await revokeAllJwtTokensForUser(dbuser.id);
+
         await createJwtTokenPair(
             dbuser.id,
             accessToken,
@@ -199,9 +181,6 @@ async function authTokenHandlerPOST(req, res) {
             accessTokenExpiresAt,
             refreshTokenExpiresAt
         );
-
-        // Security: Revoke all previous tokens to enforce single session
-        await revokeAllJwtTokensForUser(dbuser.id);
 
         return res.status(200).json({
             ok: true,

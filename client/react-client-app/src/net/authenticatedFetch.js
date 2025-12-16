@@ -1,5 +1,6 @@
 import { getAccessToken, isAccessTokenExpired, getRefreshToken, storeTokens, getUsername } from "../utils/jwt.js";
 import { authRefresh } from "./auth.js";
+import { ensureCsrfToken, getCsrfHeaders } from "./csrf.js";
 
 /**
  * Fetch wrapper that automatically adds JWT authorization header
@@ -9,18 +10,21 @@ import { authRefresh } from "./auth.js";
  * @returns {Promise<Response>}
  */
 async function authenticatedFetch(url, options = {}) {
+    // Ensure CSRF token is available
+    await ensureCsrfToken();
+
     // Get current access token
     let accessToken = getAccessToken();
-    
+
     // Check if access token is expired or about to expire
     if (isAccessTokenExpired()) {
         // Try to refresh token
         const refreshToken = getRefreshToken();
-        
+
         if (refreshToken) {
             try {
                 const result = await authRefresh({ refreshToken });
-                
+
                 if (result.ok && result.auth_refresh) {
                     // Update tokens in storage
                     const username = getUsername();
@@ -31,7 +35,7 @@ async function authenticatedFetch(url, options = {}) {
                         refreshTokenExpiresAt: result.auth_refresh.refreshTokenExpiresAt,
                         username: username
                     });
-                    
+
                     accessToken = result.auth_refresh.accessToken;
                 }
             } catch (error) {
@@ -40,13 +44,14 @@ async function authenticatedFetch(url, options = {}) {
             }
         }
     }
-    
+
     // Add Authorization header if token exists
     const headers = {
         ...options.headers,
-        ...(accessToken ? { "Authorization": `Bearer ${accessToken}` } : {})
+        ...(accessToken ? { "Authorization": `Bearer ${accessToken}` } : {}),
+        ...getCsrfHeaders()
     };
-    
+
     // Make the request
     return fetch(url, {
         ...options,

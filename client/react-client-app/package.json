@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:e2e": "vite --port ${E2E_PORT:-5180}",
     "build": "vite build",
     "lint": "eslint .",
     "lint:fix": "npx eslint . --fix",
@@ -13,7 +14,8 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "build:certs": "mkdir -p .cert && openssl req -x509 -newkey rsa:2048 -nodes -keyout .cert/key.pem -out .cert/cert.pem -subj \"/CN=localhost\" -days 365",
-    "e2e": "NODE_EXTRA_CA_CERTS=./.cert/cert.pem npx playwright test"
+    "e2e": "NODE_EXTRA_CA_CERTS=./.cert/cert.pem npx playwright test",
+    "e2e:docker": "echo 'NOTE: This script is intended for containerized environments where cleanup is handled by the container lifecycle.' && npm run dev:e2e & sleep 5 && NODE_EXTRA_CA_CERTS=./.cert/cert.pem npx playwright test --reporter=list"
   },
   "dependencies": {
     "dotenv": "^17.2.3",
@@ -32,7 +34,7 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
-    "@vitest/coverage-v8": "^4.0.15",
+    "@vitest/coverage-v8": "^4.0.16",
     "@vitest/ui": "^4.0.5",
     "eslint": "^9.39.2",
     "eslint-plugin-react-hooks": "^7.0.1",

@@ -10,3 +10,8 @@ docker build --file client/react-client-app/Dockerfile --tag meetonline-client c
 docker compose --file compose.yml up --detach
 docker compose --file compose.yml down
 ```
+
+## E2E Testing
+
+For running Playwright E2E tests in Docker, see [E2E Testing](./e2e-testing.md).
+

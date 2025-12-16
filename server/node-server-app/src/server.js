@@ -12,6 +12,7 @@ import helmet from "helmet";
 
 // middlewares
 import { setupCorsMiddleware } from "./middlewares/corsMiddleware.js";
+import { doubleCsrfProtection, generateCsrfToken } from "./middlewares/csrfMiddleware.js";
 
 // endpoint handlers
 import { setupRootHandlers } from "./handlers/rootHandler.js";
@@ -48,6 +49,37 @@ setupCorsMiddleware(app);
 app.use(compression());
 app.use(express.json());
 app.use(cookieParser());
+
+// CSRF Protection - applied selectively
+// Skip CSRF for auth endpoints that users access before having a token
+const csrfExemptRoutes = ["/auth_token", "/auth_refresh", "/signup", "/csrf-token"];
+
+// Endpoint to get a CSRF token
+app.get("/csrf-token", (req, res) => {
+    const token = generateCsrfToken(req, res);
+    res.json({ token });
+});
+
+app.use((req, res, next) => {
+    if (csrfExemptRoutes.includes(req.path)) {
+        return next();
+    }
+    doubleCsrfProtection(req, res, next);
+});
+// Error handler for CSRF to return JSON instead of HTML if preferred, 
+// strictly speaking double-csrf throws an error we might want to catch or let the default handler handle it.
+// server.js doesn't seem to have a specific error handler for this yet, assuming default express behaviour or we add one.
+// Let's add a simple one for CSRF errors if we want custom JSON response
+app.use((err, req, res, next) => {
+    if (err.code === "EBADCSRFTOKEN") {
+        return res.status(403).json({
+            ok: false,
+            message: "Invalid CSRF token"
+        });
+    }
+    next(err);
+});
+
 app.use(morgan(isProduction ? "combined" : "dev"));
 
 /* Handlers */

@@ -7,11 +7,11 @@ import { Content } from "./features/Content";
 import { navigateTo } from "./hooks/useNavigate";
 import { UserSettings } from "./features/UserSettings";
 import { applyTheme, applyFontSize, applyFontContrast, settingsStorage } from "./utils/settings";
-import { hasUserSession } from "./utils/session";
+import { useSession } from "./hooks/useSession";
 
 function App() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    const hasSession = hasUserSession();
+    const { hasSession } = useSession();
 
     // Apply stored settings on app load
     useEffect(() => {

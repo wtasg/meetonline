@@ -10,6 +10,7 @@ Start here: **[Rules](./rules.md)**
 - [Setup repo](./Setup/setup-repo.md)
 - [Set up WSL for dev](./Setup/setup-wsl-for-dev.md)
 - [Docker](./Setup/docker.md)
+- [E2E Testing](./Setup/e2e-testing.md)
 - [SQL Linting](./Setup/sql-linting.md)
 
 ### Working with Repo

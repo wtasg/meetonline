@@ -1,0 +1,37 @@
+# E2E Testing Docker Compose
+# Use with main compose.yml: docker compose -f compose.yml -f compose.e2e.yml
+#
+# This setup mounts source code and certificates as volumes to avoid rebuilds.
+# Only rebuild the e2e image when package.json changes.
+
+services:
+  e2e:
+    build:
+      context: ./client/react-client-app
+      dockerfile: e2e.Dockerfile
+    image: meetonline-e2e:latest
+    container_name: meetonline-e2e
+    env_file:
+      - ./client/react-client-app/e2e.env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      server:
+        condition: service_started
+      database:
+        condition: service_healthy
+    volumes:
+      # Source code (read-only) - avoids rebuild on code changes
+      - ./client/react-client-app/src:/app/src:ro
+      - ./client/react-client-app/tests:/app/tests:ro
+      - ./client/react-client-app/images:/app/images:ro
+      # Config files (read-only)
+      - ./client/react-client-app/vite.config.js:/app/vite.config.js:ro
+      - ./client/react-client-app/playwright.config.js:/app/playwright.config.js:ro
+      - ./client/react-client-app/index.html:/app/index.html:ro
+      # Certificates (read-only) - use host-generated certs
+      - ./client/react-client-app/.cert:/app/.cert:ro
+      # Test outputs (writable)
+      - ./client/react-client-app/playwright-report:/app/playwright-report
+      - ./client/react-client-app/test-results:/app/test-results
+    restart: "no"

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { authTokenAction } from "../actions/authActions";
 import { ServiceError } from "../components/Error";
 import { location } from "../session";
 import { Link } from "../components/Link";
@@ -16,7 +15,7 @@ function areUserCredentialsValid(username, password) {
         password.trim().length > 0;
 }
 
-function Login() {
+function Login({ onLogin }) {
     const [login_password, set_login_password] = useState("");
     const [login_username, set_login_username] = useState("");
     const [btn_options, set_btn_options] = useState({ "aria-disabled": true, disabled: "disabled" });
@@ -37,13 +36,14 @@ function Login() {
             return;
         }
 
-        // Use JWT-based authentication
-        const ok = await authTokenAction({ username: login_username, password: login_password });
-
-        if (!ok) {
-            setFailedLogin(true);
-        } else {
+        try {
+            // Delegate authentication to parent - it handles authTokenAction and state
+            if (onLogin) {
+                await onLogin({ username: login_username, password: login_password });
+            }
             setFailedLogin(false);
+        } catch {
+            setFailedLogin(true);
         }
         set_login_password("");
         set_login_username("");

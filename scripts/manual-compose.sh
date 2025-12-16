@@ -101,7 +101,7 @@ runup() {
         netcreated=true
     fi
 
-    $netcreated && sleep 2
+    $netcreated && sleep 5
 
     ## checking and/or building a volume for postgres
     (! $no_db_flag && {
@@ -131,7 +131,7 @@ runup() {
             --publish 54320:8080 \
             --detach adminer
 
-        ($did_shutdown_db || $volcreated) && sleep 3
+        ($did_shutdown_db || $volcreated) && sleep 10
     }
     ) || true
 
@@ -144,7 +144,7 @@ runup() {
             --publish 9006:9006 \
             --publish 9443:9443 \
             --detach localhost/meetonline-server:manual &&
-        sleep 2
+        sleep 5
         }
     ) || true
 
@@ -156,7 +156,7 @@ runup() {
             --network manual-meetonline-network \
             --publish 5173:5173 \
             --detach localhost/meetonline-client:manual &&
-        sleep 1
+        sleep 5
         }
     ) || true
 }
