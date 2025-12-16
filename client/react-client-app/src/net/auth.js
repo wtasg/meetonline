@@ -55,7 +55,7 @@ async function presignup() {
 /**
  * POST /login
  * @param {{username: string, password: string, token: string}} userCredentials
- * @returns {Promise<{ok: boolean, login?: {username: string, session: string}, message?: string, error?: string}>}
+ * @returns {Promise<{ok: boolean, login?: {username: string, session: string}, message?: string}>}
  */
 async function login({ username, password, token }) {
     try {

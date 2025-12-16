@@ -28,7 +28,7 @@ describe("Auth Network Functions", () => {
     describe("prelogin", () => {
         it("should return token on successful response", async () => {
             const mockResponse = { ok: true, token: "test-login-token" };
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: true,
                 json: vi.fn().mockResolvedValue(mockResponse)
             });
@@ -46,7 +46,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle HTTP error responses", async () => {
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: false,
                 status: 500
             });
@@ -57,7 +57,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle network errors", async () => {
-            global.fetch = vi.fn().mockRejectedValue(new Error("Network failure"));
+            globalThis.fetch = vi.fn().mockRejectedValue(new Error("Network failure"));
 
             const result = await prelogin();
             
@@ -66,7 +66,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle JSON parsing errors", async () => {
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: true,
                 json: vi.fn().mockRejectedValue(new Error("Invalid JSON"))
             });
@@ -80,7 +80,7 @@ describe("Auth Network Functions", () => {
     describe("presignup", () => {
         it("should return token on successful response", async () => {
             const mockResponse = { ok: true, token: "test-signup-token" };
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: true,
                 json: vi.fn().mockResolvedValue(mockResponse)
             });
@@ -98,7 +98,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle HTTP error responses", async () => {
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: false,
                 status: 404
             });
@@ -109,7 +109,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle network errors", async () => {
-            global.fetch = vi.fn().mockRejectedValue(new Error("Connection refused"));
+            globalThis.fetch = vi.fn().mockRejectedValue(new Error("Connection refused"));
 
             const result = await presignup();
             
@@ -125,7 +125,7 @@ describe("Auth Network Functions", () => {
                 login: { username: "testuser", session: "session-id" },
                 message: "Login successful"
             };
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: true,
                 json: vi.fn().mockResolvedValue(mockResponse)
             });
@@ -144,7 +144,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle HTTP error responses", async () => {
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: false,
                 status: 401
             });
@@ -155,7 +155,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle network errors", async () => {
-            global.fetch = vi.fn().mockRejectedValue(new Error("Timeout"));
+            globalThis.fetch = vi.fn().mockRejectedValue(new Error("Timeout"));
 
             const result = await login({ username: "testuser", password: "password123", token: "token" });
             
@@ -164,7 +164,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle JSON parsing errors", async () => {
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: true,
                 json: vi.fn().mockRejectedValue(new Error("Unexpected token"))
             });
@@ -182,7 +182,7 @@ describe("Auth Network Functions", () => {
                 signup: { username: "newuser" },
                 message: "Signup successful"
             };
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: true,
                 json: vi.fn().mockResolvedValue(mockResponse)
             });
@@ -193,7 +193,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle HTTP error responses", async () => {
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: false,
                 status: 409
             });
@@ -204,7 +204,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle network errors", async () => {
-            global.fetch = vi.fn().mockRejectedValue(new Error("Network error"));
+            globalThis.fetch = vi.fn().mockRejectedValue(new Error("Network error"));
 
             const result = await signup({ username: "newuser", password: "password123", token: "token" });
             
@@ -220,7 +220,7 @@ describe("Auth Network Functions", () => {
                 logout: true,
                 message: "Logout successful"
             };
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: true,
                 json: vi.fn().mockResolvedValue(mockResponse)
             });
@@ -231,7 +231,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle HTTP error responses", async () => {
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: false,
                 status: 400
             });
@@ -242,7 +242,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle network errors", async () => {
-            global.fetch = vi.fn().mockRejectedValue(new Error("Fetch failed"));
+            globalThis.fetch = vi.fn().mockRejectedValue(new Error("Fetch failed"));
 
             const result = await logout({ username: "testuser" });
             
@@ -253,18 +253,22 @@ describe("Auth Network Functions", () => {
 
     describe("authToken", () => {
         it("should authenticate and return JWT tokens", async () => {
+            const now = new Date();
+            const accessExpiry = new Date(now.getTime() + 15 * 60 * 1000); // 15 minutes
+            const refreshExpiry = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days
+            
             const mockResponse = { 
                 ok: true, 
                 auth_token: {
                     accessToken: "access-token",
                     refreshToken: "refresh-token",
-                    accessTokenExpiresAt: "2024-12-31T23:59:59Z",
-                    refreshTokenExpiresAt: "2025-01-07T23:59:59Z",
+                    accessTokenExpiresAt: accessExpiry.toISOString(),
+                    refreshTokenExpiresAt: refreshExpiry.toISOString(),
                     username: "testuser"
                 },
                 message: "Authentication successful"
             };
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: true,
                 json: vi.fn().mockResolvedValue(mockResponse)
             });
@@ -282,7 +286,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle HTTP error responses", async () => {
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: false,
                 status: 403
             });
@@ -293,7 +297,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle network errors", async () => {
-            global.fetch = vi.fn().mockRejectedValue(new Error("Server unavailable"));
+            globalThis.fetch = vi.fn().mockRejectedValue(new Error("Server unavailable"));
 
             const result = await authToken({ username: "testuser", password: "password123" });
             
@@ -304,17 +308,21 @@ describe("Auth Network Functions", () => {
 
     describe("authRefresh", () => {
         it("should refresh JWT tokens successfully", async () => {
+            const now = new Date();
+            const accessExpiry = new Date(now.getTime() + 15 * 60 * 1000); // 15 minutes
+            const refreshExpiry = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days
+            
             const mockResponse = { 
                 ok: true, 
                 auth_refresh: {
                     accessToken: "new-access-token",
                     refreshToken: "new-refresh-token",
-                    accessTokenExpiresAt: "2024-12-31T23:59:59Z",
-                    refreshTokenExpiresAt: "2025-01-07T23:59:59Z"
+                    accessTokenExpiresAt: accessExpiry.toISOString(),
+                    refreshTokenExpiresAt: refreshExpiry.toISOString()
                 },
                 message: "Token refresh successful"
             };
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: true,
                 json: vi.fn().mockResolvedValue(mockResponse)
             });
@@ -325,7 +333,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle HTTP error responses", async () => {
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: false,
                 status: 401
             });
@@ -336,7 +344,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle network errors", async () => {
-            global.fetch = vi.fn().mockRejectedValue(new Error("Connection timeout"));
+            globalThis.fetch = vi.fn().mockRejectedValue(new Error("Connection timeout"));
 
             const result = await authRefresh({ refreshToken: "refresh-token" });
             
@@ -352,7 +360,7 @@ describe("Auth Network Functions", () => {
                 logout: true,
                 message: "Logout successful"
             };
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: true,
                 json: vi.fn().mockResolvedValue(mockResponse)
             });
@@ -372,7 +380,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle HTTP error responses", async () => {
-            global.fetch = vi.fn().mockResolvedValue({
+            globalThis.fetch = vi.fn().mockResolvedValue({
                 ok: false,
                 status: 401
             });
@@ -383,7 +391,7 @@ describe("Auth Network Functions", () => {
         });
 
         it("should handle network errors", async () => {
-            global.fetch = vi.fn().mockRejectedValue(new Error("Network failure"));
+            globalThis.fetch = vi.fn().mockRejectedValue(new Error("Network failure"));
 
             const result = await logoutJwt("access-token");
             
