@@ -18,6 +18,7 @@ import {
     revokeAllJwtTokensForUser
 } from "../database/jwt_tokens.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
+import { COOKIE_CLEAR_OPTIONS } from "../utils/cookieConfig.js";
 
 /**
  *
@@ -123,11 +124,11 @@ async function destroySession(req, res) {
     // This is largely legacy cleanup now
     // ... we can just ignore reading cookies since we don't use them.
     // But we might want to clear any stragglers if the user has them.
-    res.clearCookie("session-1");
-    res.clearCookie("username");
-    res.clearCookie("loggedin");
-    res.clearCookie("signup_token");
-    res.clearCookie("login_token");
+    res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
+    res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
+    res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
+    res.clearCookie("signup_token", COOKIE_CLEAR_OPTIONS);
+    res.clearCookie("login_token", COOKIE_CLEAR_OPTIONS);
 }
 
 /**
