@@ -1,4 +1,5 @@
 import { CONF } from "./net-conf.js";
+import { authenticatedFetch } from "./authenticatedFetch.js";
 
 /**
  * Create a new group
@@ -12,7 +13,7 @@ import { CONF } from "./net-conf.js";
  */
 async function createGroup({ groupName, description, isPublic, tags, categories }) {
     try {
-        const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUP}`, {
+        const response = await authenticatedFetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUP}`, {
             credentials: "include",
             method: "POST",
             headers: {
@@ -35,7 +36,7 @@ async function createGroup({ groupName, description, isPublic, tags, categories 
  */
 async function fetchGroup(groupId) {
     try {
-        const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUP}/${groupId}`, {
+        const response = await authenticatedFetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUP}/${groupId}`, {
             credentials: "include",
             method: "GET",
             headers: {
@@ -55,7 +56,7 @@ async function fetchGroup(groupId) {
  */
 async function fetchGroups() {
     try {
-        const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUPS}`, {
+        const response = await authenticatedFetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUPS}`, {
             credentials: "include",
             method: "GET",
             headers: {
@@ -77,7 +78,7 @@ async function fetchGroups() {
  */
 async function updateGroup(groupId, updates) {
     try {
-        const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUP}/${groupId}`, {
+        const response = await authenticatedFetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUP}/${groupId}`, {
             credentials: "include",
             method: "PATCH",
             headers: {
@@ -104,7 +105,7 @@ async function updateGroup(groupId, updates) {
  */
 async function deleteGroup(groupId) {
     try {
-        const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUP}/${groupId}`, {
+        const response = await authenticatedFetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUP}/${groupId}`, {
             credentials: "include",
             method: "DELETE",
             headers: {
@@ -125,7 +126,7 @@ async function deleteGroup(groupId) {
  */
 async function joinGroup(groupId) {
     try {
-        const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUP}/${groupId}/join`, {
+        const response = await authenticatedFetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUP}/${groupId}/join`, {
             credentials: "include",
             method: "POST",
             headers: {
@@ -146,7 +147,7 @@ async function joinGroup(groupId) {
  */
 async function leaveGroup(groupId) {
     try {
-        const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUP}/${groupId}/leave`, {
+        const response = await authenticatedFetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUP}/${groupId}/leave`, {
             credentials: "include",
             method: "POST",
             headers: {
@@ -167,7 +168,7 @@ async function leaveGroup(groupId) {
  */
 async function searchGroups(searchTerm) {
     try {
-        const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUP_SEARCH}?q=${encodeURIComponent(searchTerm)}`, {
+        const response = await authenticatedFetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.GROUP_SEARCH}?q=${encodeURIComponent(searchTerm)}`, {
             credentials: "include",
             method: "GET",
             headers: {

@@ -1,4 +1,5 @@
 import { CONF } from "./net-conf.js";
+import { authenticatedFetch } from "./authenticatedFetch.js";
 
 /**
  * Fetches User Profile
@@ -6,7 +7,7 @@ import { CONF } from "./net-conf.js";
  */
 async function fetchUserProfile() {
     try {
-        const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.USER_PROFILE}`, {
+        const response = await authenticatedFetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.USER_PROFILE}`, {
             credentials: "include",
             method: "GET",
             headers: {
@@ -28,7 +29,7 @@ async function fetchUserProfile() {
  */
 async function updateUserProfile({ key, value }) {
     try {
-        const response = await fetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.USER_PROFILE}`, {
+        const response = await authenticatedFetch(`${CONF.HTTPS_SERVER}/${CONF.URLS.USER_PROFILE}`, {
             credentials: "include",
             method: "PATCH",
             headers: {

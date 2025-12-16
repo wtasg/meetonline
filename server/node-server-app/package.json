@@ -31,7 +31,9 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
     "multer": "^2.0.2",
     "pg": "^8.16.3",
@@ -42,9 +44,9 @@
     "@jest/globals": "^30.2.0",
     "@stylistic/eslint-plugin": "^5.6.1",
     "@types/express": "^5.0.6",
-    "@types/node": "^24.10.3",
+    "@types/node": "^24.10.4",
     "@types/pg": "^8.16.0",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "globals": "^16.5.0",
     "jest": "^30.2.0"
   }

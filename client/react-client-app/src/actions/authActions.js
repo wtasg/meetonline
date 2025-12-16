@@ -1,5 +1,6 @@
-import { login, signup, logout, prelogin, presignup } from "../net/auth";
+import { login, signup, logout, prelogin, presignup, authToken, logoutJwt } from "../net/auth";
 import { resetLocation, resetUserSession, user_session } from "../session";
+import { storeTokens, clearTokens, getAccessToken, hasValidTokens, getUsername } from "../utils/jwt.js";
 
 /**
  *
@@ -43,7 +44,7 @@ async function preSignupAction() {
 }
 
 /**
- * POST /login action
+ * POST /login action (legacy cookie-based)
  * @param {{username: string, password: string}} credentials
  * @returns {Promise<true|false>}
  */
@@ -69,6 +70,43 @@ async function loginAction({ username, password }) {
 }
 
 /**
+ * POST /auth_token action (JWT-based authentication)
+ * @param {{username: string, password: string}} credentials
+ * @returns {Promise<true|false>}
+ */
+async function authTokenAction({ username, password }) {
+    if (!username || !password) {
+        return Promise.reject(new Error("Username and password are required"));
+    }
+    
+    try {
+        const result = await authToken({ username, password });
+        
+        if (result.ok && result.auth_token) {
+            // Store JWT tokens
+            storeTokens({
+                accessToken: result.auth_token.accessToken,
+                refreshToken: result.auth_token.refreshToken,
+                accessTokenExpiresAt: result.auth_token.accessTokenExpiresAt,
+                refreshTokenExpiresAt: result.auth_token.refreshTokenExpiresAt,
+                username: result.auth_token.username
+            });
+            
+            // Also store username in session for compatibility
+            user_session.store("username", result.auth_token.username);
+            
+            return true;
+        }
+        
+        console.error(result.message);
+        return false;
+    } catch (err) {
+        console.error("Auth token action failed:", err);
+        return false;
+    }
+}
+
+/**
  *
  * @param {{username:string, password:string}} userCredentials
  * @returns {Promise<{ok:boolean,signup:{username:string},message:string}>}
@@ -89,22 +127,90 @@ async function signupAction({ username, password }) {
 }
 
 /**
- *
+ * Logout action - supports both JWT and cookie-based sessions
  * @returns {Promise<{ok: boolean, logout: boolean, message: string}>}
  */
 async function logoutAction() {
-    const usernameInSession = user_session.retrieve("username");
-    if (!usernameInSession) {
-        throw new Error("Username not found!");
+    // Check if using JWT authentication
+    const accessToken = getAccessToken();
+    
+    if (accessToken) {
+        // JWT-based logout
+        try {
+            const result = await logoutJwt(accessToken);
+            clearTokens();
+            resetUserSession();
+            resetLocation();
+            
+            if (!result.ok) {
+                console.error(result.message);
+            }
+            
+            return result;
+        } catch (error) {
+            console.error("JWT logout failed:", error);
+            // Clear tokens anyway
+            clearTokens();
+            resetUserSession();
+            resetLocation();
+            return { ok: false, logout: false, message: error.message };
+        }
+    } else {
+        // Cookie-based logout (legacy)
+        const usernameInSession = user_session.retrieve("username");
+        if (!usernameInSession) {
+            throw new Error("Username not found!");
+        }
+        resetUserSession();
+        resetLocation();
+        // server session destruction
+        const result = await logout({ username: usernameInSession });
+        if (!result.ok) {
+            console.error(result.message);
+        }
+        return result;
     }
-    resetUserSession();
-    resetLocation();
-    // server session destruction
-    const result = await logout({ username: usernameInSession });
-    if (!result.ok) {
-        console.error(result.message);
-    }
-    return result;
 }
 
-export { loginAction, signupAction, logoutAction, preLoginAction, preSignupAction };
+/**
+ * Check if user is authenticated (either JWT or cookie-based)
+ * @returns {boolean}
+ */
+function isAuthenticated() {
+    // Check JWT tokens first
+    if (hasValidTokens()) {
+        return true;
+    }
+    
+    // Fallback to cookie-based session
+    const username = user_session.retrieve("username");
+    const session = user_session.retrieve("session");
+    
+    return !!(username && session);
+}
+
+/**
+ * Get current username from either JWT or session
+ * @returns {string|null}
+ */
+function getCurrentUsername() {
+    // Try JWT first
+    const jwtUsername = getUsername();
+    if (jwtUsername) {
+        return jwtUsername;
+    }
+    
+    // Fallback to session
+    return user_session.retrieve("username");
+}
+
+export {
+    loginAction,
+    signupAction,
+    logoutAction,
+    preLoginAction,
+    preSignupAction,
+    authTokenAction,
+    isAuthenticated,
+    getCurrentUsername
+};

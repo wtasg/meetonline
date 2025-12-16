@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { hasUserSession } from "../utils/session";
-import { preLoginAction } from "../actions/authActions";
+import { authTokenAction } from "../actions/authActions";
 import { ServiceError } from "../components/Error";
 import { location } from "../session";
 import { Link } from "../components/Link";
@@ -17,15 +16,13 @@ function areUserCredentialsValid(username, password) {
         password.trim().length > 0;
 }
 
-function Login({ onLogin }) {
+function Login() {
     const [login_password, set_login_password] = useState("");
     const [login_username, set_login_username] = useState("");
     const [btn_options, set_btn_options] = useState({ "aria-disabled": true, disabled: "disabled" });
 
     const [fromSignup, _] = useState(location.retrieve("path")?.endsWith("#signup:true") || false);
     const [failedLogin, setFailedLogin] = useState(false);
-
-    const [preloginError, setPreloginError] = useState("");
 
     function updateLoginPassword(password) {
         set_login_password(password);
@@ -39,7 +36,10 @@ function Login({ onLogin }) {
         if (!login_password || !login_username) {
             return;
         }
-        const ok = await onLogin({ username: login_username, password: login_password });
+
+        // Use JWT-based authentication
+        const ok = await authTokenAction({ username: login_username, password: login_password });
+
         if (!ok) {
             setFailedLogin(true);
         } else {
@@ -48,19 +48,6 @@ function Login({ onLogin }) {
         set_login_password("");
         set_login_username("");
     }
-
-    useEffect(() => {
-        (async function () {
-            if (!hasUserSession()) {
-                const result = await preLoginAction();
-                if (!result.ok) {
-                    setPreloginError(result.message);
-                } else {
-                    setPreloginError("");
-                }
-            }
-        })();
-    }, []);
 
     useEffect(() => {
         if (areUserCredentialsValid(login_username, login_password)) {
@@ -75,7 +62,6 @@ function Login({ onLogin }) {
             <div className="form login vflex w40p">
                 <h2>Login</h2>
 
-                {preloginError && <ServiceError hasError={true} message={preloginError}></ServiceError>}
                 {failedLogin && <ServiceError hasError={true} message="login failed"></ServiceError>}
                 {fromSignup && <p style={{ color: "green" }}>Signup was successful!</p>}
                 <div>
