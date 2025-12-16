@@ -4,7 +4,7 @@ import { Link } from "../components/Link.jsx";
 function Menu() {
     const hasSession = hasUserSession();
 
-    return <nav role="navigation" className="flex">
+    return <nav className="flex">
         <ul className="flex">
             <li>
                 <Link to={"/"}>Home</Link>
