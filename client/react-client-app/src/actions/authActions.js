@@ -56,6 +56,10 @@ async function loginAction({ username, password }) {
     user_session.eject("login_token");
     const result = await login({ username, password, token });
     if (result.ok) {
+        if (!result.login) {
+            console.error("Unexpected response: missing login data");
+            return false;
+        }
         user_session.store("username", result.login.username);
         user_session.store("session", result.login.session);
         return true;
