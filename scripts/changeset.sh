@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 # Get the root directory of the git repository
 REPO_ROOT=$(git rev-parse --show-toplevel)
-CHANGES_DIR="${REPO_ROOT}/changes"
+CHANGES_DIR="${REPO_ROOT}/.changes"
 
 # Get current date and time
 DATE=$(date +%Y.%m.%d)
