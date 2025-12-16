@@ -2,7 +2,7 @@
     min-height: calc(1.2 * var(--min-input-height));
 }
 
-[role="navigation"] {
+nav {
     height: fit-content;
     width: fit-content;
 

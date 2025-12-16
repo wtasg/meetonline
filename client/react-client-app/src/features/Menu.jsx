@@ -4,40 +4,34 @@ import { Link } from "../components/Link.jsx";
 function Menu() {
     const hasSession = hasUserSession();
 
-    return <nav role="navigation" className="flex">
+    return <nav className="flex">
         <ul className="flex">
             <li>
                 <Link to={"/"}>Home</Link>
             </li>
             {
-                hasSession &&
-                <li>
-                    <Link to={"/account"}>account</Link>
-                </li>
-            }
-            {
-                hasSession &&
-                <li>
-                    <Link to={"/profile"}>profile</Link>
-                </li>
-            }
-            {
-                hasSession &&
-                <li>
-                    <Link to={"/groups"}>groups</Link>
-                </li>
+                hasSession && <>
+                    <li>
+                        <Link to={"/account"}>account</Link>
+                    </li>
+                    <li>
+                        <Link to={"/profile"}>profile</Link>
+                    </li>
+                    <li>
+                        <Link to={"/groups"}>groups</Link>
+                    </li>
+                </>
             }
         </ul>
         <ul className="flex">
-            {!hasSession &&
+            {!hasSession && <>
                 <li>
                     <Link to={"/login"}>login</Link>
                 </li>
-            }
-            {!hasSession &&
                 <li>
                     <Link to={"/signup"}>signup</Link>
                 </li>
+            </>
             }
             {
                 hasSession &&
