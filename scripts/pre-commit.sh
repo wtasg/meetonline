@@ -4,23 +4,23 @@ echo "Running lint before commit..."
 
 # Move to repo root
 REPO_ROOT=$(git rev-parse --show-toplevel)
-cd "$REPO_ROOT" || exit
+cd "$REPO_ROOT" || exit 1
 
 # Run SQL lint
 echo "Running SQL lint..."
-cd database || exit
+cd database || exit 1
 npm run lint
 SQL_RESULT=$?
 
 # Run server lint
 echo "Running server lint..."
-cd ../server/node-server-app || exit
+cd ../server/node-server-app || exit 1
 npm run lint
 SERVER_RESULT=$?
 
 # Run client lint
 echo "Running client lint..."
-cd ../../client/react-client-app || exit
+cd ../../client/react-client-app || exit 1
 npm run lint
 CLIENT_RESULT=$?
 

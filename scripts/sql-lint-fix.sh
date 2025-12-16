@@ -18,5 +18,3 @@ fi
 # Run sqlfluff fix
 echo "Running SQL lint and auto-fix..."
 sqlfluff fix init/schema.sql
-
-exit $?

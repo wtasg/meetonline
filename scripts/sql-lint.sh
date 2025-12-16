@@ -18,5 +18,3 @@ fi
 # Run sqlfluff lint
 echo "Running SQL lint..."
 sqlfluff lint init/schema.sql
-
-exit $?
