@@ -28,7 +28,7 @@ import { COOKIE_CLEAR_OPTIONS } from "../utils/cookieConfig.js";
 // Rate limiter for sensitive auth routes (e.g., 5 requests per minute per IP)
 const authRateLimiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minute window
-    max: 5, // Limit each IP to 5 requests per windowMs
+    max: 12, // Limit each IP to 12 requests per {windowMs}
     message: { ok: false, message: "Too many requests, please try again later." }
 });
 
@@ -49,7 +49,7 @@ function setupAuthHandlers(app) {
 async function loginHandlerGET(req, res) {
     const token = uuidv4();
     await tokenStore.store(token, (new Date()).toUTCString());
-    
+
     // Set secure cookie
     res.cookie("login_token", token, {
         httpOnly: true,
@@ -57,7 +57,7 @@ async function loginHandlerGET(req, res) {
         sameSite: "strict",
         maxAge: 120000 // 2 minutes (120 seconds)
     });
-    
+
     res.status(200).json({ ok: true, token });
 }
 
@@ -69,7 +69,7 @@ async function loginHandlerGET(req, res) {
 async function signupHandlerGET(req, res) {
     const token = uuidv4();
     await tokenStore.store(token, (new Date()).toUTCString());
-    
+
     // Set secure cookie
     res.cookie("signup_token", token, {
         httpOnly: true,
@@ -77,7 +77,7 @@ async function signupHandlerGET(req, res) {
         sameSite: "strict",
         maxAge: 120000 // 2 minutes (120 seconds)
     });
-    
+
     res.status(200).json({ ok: true, token });
 }
 
