@@ -16,7 +16,7 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Build the SQL lint image if it doesn't exist
-if ! docker images | grep -q "meetonline-sql-lint"; then
+if ! docker image inspect meetonline-sql-lint:latest >/dev/null 2>&1; then
     echo "Building SQL lint Docker image..."
     docker build -t meetonline-sql-lint:latest -f database/Dockerfile.lint database/
 fi
