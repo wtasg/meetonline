@@ -1265,3 +1265,7 @@ server/node-server-app/images/
 **/blob-report/
 **/playwright/.cache/
 **/playwright/.auth/
+
+## SQL linting
+# sqlfluff cache
+.sqlfluff_cache/

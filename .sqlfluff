@@ -1,0 +1,47 @@
+[sqlfluff]
+# Dialect configuration
+dialect = postgres
+
+# Templater configuration
+templater = raw
+
+# Exclude specific rules that conflict with common formatting practices
+# CP01 - capitalisation.keywords (CURRENT_TIMESTAMP is conventional)
+# CP04 - capitalisation.literals (NULL, TRUE, FALSE are conventional)
+# L003 - indentation not multiple of tab_space_size (allow aligned columns)
+# L034 - select targets should be on new lines (allow inline selects)
+# L036 - select targets should be on a new line after SELECT (allow inline)
+# LT01 - spacing issues (allow aligned spacing in CREATE TABLE)
+# LT02 - indentation issues (allow custom alignment for ALTER statements)
+# LT05 - line too long (some comment lines are long)
+# RF04 - keywords as identifiers (password, group are common column names)
+exclude_rules = CP01,CP04,L003,L034,L036,LT01,LT02,LT05,RF04
+
+# Indentation configuration
+[sqlfluff:indentation]
+indent_unit = space
+tab_space_size = 4
+
+# Rule configuration
+[sqlfluff:rules]
+
+# Capitalisation rules - be consistent with existing code
+[sqlfluff:rules:capitalisation.keywords]
+# Keywords should be lowercase (matching existing schema)
+capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.identifiers]
+# Identifiers should be lowercase (snake_case)
+capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.functions]
+# Function names should be lowercase
+capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.literals]
+# Literals can be any case
+capitalisation_policy = lower
+
+# Line length - match .editorconfig
+[sqlfluff:rules:layout.long_lines]
+max_line_length = 120
