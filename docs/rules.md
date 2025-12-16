@@ -8,9 +8,9 @@
 ## 🌿 Git Branching
 
 - **Feature branches**: for large tasks or complete features
-  - `feature_fe` or `fe` - frontend features
-  - `feature_be` or `be` - backend features
-  - `feature_db` or `db` - database features
+  - `feature/fe` or `fe` - frontend features
+  - `feature/be` or `be` - backend features
+  - `feature/db` or `db` - database features
 - **Task/Chore branches**: for smaller tasks or targeting single issue
   - `b_issuenumber`
 - **Bot branches**: if you are a bot
