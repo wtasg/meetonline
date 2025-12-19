@@ -30,6 +30,8 @@ const groupKeyMap = {
     modified_at: "modifiedAt",
     isDeleted: "is_deleted",
     is_deleted: "isDeleted",
+    deletedAt: "deleted_at",
+    deleted_at: "deletedAt",
     isHidden: "is_hidden",
     is_hidden: "isHidden",
     isArchived: "is_archived",
@@ -49,6 +51,7 @@ class GroupModel {
         this.createdAt = null;
         this.modifiedAt = null;
         this.isDeleted = false;
+        this.deletedAt = null;
         this.isHidden = false;
         this.isArchived = false;
         this.__isNull = true;
@@ -72,6 +75,7 @@ class GroupModel {
         instance.createdAt = toISOStringOrEmpty(row.created_at);
         instance.modifiedAt = toISOStringOrEmpty(row.modified_at);
         instance.isDeleted = Boolean(row.is_deleted);
+        instance.deletedAt = toISOStringOrEmpty(row.deleted_at);
         instance.isHidden = Boolean(row.is_hidden);
         instance.isArchived = Boolean(row.is_archived);
         instance.__isNull = false;
@@ -96,6 +100,7 @@ class GroupModel {
         instance.createdAt = new Date().toISOString();
         instance.modifiedAt = new Date().toISOString();
         instance.isDeleted = false;
+        instance.deletedAt = null;
         instance.isHidden = false;
         instance.isArchived = false;
         instance.__isNull = false;
