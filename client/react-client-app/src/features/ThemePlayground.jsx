@@ -256,9 +256,9 @@ function ThemePlayground() {
                             borderRadius: "0.25rem",
                             overflow: "auto"
                         }}>
-                            {`data-theme="${document.documentElement.getAttribute('data-theme') || 'none'}"\n`}
-                            {`data-filter="${document.documentElement.getAttribute('data-filter') || 'none'}"\n`}
-                            {`class="${document.documentElement.className || 'none'}"`}
+                            {`data-theme="${document.documentElement.getAttribute("data-theme") || "none"}"\n`}
+                            {`data-filter="${document.documentElement.getAttribute("data-filter") || "none"}"\n`}
+                            {`class="${document.documentElement.className || "none"}"`}
                         </pre>
                     </div>
                 </div>

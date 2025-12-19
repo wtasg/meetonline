@@ -3,6 +3,8 @@ import {
     UserSettingsModel,
     userSettingsKeyMap,
     VALID_THEMES,
+    VALID_SCHEMES,
+    VALID_FILTERS,
     VALID_FONT_SIZES,
     VALID_FONT_CONTRASTS
 } from "../../src/models/userSettingsModel.js";
@@ -13,7 +15,9 @@ describe("UserSettingsModel", () => {
             const instance = new UserSettingsModel();
             expect(instance.id).toBeNull();
             expect(instance.userProfileId).toBeNull();
-            expect(instance.theme).toBe("system");
+            expect(instance.theme).toBe("gray");
+            expect(instance.scheme).toBe("light");
+            expect(instance.filter).toBe("default");
             expect(instance.fontSize).toBe("medium");
             expect(instance.fontFamily).toBe("system-ui");
             expect(instance.fontContrast).toBe("normal");
@@ -40,7 +44,9 @@ describe("UserSettingsModel", () => {
             expect(instance.__isDefault).toBe(true);
             expect(instance.id).toBe(0);
             expect(instance.userProfileId).toBe(0);
-            expect(instance.theme).toBe("system");
+            expect(instance.theme).toBe("gray");
+            expect(instance.scheme).toBe("light");
+            expect(instance.filter).toBe("default");
             expect(instance.fontSize).toBe("medium");
         });
     });
@@ -50,7 +56,9 @@ describe("UserSettingsModel", () => {
             const row = {
                 id: 1,
                 user_profile_id: 123,
-                theme: "dark",
+                theme: "teal",
+                scheme: "dark",
+                filter: "vivid",
                 font_size: "large",
                 font_family: "Arial",
                 font_contrast: "high",
@@ -63,7 +71,9 @@ describe("UserSettingsModel", () => {
             const instance = UserSettingsModel.fromDatabaseRow(row);
             expect(instance.id).toBe(1);
             expect(instance.userProfileId).toBe(123);
-            expect(instance.theme).toBe("dark");
+            expect(instance.theme).toBe("teal");
+            expect(instance.scheme).toBe("dark");
+            expect(instance.filter).toBe("vivid");
             expect(instance.fontSize).toBe("large");
             expect(instance.fontFamily).toBe("Arial");
             expect(instance.fontContrast).toBe("high");
@@ -85,7 +95,9 @@ describe("UserSettingsModel", () => {
             const row = {
                 id: 1,
                 user_profile_id: 123,
-                theme: "dark",
+                theme: "teal",
+                scheme: "dark",
+                filter: "vivid",
                 font_size: "large",
                 font_family: "Arial",
                 font_contrast: "high",
@@ -100,7 +112,9 @@ describe("UserSettingsModel", () => {
             expect(clientObj.__isNull).toBeUndefined();
             expect(clientObj.__isDefault).toBeUndefined();
             expect(clientObj.userProfileId).toBeUndefined();
-            expect(clientObj.theme).toBe("dark");
+            expect(clientObj.theme).toBe("teal");
+            expect(clientObj.scheme).toBe("dark");
+            expect(clientObj.filter).toBe("vivid");
             expect(clientObj.fontSize).toBe("large");
         });
     });
@@ -109,6 +123,8 @@ describe("UserSettingsModel", () => {
 describe("userSettingsKeyMap", () => {
     it("should contain valid key mappings", () => {
         expect(userSettingsKeyMap["theme"]).toBe("theme");
+        expect(userSettingsKeyMap["scheme"]).toBe("scheme");
+        expect(userSettingsKeyMap["filter"]).toBe("filter");
         expect(userSettingsKeyMap["fontSize"]).toBe("font_size");
         expect(userSettingsKeyMap["font_size"]).toBe("fontSize");
         expect(userSettingsKeyMap["notifications"]).toBe("notifications");
@@ -119,17 +135,29 @@ describe("userSettingsKeyMap", () => {
 
 describe("VALID_THEMES", () => {
     it("should contain all expected themes", () => {
-        expect(VALID_THEMES).toContain("system");
-        expect(VALID_THEMES).toContain("light");
-        expect(VALID_THEMES).toContain("dark");
-        expect(VALID_THEMES).toContain("high-contrast-light");
-        expect(VALID_THEMES).toContain("high-contrast-dark");
+        expect(VALID_THEMES).toContain("gray");
         expect(VALID_THEMES).toContain("teal");
         expect(VALID_THEMES).toContain("pink");
-        expect(VALID_THEMES).toContain("red");
-        expect(VALID_THEMES).toContain("sepia");
-        expect(VALID_THEMES).toContain("gray");
-        expect(VALID_THEMES.length).toBe(10);
+        expect(VALID_THEMES.length).toBe(3);
+    });
+});
+
+describe("VALID_SCHEMES", () => {
+    it("should contain all expected schemes", () => {
+        expect(VALID_SCHEMES).toContain("light");
+        expect(VALID_SCHEMES).toContain("dark");
+        expect(VALID_SCHEMES).toContain("high-contrast");
+        expect(VALID_SCHEMES.length).toBe(3);
+    });
+});
+
+describe("VALID_FILTERS", () => {
+    it("should contain all expected filters", () => {
+        expect(VALID_FILTERS).toContain("default");
+        expect(VALID_FILTERS).toContain("natural");
+        expect(VALID_FILTERS).toContain("vivid");
+        expect(VALID_FILTERS).toContain("muted");
+        expect(VALID_FILTERS.length).toBe(4);
     });
 });
 
