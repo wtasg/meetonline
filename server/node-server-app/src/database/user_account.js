@@ -52,7 +52,19 @@ async function updateUserAccountStatus(userId, updates) {
 }
 
 async function deleteUserAccount(userId) {
-    const query = "UPDATE user_account SET is_deleted = true, modified_at = NOW() WHERE id = $1";
+    const query = `
+        UPDATE user_account 
+        SET is_deleted = true, 
+            deleted_at = CURRENT_TIMESTAMP, 
+            modified_at = NOW() 
+        WHERE id = $1
+    `;
+    const values = [userId];
+    await pool.query(query, values);
+}
+
+async function hardDeleteUserAccount(userId) {
+    const query = "DELETE FROM user_account WHERE id = $1";
     const values = [userId];
     await pool.query(query, values);
 }
@@ -69,4 +81,4 @@ async function unblockUserAccount(userId) {
     await pool.query(query, values);
 }
 
-export { getUserAccountByUsername, createUserAccount, updateUserAccountStatus, deleteUserAccount, blockUserAccount, unblockUserAccount };
+export { getUserAccountByUsername, createUserAccount, updateUserAccountStatus, deleteUserAccount, hardDeleteUserAccount, blockUserAccount, unblockUserAccount };

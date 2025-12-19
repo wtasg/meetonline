@@ -11,6 +11,8 @@ import {
 import { GroupModel } from "../models/groupModel.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
 import { getUserProfileByUsername } from "../database/user_profile.js";
+import { createPendingDeletion } from "../database/pending_deletions.js";
+import { createNotification } from "../database/notification.js";
 
 /**
  * Setup group handlers
@@ -263,9 +265,27 @@ async function groupDELETE(req, res) {
             });
         }
 
+        // Create pending deletion record (scheduled for 90 days from now)
+        const pendingDeletion = await createPendingDeletion({
+            entityType: "group",
+            entityId: id,
+            userProfileId: userProfile.id,
+            daysUntilDeletion: 90
+        });
+
+        if (pendingDeletion) {
+            // Create notification for user
+            await createNotification({
+                userProfileId: userProfile.id,
+                type: "group_delete",
+                source: id,
+                message: `Your group "${existingGroup.groupName}" has been moved to trash. It will be permanently deleted in 90 days.`
+            });
+        }
+
         return res.status(200).json({
             ok: true,
-            message: "Group deleted successfully."
+            message: "Group deleted successfully. It will be permanently removed in 90 days."
         });
     } catch (err) {
         console.error(err);

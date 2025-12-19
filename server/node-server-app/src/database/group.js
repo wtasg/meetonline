@@ -168,7 +168,9 @@ async function deleteGroup(groupId) {
     try {
         const query = `
             UPDATE public."group" 
-            SET is_deleted = true, modified_at = CURRENT_TIMESTAMP
+            SET is_deleted = true, 
+                deleted_at = CURRENT_TIMESTAMP, 
+                modified_at = CURRENT_TIMESTAMP
             WHERE id = $1
         `;
         const values = [groupId];
@@ -177,6 +179,24 @@ async function deleteGroup(groupId) {
         return result.rowCount > 0;
     } catch (error) {
         console.error("Error deleting group:", error);
+        return false;
+    }
+}
+
+/**
+ * Hard delete a group (permanent deletion)
+ * @param {string} groupId - The group ID
+ * @returns {Promise<boolean>}
+ */
+async function hardDeleteGroup(groupId) {
+    try {
+        const query = `DELETE FROM public."group" WHERE id = $1`;
+        const values = [groupId];
+        const result = await pool.query(query, values);
+        
+        return result.rowCount > 0;
+    } catch (error) {
+        console.error("Error hard deleting group:", error);
         return false;
     }
 }
@@ -305,6 +325,7 @@ export {
     searchGroupsByName,
     updateGroup,
     deleteGroup,
+    hardDeleteGroup,
     addGroupMember,
     removeGroupMember,
     getGroupMembers,

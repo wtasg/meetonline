@@ -8,6 +8,7 @@ create table if not exists user_account
     created_at   timestamp default CURRENT_TIMESTAMP not null,
     is_active    boolean   default true              not null,
     is_deleted   boolean   default false             not null,
+    deleted_at   timestamp,
     is_blocked   boolean   default false             not null,
     is_forgotten boolean   default false             not null,
     modified_at  timestamp default CURRENT_TIMESTAMP not null
@@ -62,7 +63,9 @@ create table if not exists user_profile
     address      varchar(512),
     website_url  varchar(128),
     created_at   timestamp default CURRENT_TIMESTAMP not null,
-    modified_at  timestamp default CURRENT_TIMESTAMP not null
+    modified_at  timestamp default CURRENT_TIMESTAMP not null,
+    is_deleted   boolean   default false             not null,
+    deleted_at   timestamp
 );
 
 comment on column user_profile.id is 'user profile id';
@@ -130,6 +133,7 @@ create table if not exists event
     created_at                 timestamp default    CURRENT_TIMESTAMP   not null,
     modified_at                timestamp default    CURRENT_TIMESTAMP   not null,
     is_deleted                 boolean   default    false               not null,
+    deleted_at                 timestamp,
     is_hidden                  boolean   default    false               not null,
     is_archived                boolean   default    false               not null
 );
@@ -156,6 +160,7 @@ comment on column event.group_id is 'Reserved for groups feature';
 comment on column event.created_at is 'Record creation timestamp';
 comment on column event.modified_at is 'Record update timestamp';
 comment on column event.is_deleted is 'delete flag';
+comment on column event.deleted_at is 'soft delete timestamp - scheduled for hard delete after 90 days';
 comment on column event.is_hidden is 'whether event is hidden from public listing';
 comment on column event.is_archived is 'whether event is archived';
 
@@ -190,6 +195,12 @@ create index if not exists event_is_archived_index
 
 create index if not exists event_created_at_desc_index
     on event (created_at desc);
+
+create index if not exists event_deleted_at_index
+    on event (deleted_at);
+
+create index if not exists event_is_deleted_index
+    on event (is_deleted);
 -- EVENT : END
 
 
@@ -207,6 +218,7 @@ create table if not exists "group"
     created_at                 timestamp default CURRENT_TIMESTAMP not null,
     modified_at                timestamp default CURRENT_TIMESTAMP not null,
     is_deleted                 boolean   default false             not null,
+    deleted_at                 timestamp,
     is_hidden                  boolean   default false             not null,
     is_archived                boolean   default false             not null
 );
@@ -223,6 +235,7 @@ comment on column "group".categories is 'Categories for the group';
 comment on column "group".created_at is 'Record creation timestamp';
 comment on column "group".modified_at is 'Record update timestamp';
 comment on column "group".is_deleted is 'Soft delete flag';
+comment on column "group".deleted_at is 'Soft delete timestamp - scheduled for hard delete after 90 days';
 comment on column "group".is_hidden is 'Whether group is hidden from public listing';
 comment on column "group".is_archived is 'Whether group is archived';
 
@@ -260,6 +273,9 @@ create index if not exists group_is_deleted_index
 
 create index if not exists group_created_at_desc_index
     on "group" (created_at desc);
+
+create index if not exists group_deleted_at_index
+    on "group" (deleted_at);
 
 -- GROUP : END
 
@@ -474,3 +490,52 @@ create index if not exists user_notifications_created_at_desc_index
     on user_notifications (created_at desc);
 
 -- USER NOTIFICATIONS : END
+
+
+-- PENDING DELETIONS : START
+create table if not exists pending_deletions
+(
+    id                      bigserial,
+    entity_type             varchar(64)                         not null,
+    entity_id               bigint                              not null,
+    user_profile_id         bigint                              not null,
+    scheduled_deletion_at   timestamp                           not null,
+    created_at              timestamp default CURRENT_TIMESTAMP not null,
+    is_processed            boolean   default false             not null,
+    processed_at            timestamp
+);
+
+comment on table pending_deletions is 'Track items pending hard deletion after soft delete';
+comment on column pending_deletions.id is 'Primary key for pending_deletions table';
+comment on column pending_deletions.entity_type is 'Type of entity: event, group, user_account, user_profile';
+comment on column pending_deletions.entity_id is 'ID of the entity to be deleted';
+comment on column pending_deletions.user_profile_id is 'User profile ID who initiated the deletion';
+comment on column pending_deletions.scheduled_deletion_at is 'When the hard delete should occur (90 days from soft delete)';
+comment on column pending_deletions.created_at is 'Record creation timestamp';
+comment on column pending_deletions.is_processed is 'Whether the hard delete has been processed';
+comment on column pending_deletions.processed_at is 'When the hard delete was processed';
+
+alter table pending_deletions
+    owner to myuser;
+
+alter table pending_deletions
+    add constraint pending_deletions_pk
+        primary key (id);
+
+alter table pending_deletions
+    add constraint pending_deletions_entity_type_check
+        check (entity_type IN ('event', 'group', 'user_account', 'user_profile'));
+
+create index if not exists pending_deletions_entity_type_id_index
+    on pending_deletions (entity_type, entity_id);
+
+create index if not exists pending_deletions_scheduled_deletion_at_index
+    on pending_deletions (scheduled_deletion_at);
+
+create index if not exists pending_deletions_is_processed_index
+    on pending_deletions (is_processed);
+
+create index if not exists pending_deletions_user_profile_id_index
+    on pending_deletions (user_profile_id);
+
+-- PENDING DELETIONS : END

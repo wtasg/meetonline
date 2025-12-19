@@ -31,6 +31,7 @@ import { setupUserSettingsHandler } from "./handlers/userSettingsHandler.js";
 import { setupEventHandler } from "./handlers/eventHandler.js";
 import { setupSearchHandler } from "./handlers/searchHandler.js";
 import { setupNotificationHandler } from "./handlers/notificationHandler.js";
+import { startBatchDeletionProcessor } from "./utils/batchDeletion.js";
 
 const app = express();
 const cookieParser = cookieParserPkg.default;
@@ -97,6 +98,11 @@ setupUserSettingsHandler(app);
 setupEventHandler(app);
 setupSearchHandler(app);
 setupNotificationHandler(app);
+
+// Start batch deletion processor (runs daily)
+// In production, you might want to use a dedicated cron job instead
+// The interval is set to 24 hours (86400000 ms)
+startBatchDeletionProcessor(24 * 60 * 60 * 1000);
 
 // Reject All Unsupported Routes
 app.use((req, res) => {

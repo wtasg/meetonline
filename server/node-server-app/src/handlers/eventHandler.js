@@ -8,6 +8,8 @@ import {
 import { EventModel } from "../models/eventModel.js";
 import { getUserProfileByUsername } from "../database/user_profile.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
+import { createPendingDeletion } from "../database/pending_deletions.js";
+import { createNotification } from "../database/notification.js";
 
 /**
  * Setup event handlers
@@ -320,7 +322,7 @@ async function eventDELETE(req, res) {
             });
         }
 
-        const success = await deleteEvent(id);
+        const success = await deleteEvent(id, userProfile.id);
         if (!success) {
             return res.status(500).json({
                 ok: false,
@@ -328,9 +330,27 @@ async function eventDELETE(req, res) {
             });
         }
 
+        // Create pending deletion record (scheduled for 90 days from now)
+        const pendingDeletion = await createPendingDeletion({
+            entityType: "event",
+            entityId: id,
+            userProfileId: userProfile.id,
+            daysUntilDeletion: 90
+        });
+
+        if (pendingDeletion) {
+            // Create notification for user
+            await createNotification({
+                userProfileId: userProfile.id,
+                type: "event_delete",
+                source: id,
+                message: `Your event "${existingEvent.title}" has been moved to trash. It will be permanently deleted in 90 days.`
+            });
+        }
+
         return res.status(200).json({
             ok: true,
-            message: "Event deleted successfully."
+            message: "Event deleted successfully. It will be permanently removed in 90 days."
         });
     } catch (err) {
         console.error(err);
