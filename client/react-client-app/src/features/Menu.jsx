@@ -1,12 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "../hooks/useSession";
 import { Link } from "../components/Link.jsx";
 import { UserSettings } from "./UserSettings";
 import { Logout } from "./Logout";
+import { Notifications } from "./Notifications";
+import { fetchUnreadNotificationCount } from "../actions/notificationActions";
 
 function Menu() {
     const { hasSession } = useSession();
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+    const [unreadCount, setUnreadCount] = useState(0);
+
+    useEffect(() => {
+        if (!hasSession) {
+            setUnreadCount(0);
+            return;
+        }
+
+        let isMounted = true;
+
+        async function loadUnreadCount() {
+            try {
+                const result = await fetchUnreadNotificationCount();
+                if (isMounted && result.ok) {
+                    setUnreadCount(result.count || 0);
+                }
+            } catch (error) {
+                console.error("Error loading unread count:", error);
+            }
+        }
+
+        loadUnreadCount();
+        const interval = setInterval(loadUnreadCount, 30000); // Poll every 30 seconds
+
+        return () => {
+            isMounted = false;
+            clearInterval(interval);
+        };
+    }, [hasSession]);
 
     return (
         <>
@@ -48,6 +80,19 @@ function Menu() {
                     {
                         hasSession && <>
                             <li>
+                                <div
+                                    className="flex hac vac clickable"
+                                    onClick={() => setIsNotificationsOpen(true)}
+                                    aria-label="Open notifications"
+                                >
+                                    <span className="notification-icon">🔔</span>
+                                    {unreadCount > 0 && (
+                                        <span className="notification-badge">{unreadCount}</span>
+                                    )}
+                                    <span>Notifications</span>
+                                </div>
+                            </li>
+                            <li>
                                 <Logout />
                             </li>
                             <li>
@@ -65,6 +110,18 @@ function Menu() {
                 </ul>
             </nav>
             <UserSettings isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+            <Notifications 
+                isOpen={isNotificationsOpen} 
+                onClose={() => {
+                    setIsNotificationsOpen(false);
+                    // Refresh unread count when closing
+                    if (hasSession) {
+                        fetchUnreadNotificationCount().then(result => {
+                            if (result.ok) setUnreadCount(result.count || 0);
+                        });
+                    }
+                }} 
+            />
         </>
     );
 }

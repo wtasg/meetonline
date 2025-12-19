@@ -30,6 +30,7 @@ import { setupGroupHandler } from "./handlers/groupHandler.js";
 import { setupUserSettingsHandler } from "./handlers/userSettingsHandler.js";
 import { setupEventHandler } from "./handlers/eventHandler.js";
 import { setupSearchHandler } from "./handlers/searchHandler.js";
+import { setupNotificationHandler } from "./handlers/notificationHandler.js";
 
 const app = express();
 const cookieParser = cookieParserPkg.default;
@@ -95,6 +96,7 @@ setupGroupHandler(app);
 setupUserSettingsHandler(app);
 setupEventHandler(app);
 setupSearchHandler(app);
+setupNotificationHandler(app);
 
 // Reject All Unsupported Routes
 app.use((req, res) => {
