@@ -29,6 +29,7 @@ import { setupUserProfileHandler } from "./handlers/userProfileHandler.js";
 import { setupGroupHandler } from "./handlers/groupHandler.js";
 import { setupUserSettingsHandler } from "./handlers/userSettingsHandler.js";
 import { setupEventHandler } from "./handlers/eventHandler.js";
+import { setupSearchHandler } from "./handlers/searchHandler.js";
 
 const app = express();
 const cookieParser = cookieParserPkg.default;
@@ -93,6 +94,7 @@ setupUserProfileHandler(app);
 setupGroupHandler(app);
 setupUserSettingsHandler(app);
 setupEventHandler(app);
+setupSearchHandler(app);
 
 // Reject All Unsupported Routes
 app.use((req, res) => {
