@@ -2,13 +2,24 @@ import {
     searchAll,
 } from "../database/search.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
+import rateLimit from "express-rate-limit";
+
+/**
+ * Rate limiter for search endpoints
+ * Prevents abuse of search functionality
+ */
+const searchRateLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute window
+    max: 30, // Limit each IP to 30 requests per minute
+    message: { ok: false, message: "Too many search requests, please try again later." }
+});
 
 /**
  * Setup search handlers
  * @param {Express} app
  */
 function setupSearchHandler(app) {
-    app.get("/search", hybridAuthMiddleware, searchGET);
+    app.get("/search", searchRateLimiter, hybridAuthMiddleware, searchGET);
 }
 
 /**
