@@ -305,7 +305,9 @@ create table if not exists user_settings
 (
     id                  bigserial,
     user_profile_id     bigint                              not null,
-    theme               varchar(64)   default 'system'      not null,
+    theme               varchar(64)   default 'gray'        not null,
+    scheme              varchar(32)   default 'light'       not null,
+    filter              varchar(32)   default 'default'     not null,
     font_size           varchar(32)   default 'medium'      not null,
     font_family         varchar(128)  default 'system-ui'   not null,
     font_contrast       varchar(32)   default 'normal'      not null,
@@ -319,7 +321,9 @@ create table if not exists user_settings
 comment on table user_settings is 'User settings per profile';
 comment on column user_settings.id is 'Primary key for user_settings table';
 comment on column user_settings.user_profile_id is 'FK: user_profile.id';
-comment on column user_settings.theme is 'UI theme: system, light, dark, high-contrast-light, high-contrast-dark, teal, pink, red, sepia, gray';
+comment on column user_settings.theme is 'Color theme/palette: gray, teal, pink';
+comment on column user_settings.scheme is 'Color scheme: light, dark, high-contrast';
+comment on column user_settings.filter is 'Color filter: default, natural, vivid, muted';
 comment on column user_settings.font_size is 'Font size: small, medium, large, x-large';
 comment on column user_settings.font_family is 'Font family';
 comment on column user_settings.font_contrast is 'Font contrast: low, normal, high';
@@ -346,7 +350,15 @@ alter table user_settings
 
 alter table user_settings
     add constraint user_settings_theme_check
-        check (theme IN ('system', 'light', 'dark', 'high-contrast-light', 'high-contrast-dark', 'teal', 'pink', 'red', 'sepia', 'gray'));
+        check (theme IN ('gray', 'teal', 'pink'));
+
+alter table user_settings
+    add constraint user_settings_scheme_check
+        check (scheme IN ('light', 'dark', 'high-contrast'));
+
+alter table user_settings
+    add constraint user_settings_filter_check
+        check (filter IN ('default', 'natural', 'vivid', 'muted'));
 
 alter table user_settings
     add constraint user_settings_font_size_check

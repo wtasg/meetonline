@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { settingsStorage, applyTheme, applyFontSize, applyFontContrast } from "./settings.js";
+import { settingsStorage, applyFontSize, applyFontContrast } from "./settings.js";
 
 describe("settings utilities", () => {
     beforeEach(() => {

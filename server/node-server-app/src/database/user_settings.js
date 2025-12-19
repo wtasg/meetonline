@@ -4,6 +4,8 @@ import {
     userSettingsKeyMap,
     UserSettingsModel,
     VALID_THEMES,
+    VALID_SCHEMES,
+    VALID_FILTERS,
     VALID_FONT_SIZES,
     VALID_FONT_CONTRASTS
 } from "../models/userSettingsModel.js";
@@ -28,11 +30,11 @@ async function getUserSettingsByUsername(username) {
         if (r1.rowCount === 0) {
             // Create default settings for the user
             const q2 = `INSERT INTO public.user_settings
-                (user_profile_id, theme, font_size, font_family, font_contrast, notifications, online_presence, sounds)
+                (user_profile_id, theme, scheme, filter, font_size, font_family, font_contrast, notifications, online_presence, sounds)
                 VALUES
-                ($1, $2, $3, $4, $5, $6, $7, $8)
+                ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                 RETURNING *`;
-            const v2 = [profileId, "system", "medium", "system-ui", "normal", true, true, true];
+            const v2 = [profileId, "gray", "light", "default", "medium", "system-ui", "normal", true, true, true];
             const r2 = await pool.query(q2, v2);
             return UserSettingsModel.fromDatabaseRow(r2.rows[0]);
         }
@@ -49,7 +51,7 @@ async function getUserSettingsByUsername(username) {
  * Allowed database column names for user_settings updates
  */
 const ALLOWED_DB_COLUMNS = new Set([
-    "theme", "font_size", "font_family", "font_contrast",
+    "theme", "scheme", "filter", "font_size", "font_family", "font_contrast",
     "notifications", "online_presence", "sounds"
 ]);
 
@@ -109,6 +111,10 @@ function validateSettingValue(key, value) {
     switch (key) {
         case "theme":
             return VALID_THEMES.includes(value);
+        case "scheme":
+            return VALID_SCHEMES.includes(value);
+        case "filter":
+            return VALID_FILTERS.includes(value);
         case "fontSize":
             return VALID_FONT_SIZES.includes(value);
         case "fontContrast":

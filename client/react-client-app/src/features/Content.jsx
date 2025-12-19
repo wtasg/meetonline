@@ -6,6 +6,7 @@ import { UserAccount } from "./UserAccount";
 import { UserProfile } from "./UserProfile";
 import Group from "./Group";
 import Event from "./Event";
+import ThemePlayground from "./ThemePlayground";
 import { useRoute } from "../hooks/useRoute";
 import { useNavigate } from "../hooks/useNavigate";
 import { useSession } from "../hooks/useSession";
@@ -44,6 +45,8 @@ function Content() {
         return hasSession && <Group />;
     } else if (pathname.startsWith("/events")) {
         return hasSession && <Event />;
+    } else if (pathname.startsWith("/theme-playground")) {
+        return <ThemePlayground />;
     } else if (pathname.startsWith("/")) {
         return hasSession && <> <Welcome /> </>;
     } else {
