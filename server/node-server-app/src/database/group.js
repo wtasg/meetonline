@@ -190,7 +190,7 @@ async function deleteGroup(groupId) {
  */
 async function hardDeleteGroup(groupId) {
     try {
-        const query = `DELETE FROM public."group" WHERE id = $1`;
+        const query = "DELETE FROM public.\"group\" WHERE id = $1";
         const values = [groupId];
         const result = await pool.query(query, values);
         

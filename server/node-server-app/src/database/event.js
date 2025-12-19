@@ -302,10 +302,9 @@ async function updateEvent(id, updates = {}) {
 /**
  * delete event (set is_deleted = true)
  * @param {number|string} id
- * @param {number|string} userProfileId - User profile ID who initiated the deletion
  * @returns {Promise<boolean>}
  */
-async function deleteEvent(id, userProfileId = null) {
+async function deleteEvent(id) {
     try {
         const query = `
             UPDATE public.event 
