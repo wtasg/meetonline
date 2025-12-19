@@ -56,9 +56,11 @@ async function listNotificationsByUserProfileId(userProfileId, options = {}) {
             paramIndex++;
         }
 
-        // Filter by days (last N days)
+        // Filter by days (last N days) - using parameterized query to prevent SQL injection
         if (days && days > 0) {
-            conditions.push(`created_at >= NOW() - INTERVAL '${Math.floor(days)} days'`);
+            conditions.push(`created_at >= NOW() - INTERVAL '1 day' * $${paramIndex}`);
+            values.push(Math.floor(days));
+            paramIndex++;
         }
 
         const query = `

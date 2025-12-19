@@ -18,7 +18,7 @@ async function fetchNotification(notificationId) {
         return response.json();
     } catch (err) {
         console.error(err);
-        return { ok: false, message: err.message, notification: false };
+        return { ok: false, message: err.message, notification: null };
     }
 }
 
@@ -89,7 +89,7 @@ async function markNotificationAsRead(notificationId) {
         return response.json();
     } catch (err) {
         console.error(err);
-        return { ok: false, message: err.message, notification: false };
+        return { ok: false, message: err.message, notification: null };
     }
 }
 
