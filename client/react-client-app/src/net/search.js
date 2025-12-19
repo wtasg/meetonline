@@ -87,7 +87,7 @@ const searchAll = throttle(searchAllInternal, 500);
  * Search user profiles
  * @param {string} searchTerm - The search term
  * @param {object} options - Search options
- * @returns {Promise<{ok: boolean, message: string, results: {users: array}}>}
+ * @returns {Promise<{ok: boolean, message: string, users: array}>}
  */
 async function searchUsersInternal(searchTerm, options = {}) {
     const result = await searchAllInternal(searchTerm, {
@@ -107,7 +107,7 @@ const searchUsers = throttle(searchUsersInternal, 500);
  * Search events
  * @param {string} searchTerm - The search term
  * @param {object} options - Search options
- * @returns {Promise<{ok: boolean, message: string, results: {events: array}}>}
+ * @returns {Promise<{ok: boolean, message: string, events: array}>}
  */
 async function searchEventsInternal(searchTerm, options = {}) {
     const result = await searchAllInternal(searchTerm, {
@@ -127,7 +127,7 @@ const searchEvents = throttle(searchEventsInternal, 500);
  * Search groups
  * @param {string} searchTerm - The search term
  * @param {object} options - Search options
- * @returns {Promise<{ok: boolean, message: string, results: {groups: array}}>}
+ * @returns {Promise<{ok: boolean, message: string, groups: array}>}
  */
 async function searchGroupsInternal(searchTerm, options = {}) {
     const result = await searchAllInternal(searchTerm, {

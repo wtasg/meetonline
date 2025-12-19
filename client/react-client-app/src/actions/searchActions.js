@@ -36,12 +36,13 @@ async function searchEvents(searchTerm, options = {}) {
 }
 
 /**
- * Search groups
+ * Search groups (unified search)
+ * Note: This uses the unified /search endpoint. For the legacy group-specific search, use searchGroups from groupActions.
  * @param {string} searchTerm - The search term
  * @param {object} options - Search options
  * @returns {Promise<{ok: boolean, message: string, groups: array}>}
  */
-async function searchGroups(searchTerm, options = {}) {
+async function searchGroupsUnified(searchTerm, options = {}) {
     return netSearchGroups(searchTerm, options);
 }
 
@@ -49,5 +50,5 @@ export {
     searchAll,
     searchUsers,
     searchEvents,
-    searchGroups,
+    searchGroupsUnified,
 };

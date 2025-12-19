@@ -137,7 +137,7 @@ describe("Search Database Functions", () => {
 
             expect(results).toEqual([]);
             expect(mockQuery).toHaveBeenCalledWith(
-                expect.stringContaining('SELECT * FROM public."group"'),
+                expect.stringContaining("SELECT * FROM public.\"group\""),
                 expect.arrayContaining(["%test%", "test"])
             );
         });
