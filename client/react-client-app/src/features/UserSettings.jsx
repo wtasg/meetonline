@@ -5,11 +5,15 @@ import {
     updateFontContrast,
     updateNotifications,
     updateOnlinePresence,
-    updateSounds
+    updateSounds,
+    updateTheme,
+    updateScheme,
+    updateFilter
 } from "../actions/userSettingsActions.js";
 import { ServiceError } from "../components/Error.jsx";
 import { resetLocation, resetUserSession } from "../session.js";
 import { applyFontSize, applyFontContrast } from "../utils/settings.js";
+import { applyTheme, applyScheme, applyFilter } from "../utils/theme.js";
 
 const FONT_SIZES = [
     { value: "small", label: "Small" },
@@ -24,11 +28,36 @@ const FONT_CONTRASTS = [
     { value: "high", label: "High" }
 ];
 
+const THEMES = [
+    { value: "gray", label: "Gray" },
+    { value: "teal", label: "Teal" },
+    { value: "pink", label: "Pink" }
+];
+
+const SCHEMES = [
+    { value: "light", label: "Light" },
+    { value: "dark", label: "Dark" },
+    { value: "high-contrast", label: "High Contrast" }
+];
+
+const FILTERS = [
+    { value: "default", label: "Default" },
+    { value: "natural", label: "Natural" },
+    { value: "vivid", label: "Vivid" },
+    { value: "muted", label: "Muted" }
+];
+
 const VALID_FONT_SIZES = FONT_SIZES.map(f => f.value);
 const VALID_FONT_CONTRASTS = FONT_CONTRASTS.map(f => f.value);
+const VALID_THEMES = THEMES.map(t => t.value);
+const VALID_SCHEMES = SCHEMES.map(s => s.value);
+const VALID_FILTERS = FILTERS.map(f => f.value);
 
 function validateSettings(settings) {
     return {
+        theme: VALID_THEMES.includes(settings?.theme) ? settings.theme : "gray",
+        scheme: VALID_SCHEMES.includes(settings?.scheme) ? settings.scheme : "light",
+        filter: VALID_FILTERS.includes(settings?.filter) ? settings.filter : "default",
         fontSize: VALID_FONT_SIZES.includes(settings?.fontSize) ? settings.fontSize : "medium",
         fontFamily: typeof settings?.fontFamily === "string" ? settings.fontFamily : "system-ui",
         fontContrast: VALID_FONT_CONTRASTS.includes(settings?.fontContrast) ? settings.fontContrast : "normal",
@@ -41,6 +70,9 @@ function validateSettings(settings) {
 function UserSettings({ isOpen, onClose }) {
     const [serviceError, setServiceError] = useState({ hasError: false, message: "" });
     const [settings, setSettings] = useState({
+        theme: "gray",
+        scheme: "light",
+        filter: "default",
         fontSize: "medium",
         fontFamily: "system-ui",
         fontContrast: "normal",
@@ -79,6 +111,9 @@ function UserSettings({ isOpen, onClose }) {
                 setSettings(validatedSettings);
 
                 // Apply settings
+                applyTheme(validatedSettings.theme);
+                applyScheme(validatedSettings.scheme);
+                applyFilter(validatedSettings.filter);
                 applyFontSize(validatedSettings.fontSize);
                 applyFontContrast(validatedSettings.fontContrast);
 
@@ -102,7 +137,16 @@ function UserSettings({ isOpen, onClose }) {
         setSettings(newSettings);
 
         // Apply the change immediately for visual feedback
-        if (key === "fontSize") {
+        if (key === "theme") {
+            applyTheme(value);
+            await updateTheme(value);
+        } else if (key === "scheme") {
+            applyScheme(value);
+            await updateScheme(value);
+        } else if (key === "filter") {
+            applyFilter(value);
+            await updateFilter(value);
+        } else if (key === "fontSize") {
             applyFontSize(value);
             await updateFontSize(value);
         } else if (key === "fontContrast") {
@@ -137,6 +181,45 @@ function UserSettings({ isOpen, onClose }) {
                 ) : (
                     <div className="settings-content vflex">
                         {/* Theme Section */}
+                        <div className="settings-section vflex">
+                            <h3>Theme</h3>
+                            <div className="settings-row flex sb vac">
+                                <label>Color Palette</label>
+                                <select
+                                    value={settings.theme}
+                                    onChange={(e) => handleSettingChange("theme", e.target.value)}
+                                    className="settings-select"
+                                >
+                                    {THEMES.map(({ value, label }) => (
+                                        <option key={value} value={value}>{label}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="settings-row flex sb vac">
+                                <label>Scheme</label>
+                                <select
+                                    value={settings.scheme}
+                                    onChange={(e) => handleSettingChange("scheme", e.target.value)}
+                                    className="settings-select"
+                                >
+                                    {SCHEMES.map(({ value, label }) => (
+                                        <option key={value} value={value}>{label}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="settings-row flex sb vac">
+                                <label>Color Filter</label>
+                                <select
+                                    value={settings.filter}
+                                    onChange={(e) => handleSettingChange("filter", e.target.value)}
+                                    className="settings-select"
+                                >
+                                    {FILTERS.map(({ value, label }) => (
+                                        <option key={value} value={value}>{label}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
 
                         {/* Font Section */}
                         <div className="settings-section vflex">

@@ -1,9 +1,10 @@
 import { pojo } from "@wtasnorg/node-lib";
 
-const VALID_THEMES = [
-    "system", "light", "dark", "high-contrast-light", "high-contrast-dark",
-    "teal", "pink", "red", "sepia", "gray"
-];
+const VALID_THEMES = ["gray", "teal", "pink"];
+
+const VALID_SCHEMES = ["light", "dark", "high-contrast"];
+
+const VALID_FILTERS = ["default", "natural", "vivid", "muted"];
 
 const VALID_FONT_SIZES = ["small", "medium", "large", "x-large"];
 
@@ -14,6 +15,8 @@ const userSettingsKeyMap = {
     "userProfileId": "user_profile_id",
     "user_profile_id": "userProfileId",
     "theme": "theme",
+    "scheme": "scheme",
+    "filter": "filter",
     "fontSize": "font_size",
     "font_size": "fontSize",
     "fontFamily": "font_family",
@@ -34,7 +37,9 @@ class UserSettingsModel {
     constructor() {
         this.id = null;
         this.userProfileId = null;
-        this.theme = "system";
+        this.theme = "gray";
+        this.scheme = "light";
+        this.filter = "default";
         this.fontSize = "medium";
         this.fontFamily = "system-ui";
         this.fontContrast = "normal";
@@ -55,6 +60,8 @@ class UserSettingsModel {
         instance.id = row.id;
         instance.userProfileId = row.user_profile_id;
         instance.theme = row.theme;
+        instance.scheme = row.scheme;
+        instance.filter = row.filter;
         instance.fontSize = row.font_size;
         instance.fontFamily = row.font_family;
         instance.fontContrast = row.font_contrast;
@@ -76,7 +83,9 @@ class UserSettingsModel {
         const instance = new UserSettingsModel();
         instance.id = 0;
         instance.userProfileId = 0;
-        instance.theme = "system";
+        instance.theme = "gray";
+        instance.scheme = "light";
+        instance.filter = "default";
         instance.fontSize = "medium";
         instance.fontFamily = "system-ui";
         instance.fontContrast = "normal";
@@ -103,6 +112,8 @@ export {
     UserSettingsModel,
     userSettingsKeyMap,
     VALID_THEMES,
+    VALID_SCHEMES,
+    VALID_FILTERS,
     VALID_FONT_SIZES,
     VALID_FONT_CONTRASTS
 };

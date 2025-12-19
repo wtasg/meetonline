@@ -6,6 +6,9 @@ import { settings } from "../session.js";
 import { isAuthenticated } from "./authActions.js";
 
 const DEFAULT_SETTINGS = {
+    theme: "gray",
+    scheme: "light",
+    filter: "default",
     fontSize: "medium",
     fontFamily: "system-ui",
     fontContrast: "normal",
@@ -102,6 +105,18 @@ async function updateSounds(value) {
     return updateSetting("sounds", value);
 }
 
+async function updateTheme(value) {
+    return updateSetting("theme", value);
+}
+
+async function updateScheme(value) {
+    return updateSetting("scheme", value);
+}
+
+async function updateFilter(value) {
+    return updateSetting("filter", value);
+}
+
 export {
     fetchUserSettings,
     updateFontSize,
@@ -110,6 +125,9 @@ export {
     updateNotifications,
     updateOnlinePresence,
     updateSounds,
+    updateTheme,
+    updateScheme,
+    updateFilter,
     getLocalSettings,
     saveLocalSettings,
 };
