@@ -57,6 +57,12 @@ npm test
 | `JWT_SECRET` | Secret key for JWT signing | Base64-encoded secret |
 | `JWT_ACCESS_TOKEN_EXPIRY` | Access token expiration | `15m` |
 | `JWT_REFRESH_TOKEN_EXPIRY` | Refresh token expiration | `7d` |
+| `RATE_LIMIT_AUTH_WINDOW_MS` | Auth rate limit time window (ms) | `60000` (1 minute) |
+| `RATE_LIMIT_AUTH_MAX` | Max auth requests per window | `12` |
+| `RATE_LIMIT_API_WINDOW_MS` | API rate limit time window (ms) | `60000` (1 minute) |
+| `RATE_LIMIT_API_MAX` | Max API requests per window | `60` |
+| `RATE_LIMIT_UPLOAD_WINDOW_MS` | Upload rate limit time window (ms) | `60000` (1 minute) |
+| `RATE_LIMIT_UPLOAD_MAX` | Max upload requests per window | `10` |
 
 ---
 
@@ -99,6 +105,7 @@ Each handler sets up routes for a specific domain and implements the business lo
 | `csrfMiddleware.js` | CSRF token generation and validation |
 | `corsMiddleware.js` | CORS configuration based on `ALLOWED_ORIGINS` |
 | `uploadMiddleware.js` | Multer file upload configuration |
+| `rateLimitMiddleware.js` | Rate limiting for auth, API, and upload endpoints |
 
 ---
 
@@ -530,8 +537,60 @@ docker build -t meetonline-server .
 | **Helmet** | Security headers (CSP, HSTS, noSniff, etc.) |
 | **CORS** | Whitelist-based origin validation |
 | **CSRF** | Double-submit cookie pattern via `csrf-csrf` |
-| **Rate Limiting** | `express-rate-limit` (12 req/min on auth routes) |
+| **Rate Limiting** | Configurable limits via environment variables: Auth (12/min), API (60/min), Upload (10/min) |
 | **Password Hashing** | bcrypt with configurable rounds |
 | **JWT** | Access tokens (15m) + Refresh tokens (7d) |
 | **Single Session** | Previous tokens revoked on new login |
 | **Token Revocation** | Database-backed token blacklist |
+
+### Rate Limiting Details
+
+The application implements three-tier rate limiting to protect against brute-force attacks, DoS, and excessive API usage:
+
+#### Rate Limit Tiers
+
+| Tier | Default Limit | Applied To | Purpose |
+|------|---------------|------------|---------|
+| **Auth** | 12 requests/minute | `/signup`, `/auth_token`, `/auth_refresh`, `/logout` | Prevent brute-force authentication attacks |
+| **API** | 60 requests/minute | `/user_account`, general API endpoints | Throttle normal API usage |
+| **Upload** | 10 requests/minute | `/upload` | Prevent upload abuse and resource exhaustion |
+
+#### Configuration
+
+All rate limits are configurable via environment variables:
+
+```bash
+# Auth endpoints (strict)
+RATE_LIMIT_AUTH_WINDOW_MS=60000  # Time window in milliseconds
+RATE_LIMIT_AUTH_MAX=12           # Max requests per window
+
+# API endpoints (moderate)
+RATE_LIMIT_API_WINDOW_MS=60000
+RATE_LIMIT_API_MAX=60
+
+# Upload endpoints (restrictive)
+RATE_LIMIT_UPLOAD_WINDOW_MS=60000
+RATE_LIMIT_UPLOAD_MAX=10
+```
+
+#### Response Format
+
+When rate limits are exceeded, the server returns:
+
+```json
+{
+  "ok": false,
+  "message": "Too many requests, please try again later."
+}
+```
+
+**HTTP Status:** `429 Too Many Requests`
+
+**Headers:** Standard `RateLimit-*` headers included for client-side retry logic
+
+#### Security Considerations
+
+- Rate limits are applied per IP address
+- Error responses do not expose internal implementation details
+- Failed and successful requests both count toward the limit
+- Retry-after information provided via standard headers

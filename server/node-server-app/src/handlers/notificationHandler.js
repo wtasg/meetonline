@@ -9,27 +9,19 @@ import {
 import { NotificationModel } from "../models/notificationModel.js";
 import { getUserProfileByUsername } from "../database/user_profile.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
-import rateLimit from "express-rate-limit";
-
-const notificationRateLimiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute
-    max: 60, // Limit each IP to 60 requests per windowMs
-    message: "Too many requests from this IP, please try again later.",
-    standardHeaders: true,
-    legacyHeaders: false,
-});
+import { apiRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 /**
  * Setup notification handlers
  * @param {Express} app
  */
 function setupNotificationHandler(app) {
-    app.get("/notification/:id", notificationRateLimiter, hybridAuthMiddleware, notificationGET);
-    app.get("/notifications", notificationRateLimiter, hybridAuthMiddleware, notificationsGET);
-    app.get("/notifications/unread-count", notificationRateLimiter, hybridAuthMiddleware, notificationsUnreadCountGET);
-    app.patch("/notification/:id/read", notificationRateLimiter, hybridAuthMiddleware, notificationMarkAsReadPATCH);
-    app.patch("/notifications/read-all", notificationRateLimiter, hybridAuthMiddleware, notificationsMarkAllAsReadPATCH);
-    app.delete("/notification/:id", notificationRateLimiter, hybridAuthMiddleware, notificationDELETE);
+    app.get("/notification/:id", apiRateLimiter, hybridAuthMiddleware, notificationGET);
+    app.get("/notifications", apiRateLimiter, hybridAuthMiddleware, notificationsGET);
+    app.get("/notifications/unread-count", apiRateLimiter, hybridAuthMiddleware, notificationsUnreadCountGET);
+    app.patch("/notification/:id/read", apiRateLimiter, hybridAuthMiddleware, notificationMarkAsReadPATCH);
+    app.patch("/notifications/read-all", apiRateLimiter, hybridAuthMiddleware, notificationsMarkAllAsReadPATCH);
+    app.delete("/notification/:id", apiRateLimiter, hybridAuthMiddleware, notificationDELETE);
 }
 
 /**
