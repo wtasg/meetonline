@@ -417,3 +417,60 @@ create index if not exists search_queries_created_at_index
     on search_queries (created_at desc);
 
 -- SEARCH QUERIES : END
+
+
+-- USER NOTIFICATIONS : START
+create table if not exists user_notifications
+(
+    id                  bigserial,
+    user_profile_id     bigint                              not null,
+    type                varchar(64)                         not null,
+    source              varchar(128),
+    message             text                                not null,
+    created_at          timestamp default CURRENT_TIMESTAMP not null,
+    is_read             boolean   default false             not null,
+    read_at             timestamp,
+    is_deleted          boolean   default false             not null,
+    deleted_at          timestamp
+);
+
+comment on table user_notifications is 'User notifications';
+comment on column user_notifications.id is 'Primary key for user_notifications table';
+comment on column user_notifications.user_profile_id is 'FK: user_profile.id';
+comment on column user_notifications.type is 'Type of notification: comment, event_create, event_modify, event_delete, group_create, group_modify, group_delete, message, system, other';
+comment on column user_notifications.source is 'Source ID (profile_id, event_id, group_id, etc.)';
+comment on column user_notifications.message is 'Notification message text';
+comment on column user_notifications.created_at is 'Record creation timestamp';
+comment on column user_notifications.is_read is 'Whether the notification has been read';
+comment on column user_notifications.read_at is 'Timestamp when notification was marked as read';
+comment on column user_notifications.is_deleted is 'Soft delete flag';
+comment on column user_notifications.deleted_at is 'Timestamp when notification was deleted';
+
+alter table user_notifications
+    owner to myuser;
+
+alter table user_notifications
+    add constraint user_notifications_pk
+        primary key (id);
+
+alter table user_notifications
+    add constraint user_notifications_user_profile_id_fk
+        foreign key (user_profile_id) references user_profile(id);
+
+alter table user_notifications
+    add constraint user_notifications_type_check
+        check (type IN ('comment', 'event_create', 'event_modify', 'event_delete', 'group_create', 'group_modify', 'group_delete', 'message', 'system', 'other'));
+
+create index if not exists user_notifications_user_profile_id_index
+    on user_notifications (user_profile_id);
+
+create index if not exists user_notifications_is_read_index
+    on user_notifications (is_read);
+
+create index if not exists user_notifications_is_deleted_index
+    on user_notifications (is_deleted);
+
+create index if not exists user_notifications_created_at_desc_index
+    on user_notifications (created_at desc);
+
+-- USER NOTIFICATIONS : END
