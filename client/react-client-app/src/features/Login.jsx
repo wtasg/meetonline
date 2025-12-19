@@ -58,12 +58,12 @@ function Login({ onLogin }) {
     }, [login_password, login_username]);
 
     return (
-        <div className="flex hac vac w80">
+        <div className="flex hac vac">
             <div className="form login vflex w40p">
                 <h2>Login</h2>
 
                 {failedLogin && <ServiceError hasError={true} message="login failed"></ServiceError>}
-                {fromSignup && <p style={{ color: "green" }}>Signup was successful!</p>}
+                {fromSignup && <p>Signup was successful!</p>}
                 <div>
                     <label htmlFor="login_username" className="vflex">
                         <>Username</>

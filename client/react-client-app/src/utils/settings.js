@@ -2,15 +2,6 @@ import { Storage } from "./storage.js";
 
 const settingsStorage = new Storage(["local", "cookie"]);
 
-function applyTheme(theme) {
-    if (theme === "system") {
-        document.documentElement.removeAttribute("data-theme");
-    } else {
-        document.documentElement.setAttribute("data-theme", theme);
-    }
-    settingsStorage.store("theme", theme);
-}
-
 function applyFontSize(fontSize) {
     const fontSizeMap = {
         "small": "14px",
@@ -32,4 +23,4 @@ function applyFontContrast(fontContrast) {
     settingsStorage.store("fontContrast", fontContrast);
 }
 
-export { settingsStorage, applyTheme, applyFontSize, applyFontContrast };
+export { settingsStorage, applyFontSize, applyFontContrast };

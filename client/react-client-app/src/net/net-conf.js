@@ -12,6 +12,8 @@ const CONF = {
         GROUPS: "groups",
         GROUP_SEARCH: "group/search",
         USER_SETTINGS: "user_settings",
+        EVENT: "event",
+        EVENTS: "events",
     }
 };
 

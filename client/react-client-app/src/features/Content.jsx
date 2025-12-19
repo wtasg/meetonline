@@ -1,30 +1,18 @@
 import { Welcome } from "../components/Welcome";
 import { Login } from "./Login";
 import { Signup } from "./Signup";
-import { authTokenAction, signupAction, logoutAction } from "../actions/authActions";
-import { Logout } from "./Logout";
-import { user_session } from "../session";
+import { authTokenAction, signupAction } from "../actions/authActions";
 import { UserAccount } from "./UserAccount";
 import { UserProfile } from "./UserProfile";
 import Group from "./Group";
+import Event from "./Event";
 import { useRoute } from "../hooks/useRoute";
 import { useNavigate } from "../hooks/useNavigate";
 import { useSession } from "../hooks/useSession";
 
 function Content() {
-    const { hasSession, login, logout } = useSession();
+    const { hasSession, login } = useSession();
     const navigate = useNavigate();
-
-    async function onLogout() {
-        try {
-            await logoutAction();
-            logout(); // Update global session state
-            navigate("/");
-        } catch (err) {
-            console.error(err);
-            throw err;
-        }
-    }
 
     async function onLogin({ username, password }) {
         const result = await authTokenAction({ username, password });
@@ -54,8 +42,8 @@ function Content() {
         return hasSession && <UserProfile />;
     } else if (pathname.startsWith("/groups")) {
         return hasSession && <Group />;
-    } else if (pathname.startsWith("/logout")) {
-        return hasSession ? <Logout onLogout={onLogout} username={() => user_session.retrieve("username")} /> : <div>You are logged out.</div>;
+    } else if (pathname.startsWith("/events")) {
+        return hasSession && <Event />;
     } else if (pathname.startsWith("/")) {
         return hasSession && <> <Welcome /> </>;
     } else {

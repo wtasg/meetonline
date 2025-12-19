@@ -470,10 +470,10 @@
     "useObsidianDefaults": false,
     "backgroundMatchCanvas": false,
     "backgroundMatchElement": true,
-    "backgroundColor": "#fff",
+    "backgroundColor": "#eee",
     "backgroundOpacity": 60,
     "borderMatchElement": true,
-    "borderColor": "#fff",
+    "borderColor": "#eee",
     "borderOpacity": 0,
     "filenameVisible": false
   },
@@ -807,7 +807,7 @@
     "pageOrientation": "portrait",
     "fitToPage": 1,
     "paperColor": "white",
-    "customPaperColor": "#ffffff",
+    "customPaperColor": "#eeefff",
     "alignment": "center",
     "margin": "normal"
   },

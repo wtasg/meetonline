@@ -9,7 +9,7 @@ function Link({ to, children, klass }) {
     };
 
     return (
-        <a href={to} onClick={handleClick} className={klass}>
+        <a href={to} onClick={handleClick} className={`${klass} clickable`}>
             {children}
         </a>
     );

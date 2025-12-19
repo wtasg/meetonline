@@ -13,15 +13,15 @@ function EditableValue({ initialValue, onChangeFn, valueType, klass }) {
         setLocalValue(initialValue || "");
     }, [initialValue]);
 
-    return <div className={`editable flex ${klass}`} style={{ borderBottom: "1px dashed green" }}>
+    return <div className={`editable flex ${klass}`} style={{ borderBottom: "1px dashed" }}>
         <input
             type={valueType || "text"}
             onChange={e => { setDirty(true); setLocalValue(e.target.value); }}
             onKeyDown={(e) => { if (e.key === "Enter" && localValue.length > 0) onValueChange(); }}
             value={localValue}
-            style={{ border: dirty ? "thin solid red" : "", width: "100%", minHeight: "56px" }}
+            style={{ border: dirty ? "thin solid" : "", width: "100%", minHeight: "56px" }}
         />
-        {dirty && <span style={{ color: "red" }}>*</span>}
+        {dirty && <span>*</span>}
     </div>;
 }
 

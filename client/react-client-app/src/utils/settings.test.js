@@ -12,31 +12,13 @@ describe("settings utilities", () => {
         }));
 
         // Mock document.documentElement
-        vi.spyOn(document.documentElement, "setAttribute").mockImplementation(() => {});
-        vi.spyOn(document.documentElement, "removeAttribute").mockImplementation(() => {});
-        vi.spyOn(document.documentElement.style, "setProperty").mockImplementation(() => {});
+        vi.spyOn(document.documentElement, "setAttribute").mockImplementation(() => { });
+        vi.spyOn(document.documentElement, "removeAttribute").mockImplementation(() => { });
+        vi.spyOn(document.documentElement.style, "setProperty").mockImplementation(() => { });
     });
 
     afterEach(() => {
         vi.restoreAllMocks();
-    });
-
-    describe("applyTheme", () => {
-        it("should remove data-theme attribute for system theme", () => {
-            applyTheme("system");
-            expect(document.documentElement.removeAttribute).toHaveBeenCalledWith("data-theme");
-        });
-
-        it("should set data-theme attribute for non-system theme", () => {
-            applyTheme("dark");
-            expect(document.documentElement.setAttribute).toHaveBeenCalledWith("data-theme", "dark");
-        });
-
-        it("should store theme in storage", () => {
-            const storeSpy = vi.spyOn(settingsStorage, "store");
-            applyTheme("light");
-            expect(storeSpy).toHaveBeenCalledWith("theme", "light");
-        });
     });
 
     describe("applyFontSize", () => {

@@ -26,10 +26,10 @@ CLIENT_RESULT=$?
 
 # Check results
 if [[ "$SQL_RESULT" -ne 0 || "$SERVER_RESULT" -ne 0 || "$CLIENT_RESULT" -ne 0 ]]; then
-  echo "Lint failed — aborting commit."
+  echo "Lint failed: Do not commit!"
   exit 1
 fi
 
-echo "Lint passed — proceeding with commit."
+echo "Lint passed: You can proceed with commit."
 
 exit 0
