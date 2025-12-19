@@ -1,6 +1,7 @@
 import {
     searchAll,
 } from "../database/search.js";
+import { logSearchQuery } from "../database/search_queries.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
 import rateLimit from "express-rate-limit";
 
@@ -72,6 +73,21 @@ async function searchGET(req, res) {
             events: results.events.map(e => e.toClient()),
             groups: results.groups.map(g => g.toClient()),
         };
+
+        // Calculate total results count
+        const totalResults = clientResults.users.length + 
+                           clientResults.events.length + 
+                           clientResults.groups.length;
+
+        // Log search query (async, don't wait for completion)
+        if (req.user?.userId) {
+            logSearchQuery(
+                req.user.userId,
+                q.trim(),
+                typesArray,
+                totalResults
+            ).catch(err => console.error("Failed to log search query:", err));
+        }
 
         return res.status(200).json({
             ok: true,

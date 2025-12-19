@@ -1,43 +1,10 @@
-import { useState } from "react";
-import { searchAll } from "../actions/searchActions.js";
+import { useSearch } from "../hooks/useSearch.js";
 
 /**
  * Search component with client-side throttling
  */
 function Search() {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [results, setResults] = useState({
-        users: [],
-        events: [],
-        groups: [],
-    });
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-
-    const handleSearch = async (term) => {
-        if (!term || !term.trim()) {
-            setResults({ users: [], events: [], groups: [] });
-            setError("");
-            return;
-        }
-
-        setLoading(true);
-        setError("");
-
-        try {
-            const response = await searchAll(term.trim());
-            if (response.ok) {
-                setResults(response.results);
-            } else {
-                setError(response.message || "Search failed");
-            }
-        } catch (err) {
-            setError("An error occurred while searching");
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const { searchTerm, results, loading, error, handleSearch, setSearchTerm } = useSearch();
 
     const handleInputChange = (e) => {
         const value = e.target.value;

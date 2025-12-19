@@ -375,3 +375,45 @@ create index if not exists jwt_tokens_is_revoked_index
     on jwt_tokens (is_revoked);
 
 -- JWT TOKENS : END
+
+
+-- SEARCH QUERIES : START
+create table if not exists search_queries
+(
+    id                  bigserial,
+    user_id             bigint                              not null,
+    search_term         varchar(1024)                       not null,
+    search_types        text,
+    results_count       integer   default 0                 not null,
+    created_at          timestamp default CURRENT_TIMESTAMP not null
+);
+
+comment on table search_queries is 'Search queries performed by users';
+comment on column search_queries.id is 'Primary key for search_queries table';
+comment on column search_queries.user_id is 'FK: user_account.id';
+comment on column search_queries.search_term is 'The search term used';
+comment on column search_queries.search_types is 'Comma-separated list of types searched (users, events, groups)';
+comment on column search_queries.results_count is 'Total number of results returned';
+comment on column search_queries.created_at is 'Record creation timestamp';
+
+alter table search_queries
+    owner to myuser;
+
+alter table search_queries
+    add constraint search_queries_pk
+        primary key (id);
+
+alter table search_queries
+    add constraint search_queries_user_id_fk
+        foreign key (user_id) references user_account(id);
+
+create index if not exists search_queries_user_id_index
+    on search_queries (user_id);
+
+create index if not exists search_queries_search_term_index
+    on search_queries (search_term);
+
+create index if not exists search_queries_created_at_index
+    on search_queries (created_at desc);
+
+-- SEARCH QUERIES : END
