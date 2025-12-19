@@ -91,9 +91,12 @@ React component that provides:
 ## Security & Privacy
 
 - All searches require authentication
+- Rate limiting: 30 requests per minute per IP address
+- Client-side throttling: 500ms delay between requests
 - Only public groups are searchable
 - Hidden and deleted entities are excluded from results
 - User profiles must have a non-empty profile_name to appear in search results
+- Parameterized SQL queries prevent SQL injection attacks
 
 ## Search Criteria
 
