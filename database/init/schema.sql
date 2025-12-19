@@ -33,6 +33,9 @@ create index if not exists user_account_is_deleted_index
 
 create index if not exists user_account_deleted_at_index
     on user_account (deleted_at);
+
+create index if not exists user_account_is_deleted_deleted_at_index
+    on user_account (is_deleted, deleted_at);
 -- USER ACCOUNT : END
 
 -- KEY VALUE STORE : START
@@ -96,6 +99,9 @@ create index if not exists user_profile_is_deleted_index
 
 create index if not exists user_profile_deleted_at_index
     on user_profile (deleted_at);
+
+create index if not exists user_profile_is_deleted_deleted_at_index
+    on user_profile (is_deleted, deleted_at);
 -- USER PROFILE : END
 
 -- EVENT : START
@@ -210,6 +216,9 @@ create index if not exists event_is_deleted_index
 
 create index if not exists event_deleted_at_index
     on event (deleted_at);
+
+create index if not exists event_is_deleted_deleted_at_index
+    on event (is_deleted, deleted_at);
 -- EVENT : END
 
 
@@ -285,6 +294,9 @@ create index if not exists group_created_at_desc_index
 
 create index if not exists group_deleted_at_index
     on "group" (deleted_at);
+
+create index if not exists group_is_deleted_deleted_at_index
+    on "group" (is_deleted, deleted_at);
 -- GROUP : END
 
 
