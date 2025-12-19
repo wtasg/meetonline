@@ -17,7 +17,7 @@ import { doubleCsrfProtection, generateCsrfToken } from "./middlewares/csrfMiddl
 // endpoint handlers
 import { setupRootHandlers } from "./handlers/rootHandler.js";
 import { setupAuthHandlers } from "./handlers/authHandler.js";
-import { setupGracefulShutdown } from "./utils/gracefulSetup.js";
+import { setupGracefulShutdown, setBatchDeletionProcessor } from "./utils/gracefulSetup.js";
 import { setupUploadHandler } from "./handlers/uploadHandler.js";
 import { setupUserAccountHandler } from "./handlers/userAccountHandler.js";
 
@@ -103,15 +103,7 @@ setupNotificationHandler(app);
 // In production, you might want to use a dedicated cron job instead
 // The interval is set to 24 hours (86400000 ms)
 const batchDeletionProcessor = startBatchDeletionProcessor(24 * 60 * 60 * 1000);
-
-// Add cleanup to graceful shutdown
-const originalExit = process.exit;
-process.exit = (code) => {
-    if (batchDeletionProcessor && batchDeletionProcessor.stop) {
-        batchDeletionProcessor.stop();
-    }
-    originalExit(code);
-};
+setBatchDeletionProcessor(batchDeletionProcessor);
 
 // Reject All Unsupported Routes
 app.use((req, res) => {

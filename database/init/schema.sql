@@ -28,8 +28,12 @@ alter table user_account
     add constraint user_account_pk
         unique (username);
 
--- USER ACCOUNT : END
+create index if not exists user_account_is_deleted_index
+    on user_account (is_deleted);
 
+create index if not exists user_account_deleted_at_index
+    on user_account (deleted_at);
+-- USER ACCOUNT : END
 
 -- KEY VALUE STORE : START
 create table if not exists kv_store
@@ -87,6 +91,11 @@ alter table user_profile
     add constraint user_profile_user_account_id_fk
         foreign key (user_id) references user_account;
 
+create index if not exists user_profile_is_deleted_index
+    on user_profile (is_deleted);
+
+create index if not exists user_profile_deleted_at_index
+    on user_profile (deleted_at);
 -- USER PROFILE : END
 
 -- EVENT : START
@@ -196,11 +205,11 @@ create index if not exists event_is_archived_index
 create index if not exists event_created_at_desc_index
     on event (created_at desc);
 
-create index if not exists event_deleted_at_index
-    on event (deleted_at);
-
 create index if not exists event_is_deleted_index
     on event (is_deleted);
+
+create index if not exists event_deleted_at_index
+    on event (deleted_at);
 -- EVENT : END
 
 
@@ -276,7 +285,6 @@ create index if not exists group_created_at_desc_index
 
 create index if not exists group_deleted_at_index
     on "group" (deleted_at);
-
 -- GROUP : END
 
 
@@ -525,6 +533,10 @@ alter table pending_deletions
 alter table pending_deletions
     add constraint pending_deletions_entity_type_check
         check (entity_type IN ('event', 'group', 'user_account', 'user_profile'));
+
+alter table pending_deletions
+    add constraint pending_deletions_user_profile_id_fk
+        foreign key (user_profile_id) references user_profile(id);
 
 create index if not exists pending_deletions_entity_type_id_index
     on pending_deletions (entity_type, entity_id);

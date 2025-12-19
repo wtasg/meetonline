@@ -43,7 +43,7 @@ async function updateUserAccountStatus(userId, updates) {
 
     const query = `
         UPDATE user_account
-        SET ${fields.join(", ")}, modified_at = NOW()
+        SET ${fields.join(", ")}, modified_at = CURRENT_TIMESTAMP
         WHERE id = $${index}
         RETURNING *`;
 
@@ -56,7 +56,7 @@ async function deleteUserAccount(userId) {
         UPDATE user_account 
         SET is_deleted = true, 
             deleted_at = CURRENT_TIMESTAMP, 
-            modified_at = NOW() 
+            modified_at = CURRENT_TIMESTAMP 
         WHERE id = $1
     `;
     const values = [userId];
@@ -70,13 +70,13 @@ async function hardDeleteUserAccount(userId) {
 }
 
 async function blockUserAccount(userId) {
-    const query = "UPDATE user_account SET is_blocked = true, modified_at = NOW() WHERE id = $1";
+    const query = "UPDATE user_account SET is_blocked = true, modified_at = CURRENT_TIMESTAMP WHERE id = $1";
     const values = [userId];
     await pool.query(query, values);
 }
 
 async function unblockUserAccount(userId) {
-    const query = "UPDATE user_account SET is_blocked = false, modified_at = NOW() WHERE id = $1";
+    const query = "UPDATE user_account SET is_blocked = false, modified_at = CURRENT_TIMESTAMP WHERE id = $1";
     const values = [userId];
     await pool.query(query, values);
 }

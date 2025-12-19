@@ -39,18 +39,21 @@ CREATE TABLE pending_deletions (
 #### 1. Database Functions
 
 **Soft Delete Functions** (`/server/node-server-app/src/database/`)
+
 - `deleteEvent()` - Soft deletes an event
 - `deleteGroup()` - Soft deletes a group
 - `deleteUserAccount()` - Soft deletes a user account
 - `deleteUserProfile()` - Soft deletes a user profile
 
 **Hard Delete Functions**
+
 - `hardDeleteEvent()` - Permanently deletes an event
 - `hardDeleteGroup()` - Permanently deletes a group
 - `hardDeleteUserAccount()` - Permanently deletes a user account
 - `hardDeleteUserProfile()` - Permanently deletes a user profile
 
 **Pending Deletion Functions** (`/server/node-server-app/src/database/pending_deletions.js`)
+
 - `createPendingDeletion()` - Creates a pending deletion record
 - `getDuePendingDeletions()` - Retrieves deletions scheduled for today or earlier
 - `markPendingDeletionAsProcessed()` - Marks a deletion as completed
@@ -65,6 +68,7 @@ CREATE TABLE pending_deletions (
 - `startBatchDeletionProcessor(intervalMs)` - Starts periodic batch processing
 
 The batch processor:
+
 1. Runs automatically on server startup
 2. Runs periodically (default: every 24 hours)
 3. Hard deletes items that have exceeded the retention period
@@ -73,9 +77,11 @@ The batch processor:
 #### 3. API Handler Updates
 
 **Event Handler** (`/server/node-server-app/src/handlers/eventHandler.js`)
+
 - DELETE `/event/:id` - Soft deletes event, creates pending deletion, notifies user
 
 **Group Handler** (`/server/node-server-app/src/handlers/groupHandler.js`)
+
 - DELETE `/group/:id` - Soft deletes group, creates pending deletion, notifies user
 
 ## User Flow
@@ -96,7 +102,7 @@ The batch processor:
 ### Automatic Permanent Deletion
 
 1. Batch processor runs daily
-2. Checks for items with `scheduled_deletion_at <= NOW()`
+2. Checks for items with `scheduled_deletion_at <= CURRENT_TIMESTAMP`
 3. For each due deletion:
    - Performs hard delete (removes from database permanently)
    - Marks pending deletion as processed
@@ -105,6 +111,7 @@ The batch processor:
 ### Future: Restore Flow (Not Yet Implemented)
 
 Users would be able to restore soft-deleted items:
+
 1. View deleted items in trash
 2. Select item to restore
 3. System:
@@ -147,14 +154,11 @@ startBatchDeletionProcessor(60 * 60 * 1000);
 For production environments, consider:
 
 1. **Dedicated Cron Job**: Instead of running the batch processor in the application, use a dedicated cron job or scheduled task to call the batch processor endpoint.
-
 2. **Monitoring**: Add monitoring for:
    - Number of items processed
    - Processing failures
    - Processing time
-
 3. **Error Handling**: The batch processor logs errors but continues processing. Monitor logs for issues.
-
 4. **Database Indexes**: The schema includes indexes on `deleted_at` columns for efficient querying.
 
 ### Manual Processing
@@ -173,10 +177,12 @@ console.log(`Processed: ${result.processed}, Failed: ${result.failed}`);
 The system integrates with the existing notification system:
 
 ### Soft Delete Notification
+
 - **Type**: `event_delete` or `group_delete`
 - **Message**: "Your [name] has been moved to trash. It will be permanently deleted in 90 days."
 
 ### Hard Delete Notification
+
 - **Type**: `system`
 - **Message**: "Your [type] has been permanently deleted as scheduled."
 
@@ -204,11 +210,13 @@ The system integrates with the existing notification system:
 ### Database Queries
 
 Check pending deletions:
+
 ```sql
 SELECT * FROM pending_deletions WHERE is_processed = false;
 ```
 
 Check soft-deleted items:
+
 ```sql
 SELECT id, title, is_deleted, deleted_at FROM event WHERE is_deleted = true;
 ```
@@ -227,6 +235,7 @@ SELECT id, title, is_deleted, deleted_at FROM event WHERE is_deleted = true;
 ### Pending Deletions
 
 #### Create Pending Deletion
+
 ```javascript
 createPendingDeletion({
     entityType: "event",      // Required: event, group, user_account, user_profile
@@ -237,12 +246,14 @@ createPendingDeletion({
 ```
 
 #### Get Due Deletions
+
 ```javascript
 const deletions = await getDuePendingDeletions();
 // Returns array of deletion records due for processing
 ```
 
 #### Cancel Pending Deletion
+
 ```javascript
 const success = await cancelPendingDeletion("event", "123");
 // Used for restore functionality
@@ -251,17 +262,20 @@ const success = await cancelPendingDeletion("event", "123");
 ## Troubleshooting
 
 ### Batch processor not running
+
 1. Check server logs for startup errors
 2. Verify database connectivity
 3. Check for exceptions in batch processor initialization
 
 ### Items not being deleted
+
 1. Check `pending_deletions` table for records
 2. Verify `scheduled_deletion_at` is in the past
 3. Check batch processor logs
 4. Run processor manually to test
 
 ### Performance issues
+
 1. Check database indexes on `deleted_at` columns
 2. Monitor batch processor execution time
 3. Consider running processor during off-peak hours

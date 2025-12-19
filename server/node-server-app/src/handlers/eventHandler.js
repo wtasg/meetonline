@@ -338,15 +338,21 @@ async function eventDELETE(req, res) {
             daysUntilDeletion: 90
         });
 
-        if (pendingDeletion) {
-            // Create notification for user
-            await createNotification({
-                userProfileId: userProfile.id,
-                type: "event_delete",
-                source: id,
-                message: `Your event "${existingEvent.title}" has been moved to trash. It will be permanently deleted in 90 days.`
+        if (!pendingDeletion) {
+            console.error("Failed to create pending deletion record for event:", id);
+            return res.status(500).json({
+                ok: false,
+                message: "Event deleted but failed to schedule permanent deletion."
             });
         }
+
+        // Create notification for user
+        await createNotification({
+            userProfileId: userProfile.id,
+            type: "event_delete",
+            source: id,
+            message: `Your event "${existingEvent.title}" has been moved to trash. It will be permanently deleted in 90 days.`
+        });
 
         return res.status(200).json({
             ok: true,

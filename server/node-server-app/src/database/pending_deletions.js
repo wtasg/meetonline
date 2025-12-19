@@ -56,7 +56,7 @@ async function getDuePendingDeletions() {
             SELECT *
             FROM public.pending_deletions
             WHERE is_processed = false
-              AND scheduled_deletion_at <= NOW()
+              AND scheduled_deletion_at <= CURRENT_TIMESTAMP
             ORDER BY scheduled_deletion_at ASC
         `;
 
