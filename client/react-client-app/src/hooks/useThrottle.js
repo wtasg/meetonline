@@ -25,13 +25,17 @@ function useThrottle(callback, delay) {
 
         if (timeSinceLastCall >= delay) {
             lastCall.current = now;
-            return callback(...args);
+            // Wrap in Promise.resolve for consistent return type
+            return Promise.resolve(callback(...args));
         } else {
             // Schedule the call for later
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
                 timeout.current = setTimeout(() => {
                     lastCall.current = Date.now();
-                    resolve(callback(...args));
+                    // Handle both sync and async callbacks, and rejections
+                    Promise.resolve(callback(...args))
+                        .then(resolve)
+                        .catch(reject);
                 }, delay - timeSinceLastCall);
             });
         }

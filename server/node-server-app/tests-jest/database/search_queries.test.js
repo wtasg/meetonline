@@ -166,7 +166,7 @@ describe("Search Queries Database Functions", () => {
 
             expect(mockQuery).toHaveBeenCalledWith(
                 expect.stringContaining("LIMIT $1"),
-                [5]
+                [5, "7"]
             );
         });
 
@@ -185,7 +185,7 @@ describe("Search Queries Database Functions", () => {
 
             expect(mockQuery).toHaveBeenCalledWith(
                 expect.any(String),
-                [50]
+                [50, "7"]
             );
         });
 
@@ -195,8 +195,8 @@ describe("Search Queries Database Functions", () => {
             await getPopularSearchTerms({ days: 14 });
 
             expect(mockQuery).toHaveBeenCalledWith(
-                expect.stringContaining("INTERVAL '14 days'"),
-                expect.any(Array)
+                expect.stringContaining("INTERVAL"),
+                [10, "14"]
             );
         });
 
@@ -206,8 +206,8 @@ describe("Search Queries Database Functions", () => {
             await getPopularSearchTerms({ days: 60 });
 
             expect(mockQuery).toHaveBeenCalledWith(
-                expect.stringContaining("INTERVAL '30 days'"),
-                expect.any(Array)
+                expect.stringContaining("INTERVAL"),
+                [10, "30"]
             );
         });
     });

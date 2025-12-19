@@ -112,4 +112,41 @@ describe("useThrottle", () => {
         expect(callback2).toHaveBeenCalledTimes(1);
         expect(callback2).toHaveBeenCalledWith("test2");
     });
+
+    it("handles errors in immediate execution", async () => {
+        const error = new Error("Test error");
+        const callback = vi.fn().mockRejectedValue(error);
+        const { result } = renderHook(() => useThrottle(callback, 500));
+
+        let promise;
+        act(() => {
+            promise = result.current("test");
+        });
+
+        await expect(promise).rejects.toThrow("Test error");
+    });
+
+    it("handles errors in delayed execution", async () => {
+        const error = new Error("Delayed error");
+        const callback = vi.fn().mockRejectedValue(error);
+        const { result } = renderHook(() => useThrottle(callback, 500));
+
+        // First call executes immediately
+        act(() => {
+            result.current("call1");
+        });
+
+        // Second call should be delayed
+        let promise;
+        act(() => {
+            promise = result.current("call2");
+        });
+
+        // Advance time to trigger delayed call
+        act(() => {
+            vi.advanceTimersByTime(500);
+        });
+
+        await expect(promise).rejects.toThrow("Delayed error");
+    });
 });

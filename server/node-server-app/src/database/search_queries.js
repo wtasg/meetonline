@@ -89,12 +89,12 @@ async function getPopularSearchTerms(options = {}) {
                 COUNT(*) as search_count,
                 SUM(results_count) as total_results
             FROM public.search_queries
-            WHERE created_at >= NOW() - INTERVAL '${safeDays} days'
+            WHERE created_at >= NOW() - ($2 || ' days')::INTERVAL
             GROUP BY search_term
             ORDER BY search_count DESC
             LIMIT $1
         `;
-        const values = [safeLimit];
+        const values = [safeLimit, String(safeDays)];
         const result = await pool.query(query, values);
 
         return result.rows.map(row => ({
