@@ -1,7 +1,6 @@
 import { createUserAccount, getUserAccountByUsername } from "../database/user_account.js";
 import { comparePassword, hashWithSalt, saltWithRounds } from "../utils/hash.js";
 import { v4 as uuidv4 } from "uuid";
-import rateLimit from "express-rate-limit";
 import { authStore, tokenStore } from "../utils/store.js";
 import {
     generateAccessToken,
@@ -19,18 +18,12 @@ import {
 } from "../database/jwt_tokens.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
 import { COOKIE_CLEAR_OPTIONS } from "../utils/cookieConfig.js";
+import { authRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 /**
  *
  * @param {Express.Application} app
  */
-
-// Rate limiter for sensitive auth routes (e.g., 5 requests per minute per IP)
-const authRateLimiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute window
-    max: 12, // Limit each IP to 12 requests per {windowMs}
-    message: { ok: false, message: "Too many requests, please try again later." }
-});
 
 function setupAuthHandlers(app) {
     app.get("/signup", authRateLimiter, signupHandlerGET);

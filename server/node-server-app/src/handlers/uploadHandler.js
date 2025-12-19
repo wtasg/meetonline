@@ -1,8 +1,9 @@
 import { upload } from "../middlewares/uploadMiddleware.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
+import { uploadRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 function setupUploadHandler(app) {
-    app.post("/upload", hybridAuthMiddleware, (req, res) => {
+    app.post("/upload", uploadRateLimiter, hybridAuthMiddleware, (req, res) => {
         upload.single("file")(req, res, (err) => {
             if (err) {
                 return res.status(400).json({

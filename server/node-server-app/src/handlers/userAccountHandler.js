@@ -1,12 +1,13 @@
 import { getUserAccountByUsername } from "../database/user_account.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
+import { apiRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 /**
  *
  * @param {Express.Application} app
  */
 function setupUserAccountHandler(app) {
-    app.post("/user_account", hybridAuthMiddleware, userAccountPOST);
+    app.post("/user_account", apiRateLimiter, hybridAuthMiddleware, userAccountPOST);
 }
 
 /**
