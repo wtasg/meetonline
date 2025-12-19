@@ -306,12 +306,37 @@ async function updateEvent(id, updates = {}) {
  */
 async function deleteEvent(id) {
     try {
-        const query = "UPDATE public.event SET is_deleted = true, modified_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING id";
+        const query = `
+            UPDATE public.event 
+            SET is_deleted = true, 
+                deleted_at = CURRENT_TIMESTAMP, 
+                modified_at = CURRENT_TIMESTAMP 
+            WHERE id = $1 
+            RETURNING id
+        `;
         const values = [id];
         const res = await pool.query(query, values);
         return res.rowCount > 0;
     } catch (err) {
         console.error("ERROR: deleteEvent");
+        console.error(err);
+        return false;
+    }
+}
+
+/**
+ * Hard delete event (permanent deletion)
+ * @param {number|string} id
+ * @returns {Promise<boolean>}
+ */
+async function hardDeleteEvent(id) {
+    try {
+        const query = "DELETE FROM public.event WHERE id = $1 RETURNING id";
+        const values = [id];
+        const res = await pool.query(query, values);
+        return res.rowCount > 0;
+    } catch (err) {
+        console.error("ERROR: hardDeleteEvent");
         console.error(err);
         return false;
     }
@@ -324,4 +349,5 @@ export {
     createEventByUsername,
     updateEvent,
     deleteEvent,
+    hardDeleteEvent,
 };

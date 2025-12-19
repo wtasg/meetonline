@@ -85,7 +85,51 @@ async function updateUserProfile(username, key, value) {
     }
 }
 
+/**
+ * Soft delete user profile
+ * @param {string} userProfileId - User profile ID
+ * @returns {Promise<boolean>}
+ */
+async function deleteUserProfile(userProfileId) {
+    try {
+        const query = `
+            UPDATE public.user_profile 
+            SET is_deleted = true, 
+                deleted_at = CURRENT_TIMESTAMP, 
+                modified_at = CURRENT_TIMESTAMP 
+            WHERE id = $1
+        `;
+        const values = [userProfileId];
+        const res = await pool.query(query, values);
+        return res.rowCount > 0;
+    } catch (err) {
+        console.error("ERROR: deleteUserProfile");
+        console.error(err);
+        return false;
+    }
+}
+
+/**
+ * Hard delete user profile (permanent deletion)
+ * @param {string} userProfileId - User profile ID
+ * @returns {Promise<boolean>}
+ */
+async function hardDeleteUserProfile(userProfileId) {
+    try {
+        const query = "DELETE FROM public.user_profile WHERE id = $1";
+        const values = [userProfileId];
+        const res = await pool.query(query, values);
+        return res.rowCount > 0;
+    } catch (err) {
+        console.error("ERROR: hardDeleteUserProfile");
+        console.error(err);
+        return false;
+    }
+}
+
 export {
     getUserProfileByUsername,
     updateUserProfile,
+    deleteUserProfile,
+    hardDeleteUserProfile,
 };

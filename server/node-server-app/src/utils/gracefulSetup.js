@@ -1,8 +1,18 @@
 import { dbClose } from "../database/db.js";
 
+let batchDeletionProcessor = null;
+
+function setBatchDeletionProcessor(processor) {
+    batchDeletionProcessor = processor;
+}
+
 function setupGracefulShutdown(server) {
     async function shutdown() {
         try {
+            // Stop batch deletion processor if running
+            if (batchDeletionProcessor && batchDeletionProcessor.stop) {
+                batchDeletionProcessor.stop();
+            }
             await dbClose();
             server.close(() => {
                 process.exit(0);
@@ -23,6 +33,10 @@ function setupGracefulShutdown(server) {
 
     async function crashOut(e) {
         console.error(e);
+        // Stop batch deletion processor if running
+        if (batchDeletionProcessor && batchDeletionProcessor.stop) {
+            batchDeletionProcessor.stop();
+        }
         await dbClose();
         console.log("Server crashed.");
         process.exit(1);
@@ -34,4 +48,4 @@ function setupGracefulShutdown(server) {
     process.on("unhandledRejection", crashOut);
 }
 
-export { setupGracefulShutdown };
+export { setupGracefulShutdown, setBatchDeletionProcessor };

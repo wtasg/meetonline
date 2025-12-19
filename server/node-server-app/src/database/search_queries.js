@@ -89,7 +89,7 @@ async function getPopularSearchTerms(options = {}) {
                 COUNT(*) as search_count,
                 SUM(results_count) as total_results
             FROM public.search_queries
-            WHERE created_at >= NOW() - ($2 || ' days')::INTERVAL
+            WHERE created_at >= CURRENT_TIMESTAMP - ($2 || ' days')::INTERVAL
             GROUP BY search_term
             ORDER BY search_count DESC
             LIMIT $1

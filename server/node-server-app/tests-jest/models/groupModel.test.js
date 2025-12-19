@@ -26,6 +26,7 @@ describe("GroupModel", () => {
                 created_at: new Date("2024-01-01"),
                 modified_at: new Date("2024-01-02"),
                 is_deleted: false,
+                deleted_at: null,
                 is_hidden: false,
                 is_archived: false,
             };
@@ -43,6 +44,7 @@ describe("GroupModel", () => {
             expect(model.tags).toBe("test,tags");
             expect(model.categories).toBe("category1");
             expect(model.isDeleted).toBe(false);
+            expect(model.deletedAt).toBeNull();
             expect(model.isHidden).toBe(false);
             expect(model.isArchived).toBe(false);
         });
@@ -68,6 +70,7 @@ describe("GroupModel", () => {
                 created_at: null,
                 modified_at: null,
                 is_deleted: null,
+                deleted_at: null,
                 is_hidden: null,
                 is_archived: null,
             };
@@ -82,6 +85,7 @@ describe("GroupModel", () => {
             expect(model.members).toBe("");
             expect(model.tags).toBe("");
             expect(model.categories).toBe("");
+            expect(model.deletedAt).toBe("");
         });
     });
 
@@ -107,6 +111,7 @@ describe("GroupModel", () => {
             expect(model.tags).toBe("");
             expect(model.categories).toBe("");
             expect(model.isDeleted).toBe(false);
+            expect(model.deletedAt).toBeNull();
             expect(model.isHidden).toBe(false);
             expect(model.isArchived).toBe(false);
         });
@@ -161,6 +166,7 @@ describe("groupKeyMap", () => {
         expect(groupKeyMap.createdAt).toBe("created_at");
         expect(groupKeyMap.modifiedAt).toBe("modified_at");
         expect(groupKeyMap.isDeleted).toBe("is_deleted");
+        expect(groupKeyMap.deletedAt).toBe("deleted_at");
         expect(groupKeyMap.isHidden).toBe("is_hidden");
         expect(groupKeyMap.isArchived).toBe("is_archived");
     });
@@ -172,6 +178,7 @@ describe("groupKeyMap", () => {
         expect(groupKeyMap.created_at).toBe("createdAt");
         expect(groupKeyMap.modified_at).toBe("modifiedAt");
         expect(groupKeyMap.is_deleted).toBe("isDeleted");
+        expect(groupKeyMap.deleted_at).toBe("deletedAt");
         expect(groupKeyMap.is_hidden).toBe("isHidden");
         expect(groupKeyMap.is_archived).toBe("isArchived");
     });

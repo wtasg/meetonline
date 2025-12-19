@@ -58,7 +58,7 @@ async function listNotificationsByUserProfileId(userProfileId, options = {}) {
 
         // Filter by days (last N days) - using parameterized query to prevent SQL injection
         if (days && days > 0) {
-            conditions.push(`created_at >= NOW() - INTERVAL '1 day' * $${paramIndex}`);
+            conditions.push(`created_at >= CURRENT_TIMESTAMP - INTERVAL '1 day' * $${paramIndex}`);
             values.push(Math.floor(days));
             paramIndex++;
         }
