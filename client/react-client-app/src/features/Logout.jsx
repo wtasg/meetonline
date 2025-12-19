@@ -1,33 +1,31 @@
 import { useState } from "react";
+import { useSession } from "../hooks/useSession";
+import { navigateTo } from "../hooks/useNavigate";
+import { logoutAction } from "../actions/authActions";
+import { LogoutIcon } from "../icons/AuthIcons";
 
-function Logout({ username, onLogout }) {
+function Logout() {
+    const { username, logout } = useSession();
     const [loggingOut, setLoggingOut] = useState(false);
-    const [loggedOut, setLoggedOut] = useState(false);
 
     async function handleLogout() {
         setLoggingOut(true);
         try {
-            await onLogout();
-            setLoggedOut(true);
+            await logoutAction();
+            logout(); // Update global session state
+            navigateTo("/");
         } catch (err) {
-            setLoggingOut(false);
-            console.error("Logout failed:", err);
+            console.error(err);
+            throw err;
         }
     }
 
-    if (loggedOut) {
-        return (
-            <div className="flex hac vac">
-                <p style={{ color: "green", fontSize: "1.2em" }}>✓ Logged out successfully!</p>
-            </div>
-        );
-    }
-
     return (
-        <div>
-            <button type="button" onClick={handleLogout} disabled={loggingOut}>
-                {loggingOut ? "Logging out..." : `Logout ${username()}`}
-            </button>
+        <div
+            className="flex hac vac clickable"
+            onClick={handleLogout} disabled={loggingOut} aria-label="Logout">
+            <span className="icon"><LogoutIcon height={"13px"} /></span>
+            <span>{loggingOut ? "Logging out..." : `Logout ${username()}`}</span>
         </div>
     );
 }

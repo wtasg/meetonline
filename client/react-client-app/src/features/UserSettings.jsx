@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import {
     fetchUserSettings,
-    updateTheme,
     updateFontSize,
     updateFontContrast,
     updateNotifications,
@@ -10,20 +9,7 @@ import {
 } from "../actions/userSettingsActions.js";
 import { ServiceError } from "../components/Error.jsx";
 import { resetLocation, resetUserSession } from "../session.js";
-import { settingsStorage, applyTheme, applyFontSize, applyFontContrast } from "../utils/settings.js";
-
-const THEMES = [
-    { value: "system", label: "System" },
-    { value: "light", label: "Light" },
-    { value: "dark", label: "Dark" },
-    { value: "high-contrast-light", label: "High Contrast Light" },
-    { value: "high-contrast-dark", label: "High Contrast Dark" },
-    { value: "teal", label: "Teal" },
-    { value: "pink", label: "Pink" },
-    { value: "red", label: "Red" },
-    { value: "sepia", label: "Sepia" },
-    { value: "gray", label: "Gray" }
-];
+import { applyFontSize, applyFontContrast } from "../utils/settings.js";
 
 const FONT_SIZES = [
     { value: "small", label: "Small" },
@@ -38,13 +24,11 @@ const FONT_CONTRASTS = [
     { value: "high", label: "High" }
 ];
 
-const VALID_THEMES = THEMES.map(t => t.value);
 const VALID_FONT_SIZES = FONT_SIZES.map(f => f.value);
 const VALID_FONT_CONTRASTS = FONT_CONTRASTS.map(f => f.value);
 
 function validateSettings(settings) {
     return {
-        theme: VALID_THEMES.includes(settings?.theme) ? settings.theme : "system",
         fontSize: VALID_FONT_SIZES.includes(settings?.fontSize) ? settings.fontSize : "medium",
         fontFamily: typeof settings?.fontFamily === "string" ? settings.fontFamily : "system-ui",
         fontContrast: VALID_FONT_CONTRASTS.includes(settings?.fontContrast) ? settings.fontContrast : "normal",
@@ -57,7 +41,6 @@ function validateSettings(settings) {
 function UserSettings({ isOpen, onClose }) {
     const [serviceError, setServiceError] = useState({ hasError: false, message: "" });
     const [settings, setSettings] = useState({
-        theme: "system",
         fontSize: "medium",
         fontFamily: "system-ui",
         fontContrast: "normal",
@@ -78,30 +61,17 @@ function UserSettings({ isOpen, onClose }) {
                 const result = await fetchUserSettings();
                 if (!isMounted) return;
 
-                const sessionErrorMessages = [
-                    "Missing Cookie Headers.",
-                    "Missing Session.",
-                    "Invalid Session.",
-                ];
-
                 if (!result.ok) {
+                    const sessionErrorMessages = [
+                        "Missing Cookie Headers.",
+                        "Missing Session.",
+                        "Invalid Session.",
+                    ];
+
                     if (sessionErrorMessages.includes(result.message)) {
                         resetUserSession();
                         resetLocation();
-                        return;
                     }
-
-                    // Fall back to local storage settings
-                    const localSettings = {
-                        theme: settingsStorage.retrieve("theme") || "system",
-                        fontSize: settingsStorage.retrieve("fontSize") || "medium",
-                        fontContrast: settingsStorage.retrieve("fontContrast") || "normal",
-                        notifications: true,
-                        onlinePresence: true,
-                        sounds: true
-                    };
-                    setSettings(localSettings);
-                    setIsLoading(false);
                     return;
                 }
 
@@ -109,7 +79,6 @@ function UserSettings({ isOpen, onClose }) {
                 setSettings(validatedSettings);
 
                 // Apply settings
-                applyTheme(validatedSettings.theme);
                 applyFontSize(validatedSettings.fontSize);
                 applyFontContrast(validatedSettings.fontContrast);
 
@@ -133,10 +102,7 @@ function UserSettings({ isOpen, onClose }) {
         setSettings(newSettings);
 
         // Apply the change immediately for visual feedback
-        if (key === "theme") {
-            applyTheme(value);
-            await updateTheme(value);
-        } else if (key === "fontSize") {
+        if (key === "fontSize") {
             applyFontSize(value);
             await updateFontSize(value);
         } else if (key === "fontContrast") {
@@ -154,13 +120,14 @@ function UserSettings({ isOpen, onClose }) {
     if (!isOpen) return null;
 
     return (
-        <div className="settings-modal-overlay" onClick={onClose}>
+        <div className="settings-modal-overlay overlay" onClick={onClose}>
             <div className="settings-modal" onClick={(e) => e.stopPropagation()}>
                 <div className="settings-header flex sb vac">
                     <h2>Settings</h2>
-                    <button className="settings-close-btn" onClick={onClose} aria-label="Close settings">
-                        ✕
-                    </button>
+                    <div className="button clickable flex hac vac" onClick={onClose} aria-label="Close settings">
+                        <div className="icon">✗</div>
+                        <div className="label">Close</div>
+                    </div>
                 </div>
 
                 <ServiceError {...serviceError} />
@@ -170,18 +137,6 @@ function UserSettings({ isOpen, onClose }) {
                 ) : (
                     <div className="settings-content vflex">
                         {/* Theme Section */}
-                        <div className="settings-section vflex">
-                            <h3>Theme</h3>
-                            <select
-                                value={settings.theme}
-                                onChange={(e) => handleSettingChange("theme", e.target.value)}
-                                className="settings-select"
-                            >
-                                {THEMES.map(({ value, label }) => (
-                                    <option key={value} value={value}>{label}</option>
-                                ))}
-                            </select>
-                        </div>
 
                         {/* Font Section */}
                         <div className="settings-section vflex">

@@ -12,88 +12,29 @@
 
     --flex-gap: 10px;
 
-    --color-blue: #0d6efd;
-    --color-indigo: #6610f2;
-    --color-purple: #6f42c1;
-    --color-pink: #d63384;
-    --color-red: #dc3545;
-    --color-orange: #fd7e14;
-    --color-yellow: #ffc107;
-    --color-green: #198754;
-    --color-teal: #20c997;
-    --color-cyan: #0dcaf0;
-    --color-black: #000;
-    --color-white: #fff;
-    --color-gray: #6c757d;
-    --color-gray-dark: #343a40;
-    --color-gray-100: #f8f9fa;
-    --color-gray-200: #e9ecef;
-    --color-gray-300: #dee2e6;
-    --color-gray-400: #ced4da;
-    --color-gray-500: #adb5bd;
-    --color-gray-600: #6c757d;
-    --color-gray-700: #495057;
-    --color-gray-800: #343a40;
-    --color-gray-900: #212529;
-    --color-primary: #0d6efd;
-    --color-secondary: #6c757d;
-    --color-success: #198754;
-    --color-info: #0dcaf0;
-    --color-warning: #ffc107;
-    --color-danger: #dc3545;
-    --color-light: #f8f9fa;
-    --color-dark: #212529;
-
-
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
 
-    color-scheme: dark light;
     margin: 0 auto;
     max-width: 1280px;
-
-    color: var(--color-gray-200);
-    background-color: #242424;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
 }
 
-@media (prefers-color-scheme: light) {
-    :root {
-        --app-background-color: #eee;
-        --app-text-color: #213547;
-        color: var(--app-text-color);
-        background-color: var(--app-background-color);
-        --btn-text-color: #222;
-        --btn-background-color: #ddd;
-        --cta-btn-text-color: #000;
-        --cta-btn-background-color: #fff;
-        --link-hover-text-color: #c1d;
-    }
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --app-background-color: #333;
-        --app-text-color: #eee;
-        color: var(--app-text-color);
-        background-color: var(--app-background-color);
-        --btn-background-color: #222;
-        --btn-text-color: #ddd;
-        --cta-btn-background-color: #000;
-        --cta-btn-text-color: #fff;
-        --link-hover-text-color: #747bff;
-    }
-}
-
+html,
 body {
+    scroll-behavior: smooth;
     padding: 0;
     margin: 0;
     min-width: 1000px;
+}
+
+body {
 
     & *,
     & *::after,
@@ -107,9 +48,7 @@ a.btn,
 *[role="button"] {
     padding: var(--min-padding);
     margin: var(--margin);
-    color: var(--cta-btn-text-color);
-    background-color: var(--btn-background-color);
-    border: 2px solid var(--btn-background-color);
+    /* border: 2px solid currentColor; */
 
     &:hover {
         cursor: pointer;
@@ -120,14 +59,13 @@ a.btn,
     }
 
     &.cta {
-        border: thick double var(--color-purple);
-        background-color: var(--cta-btn-background-color);
+        border: thick double currentColor;
     }
 }
 
 a {
     &:hover {
-        color: var(--link-hover-text-color);
+        opacity: 0.8;
     }
 }
 
@@ -280,10 +218,10 @@ input[type="password"] {
 .box {
     padding: var(--padding);
     margin: var(--margin) 0;
-    border: thin solid var(--app-background-color);
+    border: thin solid currentColor;
 
     &.error {
-        border: thin solid var(--color-red);
+        border: thin solid currentColor;
     }
 }
 

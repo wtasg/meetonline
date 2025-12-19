@@ -1,7 +1,8 @@
 import { upload } from "../middlewares/uploadMiddleware.js";
+import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
 
 function setupUploadHandler(app) {
-    app.post("/upload", (req, res) => {
+    app.post("/upload", hybridAuthMiddleware, (req, res) => {
         upload.single("file")(req, res, (err) => {
             if (err) {
                 return res.status(400).json({

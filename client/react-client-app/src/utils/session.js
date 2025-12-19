@@ -7,7 +7,7 @@ function hasUserSession() {
     if (hasValidTokens()) {
         return true;
     }
-    
+
     // Fallback to cookie-based session
     return user_session &&
         isNonEmptyString(user_session.retrieve("username")) &&
@@ -17,9 +17,13 @@ function hasUserSession() {
 function destroySession() {
     resetUserSession();
     resetLocation();
-    
+
     // Also clear JWT tokens if they exist
     clearTokens();
 }
 
-export { hasUserSession, destroySession };
+function username() {
+    return user_session.retrieve("username");
+}
+
+export { hasUserSession, destroySession, username };

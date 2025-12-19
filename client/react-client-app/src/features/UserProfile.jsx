@@ -66,7 +66,7 @@ function UserProfile() {
     }
 
     return (
-        <div className="flex hac vac w80p">
+        <div className="flex hac vacp">
             <div className="vflex">
                 <h2>User Profile</h2>
                 <p>Change and hit enter to save.</p>

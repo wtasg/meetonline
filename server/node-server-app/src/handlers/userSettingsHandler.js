@@ -1,52 +1,20 @@
 import { getUserSettingsByUsername, updateUserSettings } from "../database/user_settings.js";
 import { UserSettingsModel } from "../models/userSettingsModel.js";
-import { userSession } from "../utils/session.js";
-import { COOKIE_CLEAR_OPTIONS } from "../utils/cookieConfig.js";
+import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
 
 /**
  * Setup user settings handler routes
  * @param {Express} app
  */
 function setupUserSettingsHandler(app) {
-    app.get("/user_settings", userSettingsGET);
-    app.patch("/user_settings", userSettingsPATCH);
+    app.get("/user_settings", hybridAuthMiddleware, userSettingsGET);
+    app.patch("/user_settings", hybridAuthMiddleware, userSettingsPATCH);
 }
 
 async function userSettingsGET(req, res) {
     try {
-        const { cookies } = req;
-        if (!cookies) {
-            return res.status(400).json({
-                ok: false,
-                user_settings: UserSettingsModel.null().toClient(),
-                message: "Missing Cookie Headers."
-            });
-        }
-
-        const sessionId = cookies?.["session-1"];
-        const username = cookies?.username;
-        if (!sessionId || !username) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(400).json({
-                ok: false,
-                user_settings: UserSettingsModel.null().toClient(),
-                message: "Missing Session."
-            });
-        }
-
-        const storedSession = (await userSession({ username })).session;
-        if (storedSession !== sessionId) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(403).json({
-                ok: false,
-                user_settings: UserSettingsModel.null().toClient(),
-                message: "Invalid Session."
-            });
-        }
+        // User is authenticated via hybrid middleware
+        const username = req.user?.username;
 
         const user_settings = await getUserSettingsByUsername(username);
         if (user_settings.__isNull) {
@@ -75,40 +43,8 @@ async function userSettingsGET(req, res) {
 async function userSettingsPATCH(req, res) {
     try {
         const { key, value } = req.body;
-        const { cookies } = req;
-
-        if (!cookies) {
-            return res.status(400).json({
-                ok: false,
-                user_settings: UserSettingsModel.null().toClient(),
-                message: "Missing Cookie Headers."
-            });
-        }
-
-        const sessionId = cookies?.["session-1"];
-        const username = cookies?.username;
-        if (!sessionId || !username) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(400).json({
-                ok: false,
-                user_settings: UserSettingsModel.null().toClient(),
-                message: "Missing Session."
-            });
-        }
-
-        const storedSession = (await userSession({ username })).session;
-        if (storedSession !== sessionId) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(403).json({
-                ok: false,
-                user_settings: UserSettingsModel.null().toClient(),
-                message: "Invalid Session."
-            });
-        }
+        // User is authenticated via hybrid middleware
+        const username = req.user?.username;
 
         if (!key || value === undefined) {
             return res.status(400).json({

@@ -1,6 +1,7 @@
 import { signup, logout, presignup, authToken, logoutJwt } from "../net/auth";
 import { resetLocation, resetUserSession, user_session } from "../session";
 import { storeTokens, clearTokens, getAccessToken, hasValidTokens, getUsername } from "../utils/jwt.js";
+import { fetchUserSettings } from "./userSettingsActions.js";
 
 /**
  *
@@ -47,6 +48,9 @@ async function authTokenAction({ username, password }) {
 
             // Also store username in session for compatibility
             user_session.store("username", result.auth_token.username);
+
+            // Sync user settings from server to localStorage
+            await fetchUserSettings();
 
             return true;
         }

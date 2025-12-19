@@ -40,7 +40,7 @@ function Signup({ onSignup }) {
     }, []);
 
     return (
-        <div className="flex hac vac w80">
+        <div className="flex hac vac">
             <div className="form signup vflex w40p">
                 <h2>Signup</h2>
                 {presignupError && <ServiceError hasError={true} message={presignupError}></ServiceError>}

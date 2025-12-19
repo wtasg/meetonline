@@ -126,6 +126,16 @@ sleep 5
 
 echo "ℹ️  Running E2E tests..."
 docker compose -f compose.yml -f compose.e2e.yml run --rm e2e
+E2E_EXIT_CODE=$?
 
-echo "✅ E2E tests completed!"
+echo "ℹ️  Cleaning up E2E containers..."
+docker compose -f compose.yml -f compose.e2e.yml down --remove-orphans
+
+if [ $E2E_EXIT_CODE -eq 0 ]; then
+    echo "✅ E2E tests completed!"
+else
+    echo "❌ E2E tests failed!"
+fi
 echo "📊 Reports available in: client/react-client-app/playwright-report/"
+
+exit $E2E_EXIT_CODE

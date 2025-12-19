@@ -9,23 +9,22 @@ import {
     removeGroupMember,
 } from "../database/group.js";
 import { GroupModel } from "../models/groupModel.js";
-import { userSession } from "../utils/session.js";
+import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
 import { getUserProfileByUsername } from "../database/user_profile.js";
-import { COOKIE_CLEAR_OPTIONS } from "../utils/cookieConfig.js";
 
 /**
  * Setup group handlers
  * @param {Express} app
  */
 function setupGroupHandler(app) {
-    app.post("/group", groupPOST);
-    app.get("/group/search", groupSearchGET);
-    app.get("/group/:id", groupGET);
-    app.get("/groups", groupsGET);
-    app.patch("/group/:id", groupPATCH);
-    app.delete("/group/:id", groupDELETE);
-    app.post("/group/:id/join", groupJoinPOST);
-    app.post("/group/:id/leave", groupLeavePOST);
+    app.post("/group", hybridAuthMiddleware, groupPOST);
+    app.get("/group/search", hybridAuthMiddleware, groupSearchGET);
+    app.get("/group/:id", hybridAuthMiddleware, groupGET);
+    app.get("/groups", hybridAuthMiddleware, groupsGET);
+    app.patch("/group/:id", hybridAuthMiddleware, groupPATCH);
+    app.delete("/group/:id", hybridAuthMiddleware, groupDELETE);
+    app.post("/group/:id/join", hybridAuthMiddleware, groupJoinPOST);
+    app.post("/group/:id/leave", hybridAuthMiddleware, groupLeavePOST);
 }
 
 /**
@@ -34,40 +33,9 @@ function setupGroupHandler(app) {
 async function groupPOST(req, res) {
     try {
         const { groupName, description, isPublic, tags, categories } = req.body;
-        const { cookies } = req;
-        
-        if (!cookies) {
-            return res.status(400).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Missing Cookie Headers."
-            });
-        }
 
-        const sessionId = cookies?.["session-1"];
-        const username = cookies?.username;
-        if (!sessionId || !username) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(400).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Missing Session."
-            });
-        }
-
-        const storedSession = (await userSession({ username })).session;
-        if (storedSession !== sessionId) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(403).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Invalid Session."
-            });
-        }
+        // User is authenticated via hybrid middleware
+        const username = req.user?.username;
 
         if (!groupName || !groupName.trim()) {
             return res.status(400).json({
@@ -124,40 +92,9 @@ async function groupPOST(req, res) {
 async function groupGET(req, res) {
     try {
         const { id } = req.params;
-        const { cookies } = req;
-        
-        if (!cookies) {
-            return res.status(400).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Missing Cookie Headers."
-            });
-        }
 
-        const sessionId = cookies?.["session-1"];
-        const username = cookies?.username;
-        if (!sessionId || !username) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(400).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Missing Session."
-            });
-        }
-
-        const storedSession = (await userSession({ username })).session;
-        if (storedSession !== sessionId) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(403).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Invalid Session."
-            });
-        }
+        // User is authenticated via hybrid middleware (checking mainly for side-effects or if we want to restrict visibility later)
+        // Currently just need auth to proceed.
 
         const group = await getGroupById(id);
         if (group.__isNull) {
@@ -188,40 +125,7 @@ async function groupGET(req, res) {
  */
 async function groupsGET(req, res) {
     try {
-        const { cookies } = req;
-        
-        if (!cookies) {
-            return res.status(400).json({
-                ok: false,
-                groups: [],
-                message: "Missing Cookie Headers."
-            });
-        }
-
-        const sessionId = cookies?.["session-1"];
-        const username = cookies?.username;
-        if (!sessionId || !username) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(400).json({
-                ok: false,
-                groups: [],
-                message: "Missing Session."
-            });
-        }
-
-        const storedSession = (await userSession({ username })).session;
-        if (storedSession !== sessionId) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(403).json({
-                ok: false,
-                groups: [],
-                message: "Invalid Session."
-            });
-        }
+        const username = req.user?.username;
 
         const userProfile = await getUserProfileByUsername(username);
         if (userProfile.__isNull || userProfile.__isDefault) {
@@ -233,7 +137,7 @@ async function groupsGET(req, res) {
         }
 
         const groups = await getGroupsByUserProfileId(userProfile.id);
-        
+
         return res.status(200).json({
             ok: true,
             groups: groups.map(g => g.toClient()),
@@ -256,40 +160,8 @@ async function groupPATCH(req, res) {
     try {
         const { id } = req.params;
         const clientUpdates = req.body;
-        const { cookies } = req;
-        
-        if (!cookies) {
-            return res.status(400).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Missing Cookie Headers."
-            });
-        }
 
-        const sessionId = cookies?.["session-1"];
-        const username = cookies?.username;
-        if (!sessionId || !username) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(400).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Missing Session."
-            });
-        }
-
-        const storedSession = (await userSession({ username })).session;
-        if (storedSession !== sessionId) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(403).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Invalid Session."
-            });
-        }
+        const username = req.user?.username;
 
         const userProfile = await getUserProfileByUsername(username);
         if (userProfile.__isNull || userProfile.__isDefault) {
@@ -357,37 +229,8 @@ async function groupPATCH(req, res) {
 async function groupDELETE(req, res) {
     try {
         const { id } = req.params;
-        const { cookies } = req;
-        
-        if (!cookies) {
-            return res.status(400).json({
-                ok: false,
-                message: "Missing Cookie Headers."
-            });
-        }
 
-        const sessionId = cookies?.["session-1"];
-        const username = cookies?.username;
-        if (!sessionId || !username) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(400).json({
-                ok: false,
-                message: "Missing Session."
-            });
-        }
-
-        const storedSession = (await userSession({ username })).session;
-        if (storedSession !== sessionId) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(403).json({
-                ok: false,
-                message: "Invalid Session."
-            });
-        }
+        const username = req.user?.username;
 
         const userProfile = await getUserProfileByUsername(username);
         if (userProfile.__isNull || userProfile.__isDefault) {
@@ -439,40 +282,8 @@ async function groupDELETE(req, res) {
 async function groupJoinPOST(req, res) {
     try {
         const { id } = req.params;
-        const { cookies } = req;
-        
-        if (!cookies) {
-            return res.status(400).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Missing Cookie Headers."
-            });
-        }
 
-        const sessionId = cookies?.["session-1"];
-        const username = cookies?.username;
-        if (!sessionId || !username) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(400).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Missing Session."
-            });
-        }
-
-        const storedSession = (await userSession({ username })).session;
-        if (storedSession !== sessionId) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(403).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Invalid Session."
-            });
-        }
+        const username = req.user?.username;
 
         const userProfile = await getUserProfileByUsername(username);
         if (userProfile.__isNull || userProfile.__isDefault) {
@@ -531,40 +342,8 @@ async function groupJoinPOST(req, res) {
 async function groupLeavePOST(req, res) {
     try {
         const { id } = req.params;
-        const { cookies } = req;
-        
-        if (!cookies) {
-            return res.status(400).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Missing Cookie Headers."
-            });
-        }
 
-        const sessionId = cookies?.["session-1"];
-        const username = cookies?.username;
-        if (!sessionId || !username) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(400).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Missing Session."
-            });
-        }
-
-        const storedSession = (await userSession({ username })).session;
-        if (storedSession !== sessionId) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(403).json({
-                ok: false,
-                group: GroupModel.null().toClient(),
-                message: "Invalid Session."
-            });
-        }
+        const username = req.user?.username;
 
         const userProfile = await getUserProfileByUsername(username);
         if (userProfile.__isNull || userProfile.__isDefault) {
@@ -605,40 +384,8 @@ async function groupLeavePOST(req, res) {
 async function groupSearchGET(req, res) {
     try {
         const { q } = req.query;
-        const { cookies } = req;
-        
-        if (!cookies) {
-            return res.status(400).json({
-                ok: false,
-                groups: [],
-                message: "Missing Cookie Headers."
-            });
-        }
-
-        const sessionId = cookies?.["session-1"];
-        const username = cookies?.username;
-        if (!sessionId || !username) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(400).json({
-                ok: false,
-                groups: [],
-                message: "Missing Session."
-            });
-        }
-
-        const storedSession = (await userSession({ username })).session;
-        if (storedSession !== sessionId) {
-            res.clearCookie("session-1", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("username", COOKIE_CLEAR_OPTIONS);
-            res.clearCookie("loggedin", COOKIE_CLEAR_OPTIONS);
-            return res.status(403).json({
-                ok: false,
-                groups: [],
-                message: "Invalid Session."
-            });
-        }
+        // Auth check via middleware done to sure access rights if needed
+        // const username = req.user?.username;
 
         if (!q) {
             return res.status(400).json({
@@ -649,7 +396,7 @@ async function groupSearchGET(req, res) {
         }
 
         const groups = await searchGroupsByName(q);
-        
+
         return res.status(200).json({
             ok: true,
             groups: groups.map(g => g.toClient()),

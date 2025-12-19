@@ -11,7 +11,7 @@ function UserAccount() {
     }, []);
 
     return (
-        <div className="flex vac hac w80p">
+        <div className="flex vac hac">
             <div className="vflex">
                 <h2>User Account</h2>
                 <div className="flex"><div className="w30p">Username</div><div>{account.username}</div></div>
