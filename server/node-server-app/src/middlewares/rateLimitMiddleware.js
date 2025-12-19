@@ -17,18 +17,23 @@ const DEFAULT_UPLOAD_MAX_REQUESTS = 10; // requests per window
  * Get rate limit configuration from environment or use defaults
  */
 function getRateLimitConfig() {
+    const parseEnvInt = (envValue, defaultValue) => {
+        const parsed = parseInt(envValue, 10);
+        return !isNaN(parsed) && parsed > 0 ? parsed : defaultValue;
+    };
+
     return {
         auth: {
-            windowMs: parseInt(process.env.RATE_LIMIT_AUTH_WINDOW_MS || DEFAULT_AUTH_WINDOW_MS, 10),
-            max: parseInt(process.env.RATE_LIMIT_AUTH_MAX || DEFAULT_AUTH_MAX_REQUESTS, 10)
+            windowMs: parseEnvInt(process.env.RATE_LIMIT_AUTH_WINDOW_MS, DEFAULT_AUTH_WINDOW_MS),
+            max: parseEnvInt(process.env.RATE_LIMIT_AUTH_MAX, DEFAULT_AUTH_MAX_REQUESTS)
         },
         api: {
-            windowMs: parseInt(process.env.RATE_LIMIT_API_WINDOW_MS || DEFAULT_API_WINDOW_MS, 10),
-            max: parseInt(process.env.RATE_LIMIT_API_MAX || DEFAULT_API_MAX_REQUESTS, 10)
+            windowMs: parseEnvInt(process.env.RATE_LIMIT_API_WINDOW_MS, DEFAULT_API_WINDOW_MS),
+            max: parseEnvInt(process.env.RATE_LIMIT_API_MAX, DEFAULT_API_MAX_REQUESTS)
         },
         upload: {
-            windowMs: parseInt(process.env.RATE_LIMIT_UPLOAD_WINDOW_MS || DEFAULT_UPLOAD_WINDOW_MS, 10),
-            max: parseInt(process.env.RATE_LIMIT_UPLOAD_MAX || DEFAULT_UPLOAD_MAX_REQUESTS, 10)
+            windowMs: parseEnvInt(process.env.RATE_LIMIT_UPLOAD_WINDOW_MS, DEFAULT_UPLOAD_WINDOW_MS),
+            max: parseEnvInt(process.env.RATE_LIMIT_UPLOAD_MAX, DEFAULT_UPLOAD_MAX_REQUESTS)
         }
     };
 }
