@@ -249,3 +249,117 @@ input[type="password"] {
 .fwb {
     font-weight: bold;
 }
+/* Notification styles */
+.notification-icon {
+    font-size: 1.2em;
+    margin-right: 0.25rem;
+}
+
+.notification-badge {
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.75em;
+    font-weight: bold;
+    margin-left: 0.25rem;
+}
+
+.notification-filters {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.notification-filters button {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    background-color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.notification-filters button.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.notification-list {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.notification-item {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.notification-item.unread {
+    background-color: #f0f8ff;
+    border-left: 4px solid #007bff;
+}
+
+.notification-item.read {
+    background-color: #f9f9f9;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-type {
+    font-size: 0.85em;
+    color: #666;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.notification-message {
+    margin: 0.5rem 0;
+}
+
+.notification-time {
+    font-size: 0.8em;
+    color: #999;
+}
+
+.notification-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+    margin-top: 0.5rem;
+}
+
+.notification-load-more {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.btn-small {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85em;
+    border: 1px solid #ccc;
+    background-color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-small:hover {
+    background-color: #f0f0f0;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
