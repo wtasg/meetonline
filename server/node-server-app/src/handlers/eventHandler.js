@@ -322,7 +322,7 @@ async function eventDELETE(req, res) {
             });
         }
 
-        const success = await deleteEvent(id, userProfile.id);
+        const success = await deleteEvent(id);
         if (!success) {
             return res.status(500).json({
                 ok: false,

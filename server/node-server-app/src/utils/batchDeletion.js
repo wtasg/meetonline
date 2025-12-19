@@ -86,6 +86,7 @@ async function processPendingDeletions() {
 /**
  * Start batch deletion processor that runs periodically
  * @param {number} intervalMs - Interval in milliseconds (default: 24 hours)
+ * @returns {object} - Interval object and stop function
  */
 function startBatchDeletionProcessor(intervalMs = 24 * 60 * 60 * 1000) {
     console.log(`Starting batch deletion processor with interval: ${intervalMs}ms`);
@@ -110,7 +111,14 @@ function startBatchDeletionProcessor(intervalMs = 24 * 60 * 60 * 1000) {
             });
     }, intervalMs);
     
-    return interval;
+    // Return interval and stop function for cleanup
+    return {
+        interval,
+        stop: () => {
+            console.log("Stopping batch deletion processor");
+            clearInterval(interval);
+        }
+    };
 }
 
 export {

@@ -44,7 +44,7 @@ describe("GroupModel", () => {
             expect(model.tags).toBe("test,tags");
             expect(model.categories).toBe("category1");
             expect(model.isDeleted).toBe(false);
-            expect(model.deletedAt).toBe("");
+            expect(model.deletedAt).toBeNull();
             expect(model.isHidden).toBe(false);
             expect(model.isArchived).toBe(false);
         });

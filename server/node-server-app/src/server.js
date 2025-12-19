@@ -102,7 +102,16 @@ setupNotificationHandler(app);
 // Start batch deletion processor (runs daily)
 // In production, you might want to use a dedicated cron job instead
 // The interval is set to 24 hours (86400000 ms)
-startBatchDeletionProcessor(24 * 60 * 60 * 1000);
+const batchDeletionProcessor = startBatchDeletionProcessor(24 * 60 * 60 * 1000);
+
+// Add cleanup to graceful shutdown
+const originalExit = process.exit;
+process.exit = (code) => {
+    if (batchDeletionProcessor && batchDeletionProcessor.stop) {
+        batchDeletionProcessor.stop();
+    }
+    originalExit(code);
+};
 
 // Reject All Unsupported Routes
 app.use((req, res) => {
