@@ -7,6 +7,8 @@ import {
     deleteGroup,
     addGroupMember,
     removeGroupMember,
+    getLatestGroups,
+    getLatestGroupsForUser,
 } from "../database/group.js";
 import { GroupModel } from "../models/groupModel.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
@@ -27,6 +29,8 @@ function setupGroupHandler(app) {
     app.delete("/group/:id", hybridAuthMiddleware, groupDELETE);
     app.post("/group/:id/join", hybridAuthMiddleware, groupJoinPOST);
     app.post("/group/:id/leave", hybridAuthMiddleware, groupLeavePOST);
+    app.get("/new_groups", newGroupsGET);
+    app.get("/user_new_groups", hybridAuthMiddleware, userNewGroupsGET);
 }
 
 /**
@@ -433,6 +437,52 @@ async function groupSearchGET(req, res) {
         return res.status(500).json({
             ok: false,
             groups: [],
+            message: "CAUGHT ERROR."
+        });
+    }
+}
+
+/**
+ * Get latest groups (public endpoint)
+ * Returns minimal info: id, groupName, createdAt
+ */
+async function newGroupsGET(req, res) {
+    try {
+        const groups = await getLatestGroups();
+        
+        return res.status(200).json({
+            ok: true,
+            new_groups: groups,
+            message: "Success."
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            ok: false,
+            new_groups: [],
+            message: "CAUGHT ERROR."
+        });
+    }
+}
+
+/**
+ * Get latest groups for authenticated user
+ * Returns full group details
+ */
+async function userNewGroupsGET(req, res) {
+    try {
+        const groups = await getLatestGroupsForUser();
+        
+        return res.status(200).json({
+            ok: true,
+            user_new_groups: groups.map(g => g.toClient()),
+            message: "Success."
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            ok: false,
+            user_new_groups: [],
             message: "CAUGHT ERROR."
         });
     }

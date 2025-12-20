@@ -342,6 +342,60 @@ async function hardDeleteEvent(id) {
     }
 }
 
+/**
+ * Get latest events (public - minimal info)
+ * Returns up to 30 most recent events that are not deleted, hidden, or archived
+ * @returns {Promise<Array<{id: string, title: string, createdAt: string}>>}
+ */
+async function getLatestEvents() {
+    try {
+        const query = `
+            SELECT id, title, created_at
+            FROM public.event
+            WHERE is_deleted = false
+              AND is_hidden = false
+              AND is_archived = false
+            ORDER BY created_at DESC
+            LIMIT 30
+        `;
+        const res = await pool.query(query);
+        return res.rows.map(row => ({
+            id: String(row.id),
+            title: row.title,
+            createdAt: row.created_at ? row.created_at.toISOString() : "",
+        }));
+    } catch (err) {
+        console.error("ERROR: getLatestEvents");
+        console.error(err);
+        return [];
+    }
+}
+
+/**
+ * Get latest events for authenticated user (full details)
+ * Returns up to 30 most recent events with all fields
+ * @returns {Promise<Array<EventModel>>}
+ */
+async function getLatestEventsForUser() {
+    try {
+        const query = `
+            SELECT *
+            FROM public.event
+            WHERE is_deleted = false
+              AND is_hidden = false
+              AND is_archived = false
+            ORDER BY created_at DESC
+            LIMIT 30
+        `;
+        const res = await pool.query(query);
+        return res.rows.map(EventModel.fromDatabaseRow);
+    } catch (err) {
+        console.error("ERROR: getLatestEventsForUser");
+        console.error(err);
+        return [];
+    }
+}
+
 export {
     getEventById,
     listEventsByOrganiserId,
@@ -350,4 +404,6 @@ export {
     updateEvent,
     deleteEvent,
     hardDeleteEvent,
+    getLatestEvents,
+    getLatestEventsForUser,
 };

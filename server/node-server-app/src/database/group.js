@@ -318,6 +318,62 @@ async function getGroupMembers(groupId) {
     }
 }
 
+/**
+ * Get latest groups (public - minimal info)
+ * Returns up to 30 most recent groups that are not deleted, hidden, or archived
+ * @returns {Promise<Array<{id: string, groupName: string, createdAt: string}>>}
+ */
+async function getLatestGroups() {
+    try {
+        const query = `
+            SELECT id, group_name, created_at
+            FROM public."group"
+            WHERE is_deleted = false
+              AND is_hidden = false
+              AND is_archived = false
+              AND is_public = true
+            ORDER BY created_at DESC
+            LIMIT 30
+        `;
+        const res = await pool.query(query);
+        return res.rows.map(row => ({
+            id: String(row.id),
+            groupName: row.group_name,
+            createdAt: row.created_at ? row.created_at.toISOString() : "",
+        }));
+    } catch (err) {
+        console.error("ERROR: getLatestGroups");
+        console.error(err);
+        return [];
+    }
+}
+
+/**
+ * Get latest groups for authenticated user (full details)
+ * Returns up to 30 most recent groups with all fields
+ * @returns {Promise<Array<GroupModel>>}
+ */
+async function getLatestGroupsForUser() {
+    try {
+        const query = `
+            SELECT *
+            FROM public."group"
+            WHERE is_deleted = false
+              AND is_hidden = false
+              AND is_archived = false
+              AND is_public = true
+            ORDER BY created_at DESC
+            LIMIT 30
+        `;
+        const res = await pool.query(query);
+        return res.rows.map(GroupModel.fromDatabaseRow);
+    } catch (err) {
+        console.error("ERROR: getLatestGroupsForUser");
+        console.error(err);
+        return [];
+    }
+}
+
 export {
     createGroup,
     getGroupById,
@@ -329,4 +385,6 @@ export {
     addGroupMember,
     removeGroupMember,
     getGroupMembers,
+    getLatestGroups,
+    getLatestGroupsForUser,
 };

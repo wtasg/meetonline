@@ -4,6 +4,8 @@ import {
     createEvent,
     updateEvent,
     deleteEvent,
+    getLatestEvents,
+    getLatestEventsForUser,
 } from "../database/event.js";
 import { EventModel } from "../models/eventModel.js";
 import { getUserProfileByUsername } from "../database/user_profile.js";
@@ -21,6 +23,8 @@ function setupEventHandler(app) {
     app.get("/events", hybridAuthMiddleware, eventsGET);
     app.patch("/event/:id", hybridAuthMiddleware, eventPATCH);
     app.delete("/event/:id", hybridAuthMiddleware, eventDELETE);
+    app.get("/new_events", newEventsGET);
+    app.get("/user_new_events", hybridAuthMiddleware, userNewEventsGET);
 }
 
 /**
@@ -362,6 +366,52 @@ async function eventDELETE(req, res) {
         console.error(err);
         return res.status(500).json({
             ok: false,
+            message: "CAUGHT ERROR."
+        });
+    }
+}
+
+/**
+ * Get latest events (public endpoint)
+ * Returns minimal info: id, title, createdAt
+ */
+async function newEventsGET(req, res) {
+    try {
+        const events = await getLatestEvents();
+        
+        return res.status(200).json({
+            ok: true,
+            new_events: events,
+            message: "Success."
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            ok: false,
+            new_events: [],
+            message: "CAUGHT ERROR."
+        });
+    }
+}
+
+/**
+ * Get latest events for authenticated user
+ * Returns full event details
+ */
+async function userNewEventsGET(req, res) {
+    try {
+        const events = await getLatestEventsForUser();
+        
+        return res.status(200).json({
+            ok: true,
+            user_new_events: events.map(e => e.toClient()),
+            message: "Success."
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            ok: false,
+            user_new_events: [],
             message: "CAUGHT ERROR."
         });
     }
