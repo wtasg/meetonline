@@ -4,8 +4,6 @@
 # Usage: ./scripts/test.sh [all|server|client|e2e]
 # Default: all
 
-set -e
-
 # Colors for output
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'

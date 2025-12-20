@@ -8,8 +8,6 @@
 # - App image only rebuilds when package.json/package-lock.json changes
 # - Source code and certificates are mounted as volumes (no rebuild needed)
 
-set -e
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 CLIENT_DIR="$PROJECT_ROOT/client/react-client-app"
@@ -125,11 +123,13 @@ echo "ℹ️  Waiting for services to be ready..."
 sleep 5
 
 echo "ℹ️  Running E2E tests..."
-docker compose -f compose.yml -f compose.e2e.yml run --rm e2e
+docker compose -f compose.yml -f compose.e2e.yml run e2e
+# docker compose -f compose.yml -f compose.e2e.yml run --rm e2e
 E2E_EXIT_CODE=$?
 
 echo "ℹ️  Cleaning up E2E containers..."
-docker compose -f compose.yml -f compose.e2e.yml down --remove-orphans
+docker compose -f compose.yml -f compose.e2e.yml down
+# docker compose -f compose.yml -f compose.e2e.yml down --remove-orphans
 
 if [ $E2E_EXIT_CODE -eq 0 ]; then
     echo "✅ E2E tests completed!"

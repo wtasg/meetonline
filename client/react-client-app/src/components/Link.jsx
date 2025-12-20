@@ -9,7 +9,14 @@ function Link({ to, children, klass }) {
     };
 
     return (
-        <a href={to} onClick={handleClick} className={`${klass} clickable`}>
+        <a
+            href={to}
+            onClick={handleClick}
+            className={`${klass} clickable`}
+            role="button"
+            aria-label={`Navigate to ${to}`}
+            aria-describedby="button"
+        >
             {children}
         </a>
     );

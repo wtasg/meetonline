@@ -2,8 +2,6 @@ import { expect } from "@playwright/test";
 import { v4 as uuidv4 } from "uuid";
 
 const WEB_URL = "https://localhost:5180";
-// HTTPS issues with browsers, might be related to accepting https self-signed certificates.
-const SECURE_WEB_URL = "https://localhost:5174";
 const APP_ROOT = WEB_URL;
 const LOGIN_PATH = "/login";
 const SIGNUP_PATH = "/signup";
@@ -28,7 +26,7 @@ async function login(page, username, password) {
     }
     // load page
     await page.goto(`${APP_ROOT}`);
-    await page.getByRole("link", { name: "login" }).filter({ visible: true }).first().click();
+    await page.getByRole("button", { name: "login" }).filter({ visible: true }).first().click();
 
     // expect elements on the page
     await expect(page.locator("h2")).toBeVisible();
@@ -43,7 +41,8 @@ async function login(page, username, password) {
     await page.locator("input#login_password").fill(password);
     await page.locator("button", { name: "Login" }).filter({ visible: true }).click();
 
-    // verify the page load etc?
+    // Wait for successful login - profile link only appears when logged in
+    await expect(page.getByRole("button", { name: "profile" })).toBeVisible({ timeout: 10000 });
 
     return { username, password, page };
 }
@@ -67,7 +66,8 @@ async function signup(page, username, password) {
     }
     // load page
     await page.goto(`${APP_ROOT}`);
-    await page.getByRole("link", { name: "signup" }).filter({ visible: true }).click();
+    await page.getByRole("button", { name: "signup" })
+        .filter({ visible: true }).click();
 
     // expect elements on the page
     await expect(page.locator("h2")).toBeVisible();

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:e2e": "vite --port ${E2E_PORT:-5180}",
+    "dev:e2e": "vite --port ${E2E_PORT:-5180} --host",
     "build": "vite build",
     "lint": "eslint .",
     "lint:fix": "npx eslint . --fix",
