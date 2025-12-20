@@ -182,6 +182,45 @@ async function searchGroups(searchTerm) {
     }
 }
 
+/**
+ * Fetch latest groups (public endpoint - minimal info)
+ * @returns {Promise<{ok: boolean, message: string, new_groups: array}>}
+ */
+async function fetchNewGroups() {
+    try {
+        const response = await fetch(`${CONF.HTTPS_SERVER}/new_groups`, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+            }
+        });
+        return response.json();
+    } catch (err) {
+        console.error(err);
+        return { ok: false, message: err.message, new_groups: [] };
+    }
+}
+
+/**
+ * Fetch latest groups for authenticated user (full details)
+ * @returns {Promise<{ok: boolean, message: string, user_new_groups: array}>}
+ */
+async function fetchUserNewGroups() {
+    try {
+        const response = await authenticatedFetch(`${CONF.HTTPS_SERVER}/user_new_groups`, {
+            credentials: "include",
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+            }
+        });
+        return response.json();
+    } catch (err) {
+        console.error(err);
+        return { ok: false, message: err.message, user_new_groups: [] };
+    }
+}
+
 export {
     createGroup,
     fetchGroup,
@@ -191,4 +230,6 @@ export {
     joinGroup,
     leaveGroup,
     searchGroups,
+    fetchNewGroups,
+    fetchUserNewGroups,
 };

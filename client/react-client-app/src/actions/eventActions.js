@@ -4,6 +4,8 @@ import {
     fetchEvents as netFetchEvents,
     updateEvent as netUpdateEvent,
     deleteEvent as netDeleteEvent,
+    fetchNewEvents as netFetchNewEvents,
+    fetchUserNewEvents as netFetchUserNewEvents,
 } from "../net/event.js";
 
 async function createEvent({
@@ -54,10 +56,20 @@ async function deleteEvent(eventId) {
     return netDeleteEvent(eventId);
 }
 
+async function fetchNewEvents() {
+    return netFetchNewEvents();
+}
+
+async function fetchUserNewEvents() {
+    return netFetchUserNewEvents();
+}
+
 export {
     createEvent,
     fetchEvent,
     fetchEvents,
     updateEvent,
     deleteEvent,
+    fetchNewEvents,
+    fetchUserNewEvents,
 };

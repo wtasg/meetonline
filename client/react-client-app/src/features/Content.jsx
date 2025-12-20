@@ -48,7 +48,7 @@ function Content() {
     } else if (pathname.startsWith("/theme-playground")) {
         return <ThemePlayground />;
     } else if (pathname.startsWith("/")) {
-        return hasSession && <> <Welcome /> </>;
+        return <Welcome />;
     } else {
         return <>
             ERROR
