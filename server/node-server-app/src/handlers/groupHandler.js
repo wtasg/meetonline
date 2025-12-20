@@ -12,6 +12,7 @@ import {
 } from "../database/group.js";
 import { GroupModel } from "../models/groupModel.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
+import { apiRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 import { getUserProfileByUsername } from "../database/user_profile.js";
 import { createPendingDeletion } from "../database/pending_deletions.js";
 import { createNotification } from "../database/notification.js";
@@ -21,16 +22,16 @@ import { createNotification } from "../database/notification.js";
  * @param {Express} app
  */
 function setupGroupHandler(app) {
-    app.post("/group", hybridAuthMiddleware, groupPOST);
-    app.get("/group/search", hybridAuthMiddleware, groupSearchGET);
-    app.get("/group/:id", hybridAuthMiddleware, groupGET);
-    app.get("/groups", hybridAuthMiddleware, groupsGET);
-    app.patch("/group/:id", hybridAuthMiddleware, groupPATCH);
-    app.delete("/group/:id", hybridAuthMiddleware, groupDELETE);
-    app.post("/group/:id/join", hybridAuthMiddleware, groupJoinPOST);
-    app.post("/group/:id/leave", hybridAuthMiddleware, groupLeavePOST);
-    app.get("/new_groups", newGroupsGET);
-    app.get("/user_new_groups", hybridAuthMiddleware, userNewGroupsGET);
+    app.post("/group", apiRateLimiter, hybridAuthMiddleware, groupPOST);
+    app.get("/group/search", apiRateLimiter, hybridAuthMiddleware, groupSearchGET);
+    app.get("/group/:id", apiRateLimiter, hybridAuthMiddleware, groupGET);
+    app.get("/groups", apiRateLimiter, hybridAuthMiddleware, groupsGET);
+    app.patch("/group/:id", apiRateLimiter, hybridAuthMiddleware, groupPATCH);
+    app.delete("/group/:id", apiRateLimiter, hybridAuthMiddleware, groupDELETE);
+    app.post("/group/:id/join", apiRateLimiter, hybridAuthMiddleware, groupJoinPOST);
+    app.post("/group/:id/leave", apiRateLimiter, hybridAuthMiddleware, groupLeavePOST);
+    app.get("/new_groups", apiRateLimiter, newGroupsGET);
+    app.get("/user_new_groups", apiRateLimiter, hybridAuthMiddleware, userNewGroupsGET);
 }
 
 /**

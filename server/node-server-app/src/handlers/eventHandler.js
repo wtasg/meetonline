@@ -10,6 +10,7 @@ import {
 import { EventModel } from "../models/eventModel.js";
 import { getUserProfileByUsername } from "../database/user_profile.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
+import { apiRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 import { createPendingDeletion } from "../database/pending_deletions.js";
 import { createNotification } from "../database/notification.js";
 
@@ -18,13 +19,13 @@ import { createNotification } from "../database/notification.js";
  * @param {Express} app
  */
 function setupEventHandler(app) {
-    app.post("/event", hybridAuthMiddleware, eventPOST);
-    app.get("/event/:id", hybridAuthMiddleware, eventGET);
-    app.get("/events", hybridAuthMiddleware, eventsGET);
-    app.patch("/event/:id", hybridAuthMiddleware, eventPATCH);
-    app.delete("/event/:id", hybridAuthMiddleware, eventDELETE);
-    app.get("/new_events", newEventsGET);
-    app.get("/user_new_events", hybridAuthMiddleware, userNewEventsGET);
+    app.post("/event", apiRateLimiter, hybridAuthMiddleware, eventPOST);
+    app.get("/event/:id", apiRateLimiter, hybridAuthMiddleware, eventGET);
+    app.get("/events", apiRateLimiter, hybridAuthMiddleware, eventsGET);
+    app.patch("/event/:id", apiRateLimiter, hybridAuthMiddleware, eventPATCH);
+    app.delete("/event/:id", apiRateLimiter, hybridAuthMiddleware, eventDELETE);
+    app.get("/new_events", apiRateLimiter, newEventsGET);
+    app.get("/user_new_events", apiRateLimiter, hybridAuthMiddleware, userNewEventsGET);
 }
 
 /**
