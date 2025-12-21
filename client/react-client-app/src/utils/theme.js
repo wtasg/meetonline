@@ -12,16 +12,16 @@ function applyTheme(theme) {
         console.warn(`Invalid theme: ${theme}`);
         return;
     }
-    
+
     const root = document.documentElement;
-    
+
     // Set data-theme attribute
     if (theme === "gray") {
         root.removeAttribute("data-theme");
     } else {
         root.setAttribute("data-theme", theme);
     }
-    
+
     themeStorage.store("theme", theme);
 }
 
@@ -35,12 +35,12 @@ function applyScheme(scheme) {
         console.warn(`Invalid scheme: ${scheme}`);
         return;
     }
-    
+
     const root = document.documentElement;
-    
+
     // Remove all scheme classes
     root.classList.remove("dark", "high-contrast");
-    
+
     // Add appropriate class
     if (scheme === "dark") {
         root.classList.add("dark");
@@ -48,7 +48,7 @@ function applyScheme(scheme) {
         root.classList.add("high-contrast");
     }
     // light scheme is the default, no class needed
-    
+
     themeStorage.store("scheme", scheme);
 }
 
@@ -62,16 +62,16 @@ function applyFilter(filter) {
         console.warn(`Invalid filter: ${filter}`);
         return;
     }
-    
+
     const root = document.documentElement;
-    
+
     // Set data-filter attribute
     if (filter === "default") {
         root.removeAttribute("data-filter");
     } else {
         root.setAttribute("data-filter", filter);
     }
-    
+
     themeStorage.store("filter", filter);
 }
 
@@ -90,7 +90,7 @@ function applyThemeConfig(config) {
 
 /**
  * Get current theme configuration from storage
- * @returns {Object} Current theme configuration
+ * @returns {{theme: string, scheme: string, filter: string}} Current theme configuration
  */
 function getStoredThemeConfig() {
     return {

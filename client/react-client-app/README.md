@@ -1,6 +1,6 @@
 # MeetOnline React Client Application
 
-A modern React-based client application for the MeetOnline platform. Built with Vite, React 19, and featuring JWT authentication, theme customization, and group management capabilities.
+A modern React-based client application for the MeetOnline platform. Built with Vite, React 19, and TypeScript. Features JWT authentication, theme customization, and group management capabilities.
 
 ## Table of Contents
 
@@ -77,10 +77,13 @@ src/
 ├── net/              # Network layer (API clients)
 ├── themes/           # CSS theme files
 ├── utils/            # Utility functions
-├── App.jsx           # Root application component
+├── App.tsx           # Root application component (TypeScript)
 ├── main.jsx          # Application entry point
 └── session.js        # Session storage management
 ```
+
+> [!NOTE]
+> The project supports incremental TypeScript migration. Both `.js/.jsx` and `.ts/.tsx` files can coexist. New components should be written in TypeScript.
 
 ### Directory Details
 
@@ -478,4 +481,5 @@ docker build -t meetonline-client .
 | `vite.config.js` | Vite bundler configuration + test setup |
 | `vitest.config.js` | Vitest test runner configuration |
 | `playwright.config.js` | Playwright E2E test configuration |
-| `eslint.config.js` | ESLint rules and plugins |
+| `eslint.config.js` | ESLint rules and plugins (JS + TypeScript) |
+| `tsconfig.json` | TypeScript compiler configuration |
