@@ -28,6 +28,27 @@ meetonline/
 └── docs/                       # Documentation
 ```
 
+### Client Layering Architecture
+
+The client application follows a strict layering architecture to ensure separation of concerns and maintainability:
+
+1. **User Interaction**:
+   - `User` interacts with `Features` (Pages/Widgets) and `Components` (UI elements).
+
+2. **Actions Layer** (`src/actions/`):
+   - Features and Components **MUST** only call functions in the `actions` directory.
+   - They **MUST NOT** import directly from the `net` layer or use `fetch` directly.
+
+3. **Network Layer** (`src/net/`):
+   - The `actions` layer delegates network requests to the `net` layer.
+   - This layer handles `fetch` calls, authentication headers, CSRF tokens, and response parsing.
+
+4. **Server Handlers**:
+   - The `net` layer communicates with the server's network endpoints.
+
+**Visual Flow:**
+`User -> (Features + Components) -> actions -> net -> NETWORK -> server handlers`
+
 ## Technology Stack
 
 ### Frontend
