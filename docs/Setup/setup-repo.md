@@ -12,7 +12,7 @@ chmod u+x ./scripts/make.env.sh
 
 ## git hooks: pre-commit
 
-This hook is managed manually. 
+This hook is managed manually.
 You need to add this to your .git/hooks/pre-commit file
 
 ```bash
@@ -21,9 +21,16 @@ You need to add this to your .git/hooks/pre-commit file
 bash ./scripts/pre-commit.sh
 ```
 
-`./scripts/pre-commit.sh` exists in git repo 
+`./scripts/pre-commit.sh` exists in git repo
 
-** Below needs update **
+> [!NOTE] filename
+> The filename is `pre-commit.sample` in the git repo
+> rename it to `pre-commit` to enable it
+> No .sh extension required
+
+> [!NOTE] permissions
+> make sure the file is executable
+> `chmod u+x ./scripts/pre-commit.sh`
 
 ## Local Domain Setup
 
@@ -36,9 +43,10 @@ The application is configured to run on `meet.online` locally. You need to map t
 ## Certificate Generation
 
 The `./scripts/make.certs.sh` script generates SSL certificates specifically for `meet.online`. This is required for the application to serve traffic over HTTPS locally.
+
 ## before running docker compose
 
-Make sure that the certificates are built and 
+Make sure that the certificates are built and
 that the .env files are present by executing the scripts
 
 ```bash
