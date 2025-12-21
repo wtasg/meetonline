@@ -75,43 +75,45 @@ function Welcome() {
     }
 
     return (
-        <div style={{ padding: "16px" }}>
-            <h1>Welcome to MeetOnline!</h1>
-            
-            <section style={{ marginTop: "24px" }}>
-                <h2>Latest Events</h2>
-                {events.length === 0 ? (
-                    <p>No events yet.</p>
-                ) : (
-                    <div>
-                        {events.map((event) => (
-                            <EventListItem
-                                key={event.id}
-                                event={event}
-                                isAuthenticated={hasSession}
-                                isMinimal={!hasSession}
-                            />
-                        ))}
-                    </div>
-                )}
+        <div style={{ padding: "16px" }} className="grid">
+            <section>
+                <h3> Events</h3>
+                <div className="flex">
+                    {events.length === 0 ? (
+                        <p>No events yet.</p>
+                    ) : (
+                        <div>
+                            {events.map((event) => (
+                                <EventListItem
+                                    key={event.id}
+                                    event={event}
+                                    isAuthenticated={hasSession}
+                                    isMinimal={!hasSession}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
             </section>
 
-            <section style={{ marginTop: "24px" }}>
-                <h2>Latest Groups</h2>
-                {groups.length === 0 ? (
-                    <p>No groups yet.</p>
-                ) : (
-                    <div>
-                        {groups.map((group) => (
-                            <GroupListItem
-                                key={group.id}
-                                group={group}
-                                isAuthenticated={hasSession}
-                                isMinimal={!hasSession}
-                            />
-                        ))}
-                    </div>
-                )}
+            <section>
+                <h3> Groups</h3>
+                <div className="flex">
+                    {groups.length === 0 ? (
+                        <p>No groups yet.</p>
+                    ) : (
+                        <div>
+                            {groups.map((group) => (
+                                <GroupListItem
+                                    key={group.id}
+                                    group={group}
+                                    isAuthenticated={hasSession}
+                                    isMinimal={!hasSession}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
             </section>
         </div>
     );

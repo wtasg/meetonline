@@ -138,6 +138,7 @@
     --text-success: oklch(0.45 0.13 145);
     --text-warning: oklch(0.55 0.15 65);
     --text-danger: oklch(0.45 0.18 25);
+    --text-muted: var(--text-tertiary);
 
     /* Border colors */
     --border-primary: var(--base-gray-300);
@@ -265,6 +266,7 @@
     --text-success: oklch(0.7 calc(0.13 * var(--filter-chroma-multiplier)) 145);
     --text-warning: oklch(0.8 calc(0.15 * var(--filter-chroma-multiplier)) 75);
     --text-danger: oklch(0.7 calc(0.2 * var(--filter-chroma-multiplier)) 25);
+    --text-muted: var(--text-tertiary);
 
     /* Border colors */
     --border-primary: var(--base-gray-700);
@@ -387,6 +389,7 @@
     --text-success: oklch(0.3 0.18 145);
     --text-warning: oklch(0.35 0.2 65);
     --text-danger: oklch(0.35 0.25 25);
+    --text-muted: var(--text-tertiary);
 
     /* Border colors */
     --border-primary: oklch(0 0 0);
@@ -507,6 +510,7 @@
     --text-success: oklch(0.75 0.18 145);
     --text-warning: oklch(0.85 0.2 75);
     --text-danger: oklch(0.75 0.25 25);
+    --text-muted: var(--text-tertiary);
 
     /* Border colors */
     --border-primary: oklch(1 0 0);

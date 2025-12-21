@@ -33,14 +33,14 @@ function EventListItem({ event, isAuthenticated, isMinimal }) {
 
     // Authenticated user can see full details
     return (
-        <div className="event-list-item" style={{ padding: "8px", borderBottom: "1px solid #ccc" }}>
-            <div 
-                onClick={() => setIsExpanded(!isExpanded)} 
-                style={{ cursor: "pointer", fontWeight: "bold" }}
+        <div className="event-list-item">
+            <div
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="clickable flex"
             >
-                {event.title} {isExpanded ? "▼" : "▶"}
+                <div>{isExpanded ? "[-]" : "[+]"}</div> <div>{event.title}</div>
             </div>
-            <div style={{ fontSize: "0.9em", color: "#666" }}>
+            <div className="text muted">
                 Created: {formatDate(event.createdAt)}
             </div>
             {isExpanded && (

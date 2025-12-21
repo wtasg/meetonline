@@ -1,7 +1,3 @@
-.buttons {
-    min-height: var(--min-input-height);
-}
-
 nav {
     height: fit-content;
     width: fit-content;
@@ -22,10 +18,6 @@ footer.footer {
 
 header.header {
     padding: 10px 0;
-}
-
-section.content {
-    margin-bottom: 100px;
 }
 
 footer.footer {

@@ -28,6 +28,10 @@ did_shutdown_db=false
 
 ## function for cleaning up the running containers
 cleanup() {
+
+    docker stop manual-meetonline-client-dev meetonline-client meetonline-server meetonline-database || true
+    docker rm manual-meetonline-client-dev meetonline-client meetonline-server meetonline-database || true
+
     ! $no_db_flag && {
         docker stop manual-meetonline-database manual-meetonline-adminer || true
         docker rm manual-meetonline-database manual-meetonline-adminer || true
@@ -104,59 +108,62 @@ runup() {
     $netcreated && sleep 5
 
     ## checking and/or building a volume for postgres
-    (! $no_db_flag && {
-        volcreated=false
+    (
+        ! $no_db_flag && {
+            volcreated=false
 
-        if docker volume inspect manual-meetonline-pgdata >/dev/null 2>&1; then
-            echo "Volume exists."
-        else
-            echo "Creating volume."
-            docker volume create manual-meetonline-pgdata 2>/dev/null || true
-            volcreated=true
-        fi
+            if docker volume inspect manual-meetonline-pgdata >/dev/null 2>&1; then
+                echo "Volume exists."
+            else
+                echo "Creating volume."
+                docker volume create manual-meetonline-pgdata 2>/dev/null || true
+                volcreated=true
+            fi
 
-        docker run \
-            --user "$(id -u)":"$(id -g)" \
-            --name manual-meetonline-database \
-            --env DB_INIT_FILE:database/init/schema.sql \
-            --env-file database/local.env \
-            --network manual-meetonline-network \
-            --publish 5432:5432 \
-            --volume manual-meetonline-pgdata:/var/lib/postgresql \
-            --detach localhost/meetonline-database:manual
+            docker run \
+                --user "$(id -u)":"$(id -g)" \
+                --name manual-meetonline-database \
+                --env DB_INIT_FILE:database/init/schema.sql \
+                --env-file database/local.env \
+                --network manual-meetonline-network \
+                --publish 5432:5432 \
+                --volume manual-meetonline-pgdata:/var/lib/postgresql \
+                --detach localhost/meetonline-database:manual
 
-        docker run \
-            --user "$(id -u)":"$(id -g)" \
-            --name manual-meetonline-adminer \
-            --publish 54320:8080 \
-            --detach adminer
+            docker run \
+                --user "$(id -u)":"$(id -g)" \
+                --name manual-meetonline-adminer \
+                --publish 54320:8080 \
+                --detach adminer
 
-        ($did_shutdown_db || $volcreated) && sleep 10
-    }
-    ) || true
-
-    (! $no_server_flag && {
-        docker run \
-            --user "$(id -u)":"$(id -g)" \
-            --name manual-meetonline-server \
-            --env-file server/node-server-app/local.env \
-            --network manual-meetonline-network \
-            --publish 9006:9006 \
-            --publish 9443:9443 \
-            --detach localhost/meetonline-server:manual &&
-        sleep 5
+            ($did_shutdown_db || $volcreated) && sleep 10
         }
     ) || true
 
-    (! $no_client_flag && {
-        docker run \
-            --user "$(id -u)":"$(id -g)" \
-            --name manual-meetonline-client \
-            --env-file client/react-client-app/local.env \
-            --network manual-meetonline-network \
-            --publish 5173:5173 \
-            --detach localhost/meetonline-client:manual &&
-        sleep 5
+    (
+        ! $no_server_flag && {
+            docker run \
+                --user "$(id -u)":"$(id -g)" \
+                --name manual-meetonline-server \
+                --env-file server/node-server-app/local.env \
+                --network manual-meetonline-network \
+                --publish 9006:9006 \
+                --publish 9443:9443 \
+                --detach localhost/meetonline-server:manual &&
+                sleep 5
+        }
+    ) || true
+
+    (
+        ! $no_client_flag && {
+            docker run \
+                --user "$(id -u)":"$(id -g)" \
+                --name manual-meetonline-client \
+                --env-file client/react-client-app/local.env \
+                --network manual-meetonline-network \
+                --publish 5173:5173 \
+                --detach localhost/meetonline-client:manual &&
+                sleep 5
         }
     ) || true
 }

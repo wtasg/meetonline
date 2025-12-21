@@ -33,14 +33,14 @@ function GroupListItem({ group, isAuthenticated, isMinimal }) {
 
     // Authenticated user can see full details
     return (
-        <div className="group-list-item" style={{ padding: "8px", borderBottom: "1px solid #ccc" }}>
-            <div 
-                onClick={() => setIsExpanded(!isExpanded)} 
-                style={{ cursor: "pointer", fontWeight: "bold" }}
+        <div className="group-list-item">
+            <div
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="clickable flex"
             >
-                {group.groupName} {isExpanded ? "▼" : "▶"}
+                <div>{isExpanded ? "[-]" : "[+]"}</div> <div>{group.groupName}</div>
             </div>
-            <div style={{ fontSize: "0.9em", color: "#666" }}>
+            <div className="text muted">
                 Created: {formatDate(group.createdAt)}
             </div>
             {isExpanded && (

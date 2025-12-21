@@ -110,8 +110,8 @@ function Menu() {
                 </ul>
             </nav>
             <UserSettings isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
-            <Notifications 
-                isOpen={isNotificationsOpen} 
+            <Notifications
+                isOpen={isNotificationsOpen}
                 onClose={() => {
                     setIsNotificationsOpen(false);
                     // Refresh unread count when closing
@@ -120,7 +120,7 @@ function Menu() {
                             if (result.ok) setUnreadCount(result.count || 0);
                         });
                     }
-                }} 
+                }}
             />
         </>
     );

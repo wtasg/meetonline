@@ -1,3 +1,5 @@
+@import url("./theme.css");
+
 :root {
 
     --min-gap: 4px;
@@ -13,6 +15,7 @@
     --flex-gap: 10px;
 
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-size: 12px;
     line-height: 1.5;
     font-weight: 400;
 
@@ -46,9 +49,6 @@ body {
 button,
 a.btn,
 *[role="button"] {
-    padding: var(--min-padding);
-    margin: var(--margin);
-    /* border: 2px solid currentColor; */
 
     &:hover {
         cursor: pointer;
@@ -63,20 +63,29 @@ a.btn,
     }
 }
 
-a {
+/* link colors: a, .link */
+a,
+.link {
+    color: var(--text-primary);
+    padding-bottom: 4px;
+    text-decoration: none;
+    border-bottom: thin solid var(--text-tertiary);
+    transition: color 0.2s ease-in-out;
+
     &:hover {
-        opacity: 0.8;
+        color: var(--color-primary-hover);
+        padding-bottom: 3px;
+        border-bottom-color: var(--text-primary);
     }
-}
 
-input {
-    padding: var(--min-padding);
-    margin: var(--margin);
-}
+    &:visited {
+        color: var(--text-tertiary);
+    }
 
-input[type="text"],
-input[type="password"] {
-    min-height: 56px;
+    &:active {
+        color: var(--color-primary-active);
+        padding-bottom: 5px;
+    }
 }
 
 .flex {
@@ -103,6 +112,36 @@ input[type="password"] {
     &.sb {
         justify-content: space-between;
     }
+
+    &.col2 {
+        flex-wrap: wrap;
+
+        &>* {
+            flex: 0 0 48%;
+        }
+    }
+}
+
+.text {
+    font-size: 1rem;
+    line-height: 1.4;
+
+    &.muted {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+}
+
+.grid {
+    display: grid;
+    gap: var(--flex-gap);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.vgrid {
+    display: grid;
+    gap: var(--flex-gap);
+    grid-auto-rows: minmax(100px, auto);
 }
 
 .w0 {
@@ -249,6 +288,7 @@ input[type="password"] {
 .fwb {
     font-weight: bold;
 }
+
 /* Notification styles */
 .notification-icon {
     font-size: 1.2em;

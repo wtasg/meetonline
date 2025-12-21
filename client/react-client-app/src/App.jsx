@@ -18,7 +18,7 @@ function App() {
 
         if (storedFontSize) applyFontSize(storedFontSize);
         if (storedFontContrast) applyFontContrast(storedFontContrast);
-        
+
         // Apply stored theme configuration
         applyThemeConfig(storedThemeConfig);
     }, []);
@@ -26,7 +26,7 @@ function App() {
     return (
         <div className="vflex">
             <header className="header flex sb">
-                <div className="flex vac hac fs4 fwb clickable" onClick={() => navigateTo("/")}>MeetOnline</div>
+                <div className="flex vac hac  clickable" onClick={() => navigateTo("/")}>MeetOnline</div>
                 <div>
                     <Menu />
                 </div>
