@@ -23,6 +23,8 @@ trap cleanup INT TERM
 echo "Stopping any existing client container..."
 docker stop "$CLIENT_CONTAINER" >/dev/null 2>&1 || true
 docker rm "$CLIENT_CONTAINER" >/dev/null 2>&1 || true
+docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
+docker rm "$CONTAINER_NAME" >/dev/null 2>&1 || true
 
 echo "Starting Vite dev server in Docker with live reload..."
 
@@ -35,9 +37,7 @@ docker run \
     --workdir /app \
     --publish $PORT:$PORT \
     --detach node:25-bullseye \
-    bash -c "npm run dev -- --host"
-
-echo "Dev client is running. Hit CTRL+C to exit."
+    bash -c "npm run dev"
 
 docker logs --follow "${CONTAINER_NAME}"
 

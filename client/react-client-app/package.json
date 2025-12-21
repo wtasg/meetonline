@@ -13,7 +13,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "build:certs": "mkdir -p .cert && openssl req -x509 -newkey rsa:2048 -nodes -keyout .cert/key.pem -out .cert/cert.pem -subj \"/CN=localhost\" -days 365",
+    "build:certs": "mkdir -p .cert && openssl req -x509 -newkey rsa:2048 -nodes -keyout .cert/key.pem -out .cert/cert.pem -subj \"/CN=meet.online\" -days 365",
     "e2e": "NODE_EXTRA_CA_CERTS=./.cert/cert.pem npx playwright test",
     "e2e:docker": "echo 'NOTE: This script is intended for containerized environments where cleanup is handled by the container lifecycle.' && npm run dev:e2e & sleep 5 && NODE_EXTRA_CA_CERTS=./.cert/cert.pem npx playwright test --reporter=list"
   },

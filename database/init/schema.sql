@@ -575,3 +575,36 @@ create index if not exists pending_deletions_user_profile_id_index
     on pending_deletions (user_profile_id);
 
 -- PENDING DELETIONS : END
+
+
+-- USER OAUTH CONNECTIONS : START
+create table if not exists user_oauth_connections
+(
+    id           bigserial,
+    user_id      bigint                              not null,
+    provider     varchar(64)                         not null, -- 'google', 'microsoft', 'apple', 'facebook'
+    provider_id  varchar(1024)                       not null,
+    email        varchar(256),
+    profile_data text,                                         -- store raw profile as JSON string
+    created_at   timestamp default CURRENT_TIMESTAMP not null,
+    modified_at  timestamp default CURRENT_TIMESTAMP not null
+);
+
+alter table user_oauth_connections
+    owner to myuser;
+
+alter table user_oauth_connections
+    add constraint user_oauth_connections_pk
+        primary key (id);
+
+alter table user_oauth_connections
+    add constraint user_oauth_connections_user_id_fk
+        foreign key (user_id) references user_account (id) on delete cascade;
+
+alter table user_oauth_connections
+    add constraint user_oauth_connections_provider_provider_id_key
+        unique (provider, provider_id);
+
+create index if not exists user_oauth_connections_user_id_index
+    on user_oauth_connections (user_id);
+-- USER OAUTH CONNECTIONS : END

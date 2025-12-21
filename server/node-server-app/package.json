@@ -7,7 +7,7 @@
   "main": "src/server.js",
   "scripts": {
     "build": "mkdir -p certs && mkdir -p tmp",
-    "build:certs": "mkdir -p certs && openssl req -x509 -newkey rsa:4096 -nodes -keyout certs/server.key -out certs/server.crt -subj \"/CN=localhost\" -days 365",
+    "build:certs": "mkdir -p certs && openssl req -x509 -newkey rsa:4096 -nodes -keyout certs/server.key -out certs/server.crt -subj \"/CN=meet.online\" -days 365",
     "lint": "./node_modules/.bin/eslint .",
     "lint:fix": "./node_modules/.bin/eslint . --fix",
     "test:jest": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" ./node_modules/.bin/jest --runInBand",
@@ -37,6 +37,11 @@
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
     "multer": "^2.0.2",
+    "passport": "^0.7.0",
+    "passport-apple": "^2.0.2",
+    "passport-azure-ad": "^4.3.5",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth20": "^2.0.0",
     "pg": "^8.16.3",
     "uuid": "^13.0.0"
   },

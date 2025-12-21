@@ -40,7 +40,7 @@ export default defineConfig({
         launchOptions: {
             args: ["--ignore-certificate-errors"]
         },
-        baseURL: "https://localhost:5173",
+        baseURL: "https://meet.online:5173",
         ignoreHTTPSErrors: true, // ✅ Trust self-signed certs
         headless: true,
     },

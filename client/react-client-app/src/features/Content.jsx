@@ -8,6 +8,7 @@ import Group from "./Group";
 import Event from "./Event";
 import Search from "./Search";
 import ThemePlayground from "./ThemePlayground";
+import { OAuthCallback } from "./OAuthCallback";
 import { useRoute } from "../hooks/useRoute";
 import { useNavigate } from "../hooks/useNavigate";
 import { useSession } from "../hooks/useSession";
@@ -38,6 +39,8 @@ function Content() {
         return !hasSession && <Login onLogin={onLogin} />;
     } else if (pathname.startsWith("/signup")) {
         return !hasSession && <Signup onSignup={onSignup} />;
+    } else if (pathname.startsWith("/oauth/callback")) {
+        return <OAuthCallback />;
     } else if (pathname.startsWith("/account")) {
         return hasSession && <UserAccount />;
     } else if (pathname.startsWith("/profile")) {

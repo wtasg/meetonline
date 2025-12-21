@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ServiceError } from "../components/Error";
 import { location } from "../session";
 import { Link } from "../components/Link";
+import { SocialLoginButtons } from "../components/SocialLoginButtons";
 
 /**
  * Returns true if user credentials are valid to POST
@@ -102,7 +103,9 @@ function Login({ onLogin }) {
                         onClick={onLoginLocal}>Login</button>
                 </div>
 
-                <div>
+                <SocialLoginButtons mode="login" />
+
+                <div className="mt-3">
                     <Link to="/signup">create a new account</Link>
                 </div>
             </div>

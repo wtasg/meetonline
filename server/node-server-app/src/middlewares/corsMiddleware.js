@@ -17,6 +17,7 @@ function setupCorsMiddleware(app) {
             "https://localhost:5177",
             "http://localhost",
             "https://localhost",
+            "https://meet.online:5173",
         ]
     )
         .filter(url => url.trim().length > 0)

@@ -20,6 +20,10 @@ import { setupAuthHandlers } from "./handlers/authHandler.js";
 import { setupGracefulShutdown, setBatchDeletionProcessor } from "./utils/gracefulSetup.js";
 import { setupUploadHandler } from "./handlers/uploadHandler.js";
 import { setupUserAccountHandler } from "./handlers/userAccountHandler.js";
+import { setupOAuthHandlers } from "./handlers/oauthHandler.js";
+import { setupUserOAuthHandlers } from "./handlers/userOAuthHandler.js";
+import { setupPassport } from "./config/passport.js";
+import passport from "passport";
 
 import { setupDirectories } from "./utils/fs.js";
 import { loadEnv } from "./utils/env.js";
@@ -53,10 +57,13 @@ setupCorsMiddleware(app);
 app.use(compression());
 app.use(express.json());
 app.use(cookieParser());
+setupPassport();
+app.use(passport.initialize());
 
 // CSRF Protection - applied selectively
 // Skip CSRF for auth endpoints that users access before having a token
 const csrfExemptRoutes = ["/auth_token", "/auth_refresh", "/signup", "/csrf-token"];
+const csrfExemptPrefixes = ["/oauth/"];
 
 // Endpoint to get a CSRF token
 app.get("/csrf-token", (req, res) => {
@@ -65,7 +72,7 @@ app.get("/csrf-token", (req, res) => {
 });
 
 app.use((req, res, next) => {
-    if (csrfExemptRoutes.includes(req.path)) {
+    if (csrfExemptRoutes.includes(req.path) || csrfExemptPrefixes.some(p => req.path.startsWith(p))) {
         return next();
     }
     doubleCsrfProtection(req, res, next);
@@ -90,6 +97,8 @@ app.use(morgan(isProduction ? "combined" : "dev"));
 app.use("/uploads", express.static(pathResolve(projectRoot, "uploads")));
 setupRootHandlers(app);
 setupAuthHandlers(app);
+setupOAuthHandlers(app);
+setupUserOAuthHandlers(app);
 setupUploadHandler(app);
 setupUserAccountHandler(app);
 setupUserProfileHandler(app);

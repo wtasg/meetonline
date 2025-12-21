@@ -24,6 +24,18 @@ bash ./scripts/pre-commit.sh
 `./scripts/pre-commit.sh` exists in git repo 
 
 ** Below needs update **
+
+## Local Domain Setup
+
+The application is configured to run on `meet.online` locally. You need to map this domain to your local machine in your `/etc/hosts` file:
+
+```text
+127.0.0.1 meet.online
+```
+
+## Certificate Generation
+
+The `./scripts/make.certs.sh` script generates SSL certificates specifically for `meet.online`. This is required for the application to serve traffic over HTTPS locally.
 ## before running docker compose
 
 Make sure that the certificates are built and 

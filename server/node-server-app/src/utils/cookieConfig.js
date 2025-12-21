@@ -8,7 +8,7 @@
  * @type {Object}
  */
 const COOKIE_CLEAR_OPTIONS = {
-    domain: "localhost",
+    domain: "meet.online",
     path: "/"
 };
 

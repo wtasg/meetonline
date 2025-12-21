@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchUserAccount } from "../actions/userAccountActions.js";
+import { ConnectedAccounts } from "./ConnectedAccounts";
 
 function UserAccount() {
 
@@ -35,6 +36,8 @@ function UserAccount() {
                         <span className="text-muted">({new Date(account.modifiedAt).toDateString()})</span>
                     </div>
                 </div>
+
+                <ConnectedAccounts />
             </div>
         </div>
     );

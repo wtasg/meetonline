@@ -1,9 +1,9 @@
 import { expect } from "@playwright/test";
 import { v4 as uuidv4 } from "uuid";
 
-const WEB_URL = "https://localhost:5180";
+const WEB_URL = "https://meet.online:5180";
 // HTTPS issues with browsers, might be related to accepting https self-signed certificates.
-const SECURE_WEB_URL = "https://localhost:5174";
+const SECURE_WEB_URL = "https://meet.online:5174";
 const APP_ROOT = WEB_URL;
 const LOGIN_PATH = "/login";
 const SIGNUP_PATH = "/signup";

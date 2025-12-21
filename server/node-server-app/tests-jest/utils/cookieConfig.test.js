@@ -3,7 +3,7 @@ import { COOKIE_CLEAR_OPTIONS } from "../../src/utils/cookieConfig.js";
 describe("cookieConfig", () => {
     describe("COOKIE_CLEAR_OPTIONS", () => {
         it("should have domain set to localhost", () => {
-            expect(COOKIE_CLEAR_OPTIONS.domain).toBe("localhost");
+            expect(COOKIE_CLEAR_OPTIONS.domain).toBe("meet.online");
         });
 
         it("should have path set to /", () => {

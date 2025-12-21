@@ -1,6 +1,6 @@
 
 const CONF = {
-    HTTP_SERVER: "http://localhost:9006",
+    HTTP_SERVER: "http://meet.online:9006",
     HTTPS_SERVER: import.meta.env.VITE_API_URL,
     URLS: {
         LOGIN: "login",
@@ -15,6 +15,7 @@ const CONF = {
         EVENT: "event",
         EVENTS: "events",
         SEARCH: "search",
+        OAUTH_CONNECTIONS: "user/oauth_connections",
     }
 };
 
