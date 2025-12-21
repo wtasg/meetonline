@@ -7,6 +7,8 @@ import {
     joinGroup as netJoinGroup,
     leaveGroup as netLeaveGroup,
     searchGroups as netSearchGroups,
+    fetchNewGroups as netFetchNewGroups,
+    fetchUserNewGroups as netFetchUserNewGroups,
 } from "../net/group.js";
 
 async function createGroup({ groupName, description, isPublic, tags, categories }) {
@@ -41,6 +43,14 @@ async function searchGroups(searchTerm) {
     return netSearchGroups(searchTerm);
 }
 
+async function fetchNewGroups() {
+    return netFetchNewGroups();
+}
+
+async function fetchUserNewGroups() {
+    return netFetchUserNewGroups();
+}
+
 export {
     createGroup,
     fetchGroup,
@@ -50,4 +60,6 @@ export {
     joinGroup,
     leaveGroup,
     searchGroups,
+    fetchNewGroups,
+    fetchUserNewGroups,
 };

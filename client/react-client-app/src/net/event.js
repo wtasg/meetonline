@@ -165,10 +165,51 @@ async function deleteEvent(eventId) {
     }
 }
 
+/**
+ * Fetch latest events (public endpoint - minimal info)
+ * @returns {Promise<{ok: boolean, message: string, new_events: array}>}
+ */
+async function fetchNewEvents() {
+    try {
+        const response = await fetch(`${CONF.HTTPS_SERVER}/new_events`, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+            }
+        });
+        return response.json();
+    } catch (err) {
+        console.error(err);
+        return { ok: false, message: err.message, new_events: [] };
+    }
+}
+
+/**
+ * Fetch latest events for authenticated user (full details)
+ * @returns {Promise<{ok: boolean, message: string, user_new_events: array}>}
+ */
+async function fetchUserNewEvents() {
+    try {
+        const response = await authenticatedFetch(`${CONF.HTTPS_SERVER}/user_new_events`, {
+            credentials: "include",
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+            }
+        });
+        return response.json();
+    } catch (err) {
+        console.error(err);
+        return { ok: false, message: err.message, user_new_events: [] };
+    }
+}
+
 export {
     createEvent,
     fetchEvent,
     fetchEvents,
     updateEvent,
     deleteEvent,
+    fetchNewEvents,
+    fetchUserNewEvents,
 };

@@ -7,9 +7,12 @@ import {
     deleteGroup,
     addGroupMember,
     removeGroupMember,
+    getLatestGroups,
+    getLatestGroupsForUser,
 } from "../database/group.js";
 import { GroupModel } from "../models/groupModel.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
+import { apiRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 import { getUserProfileByUsername } from "../database/user_profile.js";
 import { createPendingDeletion } from "../database/pending_deletions.js";
 import { createNotification } from "../database/notification.js";
@@ -19,14 +22,16 @@ import { createNotification } from "../database/notification.js";
  * @param {Express} app
  */
 function setupGroupHandler(app) {
-    app.post("/group", hybridAuthMiddleware, groupPOST);
-    app.get("/group/search", hybridAuthMiddleware, groupSearchGET);
-    app.get("/group/:id", hybridAuthMiddleware, groupGET);
-    app.get("/groups", hybridAuthMiddleware, groupsGET);
-    app.patch("/group/:id", hybridAuthMiddleware, groupPATCH);
-    app.delete("/group/:id", hybridAuthMiddleware, groupDELETE);
-    app.post("/group/:id/join", hybridAuthMiddleware, groupJoinPOST);
-    app.post("/group/:id/leave", hybridAuthMiddleware, groupLeavePOST);
+    app.post("/group", apiRateLimiter, hybridAuthMiddleware, groupPOST);
+    app.get("/group/search", apiRateLimiter, hybridAuthMiddleware, groupSearchGET);
+    app.get("/group/:id", apiRateLimiter, hybridAuthMiddleware, groupGET);
+    app.get("/groups", apiRateLimiter, hybridAuthMiddleware, groupsGET);
+    app.patch("/group/:id", apiRateLimiter, hybridAuthMiddleware, groupPATCH);
+    app.delete("/group/:id", apiRateLimiter, hybridAuthMiddleware, groupDELETE);
+    app.post("/group/:id/join", apiRateLimiter, hybridAuthMiddleware, groupJoinPOST);
+    app.post("/group/:id/leave", apiRateLimiter, hybridAuthMiddleware, groupLeavePOST);
+    app.get("/new_groups", apiRateLimiter, newGroupsGET);
+    app.get("/user_new_groups", apiRateLimiter, hybridAuthMiddleware, userNewGroupsGET);
 }
 
 /**
@@ -433,6 +438,52 @@ async function groupSearchGET(req, res) {
         return res.status(500).json({
             ok: false,
             groups: [],
+            message: "CAUGHT ERROR."
+        });
+    }
+}
+
+/**
+ * Get latest groups (public endpoint)
+ * Returns minimal info: id, groupName, createdAt
+ */
+async function newGroupsGET(req, res) {
+    try {
+        const groups = await getLatestGroups();
+        
+        return res.status(200).json({
+            ok: true,
+            new_groups: groups,
+            message: "Success."
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            ok: false,
+            new_groups: [],
+            message: "CAUGHT ERROR."
+        });
+    }
+}
+
+/**
+ * Get latest groups for authenticated user
+ * Returns full group details
+ */
+async function userNewGroupsGET(req, res) {
+    try {
+        const groups = await getLatestGroupsForUser();
+        
+        return res.status(200).json({
+            ok: true,
+            user_new_groups: groups.map(g => g.toClient()),
+            message: "Success."
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            ok: false,
+            user_new_groups: [],
             message: "CAUGHT ERROR."
         });
     }
