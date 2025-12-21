@@ -67,22 +67,22 @@ function Welcome() {
     }, [hasSession]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className="p-3">Loading...</div>;
     }
 
     if (error) {
-        return <div style={{ color: "red" }}>Error: {error}</div>;
+        return <div className="message message--error p-3">{error}</div>;
     }
 
     return (
-        <div style={{ padding: "16px" }} className="grid">
+        <div className="container p-3 grid">
             <section>
-                <h3> Events</h3>
-                <div className="flex">
+                <h3>Events</h3>
+                <div className="vflex gap-2">
                     {events.length === 0 ? (
                         <p>No events yet.</p>
                     ) : (
-                        <div>
+                        <div className="vflex gap-2">
                             {events.map((event) => (
                                 <EventListItem
                                     key={event.id}
@@ -97,12 +97,12 @@ function Welcome() {
             </section>
 
             <section>
-                <h3> Groups</h3>
-                <div className="flex">
+                <h3>Groups</h3>
+                <div className="vflex gap-2">
                     {groups.length === 0 ? (
                         <p>No groups yet.</p>
                     ) : (
-                        <div>
+                        <div className="vflex gap-2">
                             {groups.map((group) => (
                                 <GroupListItem
                                     key={group.id}

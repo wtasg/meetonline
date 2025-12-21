@@ -1,5 +1,5 @@
 function Error({ children }) {
-    return <div className="error box">
+    return <div className="box error message message--error">
         {children}
     </div>;
 }
@@ -9,7 +9,7 @@ function ServiceError({ message, hasError, children }) {
         return null;
     }
     return <Error>
-        <div className="message">{message}</div>
+        <div>{message}</div>
         <div>{children}</div>
     </Error>;
 }

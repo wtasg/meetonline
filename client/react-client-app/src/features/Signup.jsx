@@ -40,44 +40,50 @@ function Signup({ onSignup }) {
     }, []);
 
     return (
-        <div className="flex hac vac">
-            <div className="form signup vflex w40p">
+        <div className="container p-3 flex hac vac">
+            <div className="form-container max-w-sm vflex">
                 <h2>Signup</h2>
                 {presignupError && <ServiceError hasError={true} message={presignupError}></ServiceError>}
-                <div>
-                    <label htmlFor="signup_username" className="vflex">
-                        <>Username</>
-                        <input
-                            type="text"
-                            id="signup_username"
-                            name="signup_username"
-                            placeholder="signup_username"
-                            value={signup_username}
-                            onChange={e => updateSignupUsername(e.target.value)}
-                        />
+
+                <div className="form-group">
+                    <label htmlFor="signup_username" className="form-label">
+                        Username
                     </label>
+                    <input
+                        type="text"
+                        id="signup_username"
+                        name="signup_username"
+                        placeholder="Username"
+                        value={signup_username}
+                        onChange={e => updateSignupUsername(e.target.value)}
+                        className="form-input"
+                    />
                 </div>
-                <div>
-                    <label htmlFor="signup_password" className="vflex">
-                        <>Password</>
-                        <input
-                            type="password"
-                            id="signup_password"
-                            name="signup_password"
-                            placeholder="signup_password"
-                            value={signup_password}
-                            onChange={e => updateSignupPassword(e.target.value)}
-                        />
+
+                <div className="form-group">
+                    <label htmlFor="signup_password" className="form-label">
+                        Password
                     </label>
+                    <input
+                        type="password"
+                        id="signup_password"
+                        name="signup_password"
+                        placeholder="Password"
+                        value={signup_password}
+                        onChange={e => updateSignupPassword(e.target.value)}
+                        className="form-input"
+                    />
                 </div>
-                <div>
-                    <button type="button" className="cta" onClick={onSignupLocal}>Signup</button>
+
+                <div className="form-actions">
+                    <button type="button" className="btn btn-primary cta" onClick={onSignupLocal}>Signup</button>
                 </div>
+
                 <div>
                     <Link to="/login">login instead</Link>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
 

@@ -13,85 +13,83 @@ function Search() {
     };
 
     return (
-        <div className="search-container">
+        <div className="container p-3">
             <h2>Search</h2>
-            <div className="search-input-container">
+            <div className="form-group mb-3">
                 <input
                     type="text"
                     placeholder="Search for users, events, or groups..."
                     value={searchTerm}
                     onChange={handleInputChange}
-                    className="search-input"
+                    className="form-input"
                 />
-                {loading && <span className="search-loading">Searching...</span>}
+                {loading && <span className="text-muted">Searching...</span>}
             </div>
 
-            {error && <div className="search-error">{error}</div>}
+            {error && <div className="message message--error">{error}</div>}
 
             {searchTerm && (
-                <div className="search-results">
+                <div className="vflex gap-4">
                     {/* Users Results */}
                     {results.users.length > 0 && (
-                        <div className="search-section">
+                        <div className="vflex gap-2">
                             <h3>Users ({results.users.length})</h3>
-                            <ul className="search-list">
+                            <div className="vflex gap-2">
                                 {results.users.map((user) => (
-                                    <li key={user.id} className="search-item">
-                                        <div className="search-item-title">
+                                    <div key={user.id} className="card">
+                                        <div className="list-item__title">
                                             {user.profileName || user.displayName}
                                         </div>
-                                        <div className="search-item-meta">
+                                        <div className="list-item__meta">
                                             Display Name: {user.displayName}
                                             {user.email && ` • ${user.email}`}
                                         </div>
-                                    </li>
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         </div>
                     )}
 
                     {/* Events Results */}
                     {results.events.length > 0 && (
-                        <div className="search-section">
+                        <div className="vflex gap-2">
                             <h3>Events ({results.events.length})</h3>
-                            <ul className="search-list">
+                            <div className="vflex gap-2">
                                 {results.events.map((event) => (
-                                    <li key={event.id} className="search-item">
-                                        <div className="search-item-title">{event.title}</div>
-                                        <div className="search-item-meta">
+                                    <div key={event.id} className="card">
+                                        <div className="list-item__title">{event.title}</div>
+                                        <div className="list-item__meta">
                                             {new Date(event.startAt).toLocaleDateString()}
-                                            {event.description && (
-                                                <div className="search-item-description">
-                                                    {event.description.substring(0, 150)}
-                                                    {event.description.length > 150 ? "..." : ""}
-                                                </div>
-                                            )}
                                         </div>
-                                    </li>
+                                        {event.description && (
+                                            <div className="text-muted mt-1">
+                                                {event.description.substring(0, 150)}
+                                                {event.description.length > 150 ? "..." : ""}
+                                            </div>
+                                        )}
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         </div>
                     )}
 
                     {/* Groups Results */}
                     {results.groups.length > 0 && (
-                        <div className="search-section">
+                        <div className="vflex gap-2">
                             <h3>Groups ({results.groups.length})</h3>
-                            <ul className="search-list">
+                            <div className="vflex gap-2">
                                 {results.groups.map((group) => (
-                                    <li key={group.id} className="search-item">
-                                        <div className="search-item-title">{group.groupName}</div>
-                                        <div className="search-item-meta">
-                                            {group.description && (
-                                                <div className="search-item-description">
-                                                    {group.description.substring(0, 150)}
-                                                    {group.description.length > 150 ? "..." : ""}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </li>
+                                    <div key={group.id} className="card">
+                                        <div className="list-item__title">{group.groupName}</div>
+                                        {group.description && (
+                                            <div className="text-muted mt-1">
+                                                {group.description.substring(0, 150)}
+                                                {group.description.length > 150 ? "..." : ""}
+                                            </div>
+                                        )}
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         </div>
                     )}
 
@@ -101,10 +99,10 @@ function Search() {
                         results.groups.length === 0 &&
                         !loading &&
                         !error && (
-                        <div className="search-no-results">
-                            No results found for &quot;{searchTerm}&quot;
-                        </div>
-                    )}
+                            <div className="text-center text-muted p-4">
+                                No results found for &quot;{searchTerm}&quot;
+                            </div>
+                        )}
                 </div>
             )}
         </div>

@@ -180,29 +180,21 @@ function Group() {
     };
 
     return (
-        <div className="flex hac vacp">
+        <div className="container p-3">
             <div className="vflex">
                 <h1>Groups</h1>
 
                 {message.state !== MESSAGE_STATE.IDLE && (
-                    <div className={message.state === MESSAGE_STATE.SUCCESS ? "success-message" : "error-message"} style={{
-                        padding: "10px",
-                        marginBottom: "10px",
-                        borderRadius: "4px",
-                        border: "1px solid",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px"
-                    }}>
+                    <div className={`message ${message.state === MESSAGE_STATE.SUCCESS ? "message--success" : "message--error"}`}>
                         {message.state === MESSAGE_STATE.SUCCESS ? <CheckCircle size={20} /> : <XCircle size={20} />}
                         {message.text}
                     </div>
                 )}
 
-                <div className="group-actions flex">
-                    <button onClick={handleCreateClick}>Create Group</button>
-                    <button onClick={handleSearchClick}>Search Groups</button>
-                    <button onClick={() => {
+                <div className="flex wrap gap-2 mb-3">
+                    <button className="btn" onClick={handleCreateClick}>Create Group</button>
+                    <button className="btn" onClick={handleSearchClick}>Search Groups</button>
+                    <button className="btn" onClick={() => {
                         setIsCreating(false);
                         setIsEditing(false);
                         setIsSearching(false);
@@ -211,34 +203,30 @@ function Group() {
                 </div>
 
                 {isCreating && (
-                    <div className="create-group-form vflex">
+                    <div className="form-container mb-4">
                         <h2>Create New Group</h2>
                         <form onSubmit={handleCreateGroup} className="vflex">
-                            <div className="vflex">
-                                <div className="w30p">Group Name</div>
-                                <div>
-                                    <input
-                                        className="w60p"
-                                        type="text"
-                                        value={formData.groupName}
-                                        onChange={(e) => setFormData({ ...formData, groupName: e.target.value })}
-                                        required
-                                    />
-                                </div>
+                            <div className="form-group">
+                                <label className="form-label">Group Name</label>
+                                <input
+                                    className="form-input"
+                                    type="text"
+                                    value={formData.groupName}
+                                    onChange={(e) => setFormData({ ...formData, groupName: e.target.value })}
+                                    required
+                                />
                             </div>
-                            <div className="vflex">
-                                <div className="w30p">Description</div>
-                                <div>
-                                    <textarea
-                                        className="w60p"
-                                        value={formData.description}
-                                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                        rows={4}
-                                    />
-                                </div>
+                            <div className="form-group">
+                                <label className="form-label">Description</label>
+                                <textarea
+                                    className="form-input"
+                                    value={formData.description}
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                    rows={4}
+                                />
                             </div>
-                            <div className="vflex">
-                                <label className="flex vac">
+                            <div className="form-group">
+                                <label className="form-checkbox-label">
                                     <input
                                         type="checkbox"
                                         checked={formData.isPublic}
@@ -247,64 +235,56 @@ function Group() {
                                     Public Group
                                 </label>
                             </div>
-                            <div className="vflex">
-                                <div className="w30p">Tags</div>
-                                <div>
-                                    <input
-                                        className="w60p"
-                                        type="text"
-                                        value={formData.tags}
-                                        onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                                    />
-                                </div>
+                            <div className="form-group">
+                                <label className="form-label">Tags</label>
+                                <input
+                                    className="form-input"
+                                    type="text"
+                                    value={formData.tags}
+                                    onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                                />
                             </div>
-                            <div className="vflex">
-                                <div className="w30p">Categories</div>
-                                <div>
-                                    <input
-                                        className="w60p"
-                                        type="text"
-                                        value={formData.categories}
-                                        onChange={(e) => setFormData({ ...formData, categories: e.target.value })}
-                                    />
-                                </div>
+                            <div className="form-group">
+                                <label className="form-label">Categories</label>
+                                <input
+                                    className="form-input"
+                                    type="text"
+                                    value={formData.categories}
+                                    onChange={(e) => setFormData({ ...formData, categories: e.target.value })}
+                                />
                             </div>
-                            <div className="flex">
-                                <button type="submit">Create</button>
-                                <button type="button" onClick={() => setIsCreating(false)}>Cancel</button>
+                            <div className="form-actions">
+                                <button type="submit" className="btn btn-primary">Create</button>
+                                <button type="button" className="btn" onClick={() => setIsCreating(false)}>Cancel</button>
                             </div>
                         </form>
                     </div>
                 )}
 
                 {isEditing && selectedGroup && (
-                    <div className="edit-group-form vflex">
+                    <div className="form-container mb-4">
                         <h2>Edit Group</h2>
                         <form onSubmit={handleUpdateGroup} className="vflex">
-                            <div className="vflex">
-                                <div className="w30p">Group Name</div>
-                                <div>
-                                    <input
-                                        className="w60p"
-                                        type="text"
-                                        value={formData.groupName}
-                                        onChange={(e) => setFormData({ ...formData, groupName: e.target.value })}
-                                    />
-                                </div>
+                            <div className="form-group">
+                                <label className="form-label">Group Name</label>
+                                <input
+                                    className="form-input"
+                                    type="text"
+                                    value={formData.groupName}
+                                    onChange={(e) => setFormData({ ...formData, groupName: e.target.value })}
+                                />
                             </div>
-                            <div className="vflex">
-                                <div className="w30p">Description</div>
-                                <div>
-                                    <textarea
-                                        className="w60p"
-                                        value={formData.description}
-                                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                        rows={4}
-                                    />
-                                </div>
+                            <div className="form-group">
+                                <label className="form-label">Description</label>
+                                <textarea
+                                    className="form-input"
+                                    value={formData.description}
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                    rows={4}
+                                />
                             </div>
-                            <div className="vflex">
-                                <label className="flex vac">
+                            <div className="form-group">
+                                <label className="form-checkbox-label">
                                     <input
                                         type="checkbox"
                                         checked={formData.isPublic}
@@ -313,31 +293,27 @@ function Group() {
                                     Public Group
                                 </label>
                             </div>
-                            <div className="vflex">
-                                <div className="w30p">Tags</div>
-                                <div>
-                                    <input
-                                        className="w60p"
-                                        type="text"
-                                        value={formData.tags}
-                                        onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                                    />
-                                </div>
+                            <div className="form-group">
+                                <label className="form-label">Tags</label>
+                                <input
+                                    className="form-input"
+                                    type="text"
+                                    value={formData.tags}
+                                    onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                                />
                             </div>
-                            <div className="vflex">
-                                <div className="w30p">Categories</div>
-                                <div>
-                                    <input
-                                        className="w60p"
-                                        type="text"
-                                        value={formData.categories}
-                                        onChange={(e) => setFormData({ ...formData, categories: e.target.value })}
-                                    />
-                                </div>
+                            <div className="form-group">
+                                <label className="form-label">Categories</label>
+                                <input
+                                    className="form-input"
+                                    type="text"
+                                    value={formData.categories}
+                                    onChange={(e) => setFormData({ ...formData, categories: e.target.value })}
+                                />
                             </div>
-                            <div className="flex">
-                                <button type="submit">Update</button>
-                                <button type="button" onClick={() => {
+                            <div className="form-actions">
+                                <button type="submit" className="btn btn-primary">Update</button>
+                                <button type="button" className="btn" onClick={() => {
                                     setIsEditing(false);
                                     setSelectedGroup(null);
                                 }}>Cancel</button>
@@ -347,33 +323,31 @@ function Group() {
                 )}
 
                 {isSearching && (
-                    <div className="search-groups vflex">
+                    <div className="vflex mb-4">
                         <h2>Search Groups</h2>
                         <form onSubmit={handleSearch} className="vflex">
-                            <div className="vflex">
-                                <div className="w30p">Search Term</div>
-                                <div>
-                                    <input
-                                        className="w60p"
-                                        type="text"
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                        placeholder="Search by group name"
-                                    />
-                                </div>
+                            <div className="form-group">
+                                <label className="form-label">Search Term</label>
+                                <input
+                                    className="form-input"
+                                    type="text"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    placeholder="Search by group name"
+                                />
                             </div>
                             <div>
-                                <button type="submit">Search</button>
+                                <button type="submit" className="btn btn-primary">Search</button>
                             </div>
                         </form>
-                        <div className="search-results vflex">
+                        <div className="vflex gap-2 mt-3">
                             {searchResults.map((group) => (
-                                <div key={group.id} className="box vflex">
+                                <div key={group.id} className="card vflex">
                                     <h3>{group.groupName}</h3>
                                     <p>{group.description}</p>
-                                    <div className="flex">
-                                        <button onClick={() => handleViewGroup(group.id)}>View</button>
-                                        <button onClick={() => handleJoinGroup(group.id)}>Join</button>
+                                    <div className="flex gap-2">
+                                        <button className="btn" onClick={() => handleViewGroup(group.id)}>View</button>
+                                        <button className="btn btn-primary" onClick={() => handleJoinGroup(group.id)}>Join</button>
                                     </div>
                                 </div>
                             ))}
@@ -382,25 +356,25 @@ function Group() {
                 )}
 
                 {!isCreating && !isEditing && !isSearching && (
-                    <div className="groups-list vflex">
+                    <div className="vflex">
                         <h2>My Groups</h2>
                         {groups.length === 0 ? (
                             <p>No groups yet. Create one to get started!</p>
                         ) : (
-                            <div className="vflex">
+                            <div className="vflex gap-2">
                                 {groups.map((group) => (
-                                    <div key={group.id} className="box vflex">
+                                    <div key={group.id} className="card vflex">
                                         <h3>{group.groupName}</h3>
                                         <p>{group.description}</p>
-                                        <div className="vflex">
+                                        <div className="vflex gap-1 text-sm">
                                             <div><strong>Public:</strong> {group.isPublic ? "Yes" : "No"}</div>
                                             <div><strong>Tags:</strong> {group.tags}</div>
                                             <div><strong>Categories:</strong> {group.categories}</div>
                                         </div>
-                                        <div className="flex">
-                                            <button onClick={() => handleEditClick(group)}>Edit</button>
-                                            <button onClick={() => handleDeleteGroup(group.id)}>Delete</button>
-                                            <button onClick={() => handleLeaveGroup(group.id)}>Leave</button>
+                                        <div className="flex gap-2 mt-2">
+                                            <button className="btn" onClick={() => handleEditClick(group)}>Edit</button>
+                                            <button className="btn btn-danger" onClick={() => handleDeleteGroup(group.id)}>Delete</button>
+                                            <button className="btn" onClick={() => handleLeaveGroup(group.id)}>Leave</button>
                                         </div>
                                     </div>
                                 ))}
@@ -410,9 +384,9 @@ function Group() {
                 )}
 
                 {selectedGroup && !isEditing && (
-                    <div className="group-details box vflex">
+                    <div className="detail-card mt-4">
                         <h2>Group Details</h2>
-                        <div className="vflex">
+                        <div className="vflex gap-2">
                             <div><strong>Name:</strong> {selectedGroup.groupName}</div>
                             <div><strong>Description:</strong> {selectedGroup.description}</div>
                             <div><strong>Public:</strong> {selectedGroup.isPublic ? "Yes" : "No"}</div>
@@ -420,8 +394,8 @@ function Group() {
                             <div><strong>Categories:</strong> {selectedGroup.categories}</div>
                             <div><strong>Created:</strong> {new Date(selectedGroup.createdAt).toLocaleString()}</div>
                         </div>
-                        <div>
-                            <button onClick={() => setSelectedGroup(null)}>Close</button>
+                        <div className="mt-3">
+                            <button className="btn" onClick={() => setSelectedGroup(null)}>Close</button>
                         </div>
                     </div>
                 )}

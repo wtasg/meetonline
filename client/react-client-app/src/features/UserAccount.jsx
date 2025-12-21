@@ -11,12 +11,30 @@ function UserAccount() {
     }, []);
 
     return (
-        <div className="flex vac hac">
-            <div className="vflex">
+        <div className="container p-3">
+            <div className="vflex max-w-lg">
                 <h2>User Account</h2>
-                <div className="flex"><div className="w30p">Username</div><div>{account.username}</div></div>
-                <div className="flex"><div className="w30p">Created At</div><div>{new Date(account.createdAt).toLocaleDateString()}</div> <div>({new Date(account.createdAt).toDateString()})</div></div>
-                <div className="flex"><div className="w30p">Last Modified At</div><div>{new Date(account.modifiedAt).toLocaleDateString()}</div> <div>({new Date(account.modifiedAt).toDateString()})</div></div>
+
+                <div className="form-group">
+                    <label className="form-label">Username</label>
+                    <div>{account.username}</div>
+                </div>
+
+                <div className="form-group">
+                    <label className="form-label">Created At</label>
+                    <div className="flex gap-2 wrap">
+                        <span>{new Date(account.createdAt).toLocaleDateString()}</span>
+                        <span className="text-muted">({new Date(account.createdAt).toDateString()})</span>
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <label className="form-label">Last Modified At</label>
+                    <div className="flex gap-2 wrap">
+                        <span>{new Date(account.modifiedAt).toLocaleDateString()}</span>
+                        <span className="text-muted">({new Date(account.modifiedAt).toDateString()})</span>
+                    </div>
+                </div>
             </div>
         </div>
     );

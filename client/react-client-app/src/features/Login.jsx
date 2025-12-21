@@ -58,45 +58,50 @@ function Login({ onLogin }) {
     }, [login_password, login_username]);
 
     return (
-        <div className="flex hac vac">
-            <div className="form login vflex w40p">
+        <div className="container p-3 flex hac vac">
+            <div className="form-container max-w-sm vflex">
                 <h2>Login</h2>
 
                 {failedLogin && <ServiceError hasError={true} message="login failed"></ServiceError>}
-                {fromSignup && <p>Signup was successful!</p>}
-                <div>
-                    <label htmlFor="login_username" className="vflex">
-                        <>Username</>
-                        <input
-                            type="text"
-                            id="login_username"
-                            name="login_username"
-                            placeholder="login_username"
-                            value={login_username}
-                            onChange={e => updateLoginUsername(e.target.value)}
-                        />
-                    </label>
-                </div>
-                <div>
-                    <label htmlFor="login_password" className="vflex">
-                        <>Password</>
-                        <input
+                {fromSignup && <p className="message message--success">Signup was successful!</p>}
 
-                            type="password"
-                            id="login_password"
-                            name="login_password"
-                            placeholder="login_password"
-                            value={login_password}
-                            onChange={e => updateLoginPassword(e.target.value)}
-                        />
+                <div className="form-group">
+                    <label htmlFor="login_username" className="form-label">
+                        Username
                     </label>
+                    <input
+                        type="text"
+                        id="login_username"
+                        name="login_username"
+                        placeholder="Username"
+                        value={login_username}
+                        onChange={e => updateLoginUsername(e.target.value)}
+                        className="form-input"
+                    />
                 </div>
-                <div>
+
+                <div className="form-group">
+                    <label htmlFor="login_password" className="form-label">
+                        Password
+                    </label>
+                    <input
+                        type="password"
+                        id="login_password"
+                        name="login_password"
+                        placeholder="Password"
+                        value={login_password}
+                        onChange={e => updateLoginPassword(e.target.value)}
+                        className="form-input"
+                    />
+                </div>
+
+                <div className="form-actions">
                     <button {...btn_options}
                         type="button"
-                        className="cta"
+                        className="btn btn-primary cta"
                         onClick={onLoginLocal}>Login</button>
                 </div>
+
                 <div>
                     <Link to="/signup">create a new account</Link>
                 </div>

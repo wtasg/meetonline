@@ -24,17 +24,15 @@ function App() {
     }, []);
 
     return (
-        <div className="vflex">
-            <header className="header flex sb">
-                <div className="flex vac hac  clickable" onClick={() => navigateTo("/")}>MeetOnline</div>
-                <div>
-                    <Menu />
-                </div>
-            </header >
-            <section className="content flex">
+        <div className="vflex min-h-screen">
+            <header className="header flex sb vac px-3">
+                <div className="flex vac hac clickable" onClick={() => navigateTo("/")}>MeetOnline</div>
+                <Menu />
+            </header>
+            <main className="flex-1">
                 <Content />
-            </section>
-        </div >
+            </main>
+        </div>
     );
 }
 

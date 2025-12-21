@@ -22,9 +22,9 @@ function EventListItem({ event, isAuthenticated, isMinimal }) {
     if (isMinimal || !isAuthenticated) {
         // Show minimal info (title + created date)
         return (
-            <div className="event-list-item" style={{ padding: "8px", borderBottom: "1px solid #ccc" }}>
-                <div style={{ fontWeight: "bold" }}>{event.title}</div>
-                <div style={{ fontSize: "0.9em", color: "#666" }}>
+            <div className="card p-2">
+                <div className="list-item__title">{event.title}</div>
+                <div className="list-item__meta">
                     Created: {formatDate(event.createdAt)}
                 </div>
             </div>
@@ -33,18 +33,18 @@ function EventListItem({ event, isAuthenticated, isMinimal }) {
 
     // Authenticated user can see full details
     return (
-        <div className="event-list-item">
+        <div className="card">
             <div
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="clickable flex"
+                className="clickable flex gap-2"
             >
-                <div>{isExpanded ? "[-]" : "[+]"}</div> <div>{event.title}</div>
+                <div>{isExpanded ? "[-]" : "[+]"}</div> <div className="list-item__title">{event.title}</div>
             </div>
-            <div className="text muted">
+            <div className="text-muted text-sm">
                 Created: {formatDate(event.createdAt)}
             </div>
             {isExpanded && (
-                <div style={{ marginTop: "8px", paddingLeft: "16px" }}>
+                <div className="vflex gap-1 mt-2 px-3">
                     {event.description && (
                         <div><strong>Description:</strong> {event.description}</div>
                     )}

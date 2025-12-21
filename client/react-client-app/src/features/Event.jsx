@@ -199,25 +199,30 @@ function Event() {
     }
 
     return (
-        <div className="event-container p1">
+        <div className="container p-3">
             <h2>Events</h2>
 
-            {message.state !== MESSAGE_STATE.IDLE && <div className={message.state === MESSAGE_STATE.SUCCESS ? "success-message" : "error-message"} style={{ color: message.state === MESSAGE_STATE.SUCCESS ? "var(--color-green)" : "var(--color-red)", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "8px", padding: "10px", backgroundColor: message.state === MESSAGE_STATE.SUCCESS ? "oklch(95% 0.1 150)" : "oklch(95% 0.1 29)", borderRadius: "4px", border: `1px solid ${message.state === MESSAGE_STATE.SUCCESS ? "var(--color-green)" : "var(--color-red)"}` }}>{message.state === MESSAGE_STATE.SUCCESS ? <CheckCircle size={20} /> : <XCircle size={20} />} {message.text}</div>}
+            {message.state !== MESSAGE_STATE.IDLE && (
+                <div className={`message ${message.state === MESSAGE_STATE.SUCCESS ? "message--success" : "message--error"}`}>
+                    {message.state === MESSAGE_STATE.SUCCESS ? <CheckCircle size={20} /> : <XCircle size={20} />}
+                    {message.text}
+                </div>
+            )}
 
-            <div style={{ marginBottom: "1rem" }}>
-                <button onClick={handleCreateClick} className="btn-primary">
+            <div className="mb-3">
+                <button onClick={handleCreateClick} className="btn btn-primary">
                     Create New Event
                 </button>
             </div>
 
             {/* Create/Edit Form */}
             {(isCreating || isEditing) && (
-                <form onSubmit={isEditing ? handleUpdateEvent : handleCreateEvent} className="event-form" style={{ marginBottom: "2rem", padding: "1rem", border: "1px solid var(--color-gray-300)", borderRadius: "8px" }}>
+                <form onSubmit={isEditing ? handleUpdateEvent : handleCreateEvent} className="form-container mb-4">
                     <h3>{isEditing ? "Edit Event" : "Create Event"}</h3>
-                    <p style={{ fontSize: "0.85rem", color: "var(--color-gray-500)", marginBottom: "1rem" }}>Fields marked with * are required</p>
+                    <p className="form-hint mb-3">Fields marked with * are required</p>
 
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label htmlFor="title">Title *</label>
+                    <div className="form-group">
+                        <label htmlFor="title" className="form-label">Title *</label>
                         <input
                             type="text"
                             id="title"
@@ -225,37 +230,37 @@ function Event() {
                             value={formData.title}
                             onChange={handleInputChange}
                             required
-                            style={{ width: "100%", padding: "0.5rem" }}
+                            className="form-input"
                         />
                     </div>
 
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label htmlFor="description">Description</label>
+                    <div className="form-group">
+                        <label htmlFor="description" className="form-label">Description</label>
                         <textarea
                             id="description"
                             name="description"
                             value={formData.description}
                             onChange={handleInputChange}
                             rows={3}
-                            style={{ width: "100%", padding: "0.5rem" }}
+                            className="form-input"
                         />
                     </div>
 
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label htmlFor="onlineLocation">Online Location (URL)</label>
+                    <div className="form-group">
+                        <label htmlFor="onlineLocation" className="form-label">Online Location (URL)</label>
                         <input
                             type="text"
                             id="onlineLocation"
                             name="onlineLocation"
                             value={formData.onlineLocation}
                             onChange={handleInputChange}
-                            style={{ width: "100%", padding: "0.5rem" }}
+                            className="form-input"
                         />
                     </div>
 
-                    <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
-                        <div style={{ flex: 1 }}>
-                            <label htmlFor="startAt">Start Time *</label>
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label htmlFor="startAt" className="form-label">Start Time *</label>
                             <input
                                 type="datetime-local"
                                 id="startAt"
@@ -263,11 +268,11 @@ function Event() {
                                 value={formData.startAt}
                                 onChange={handleInputChange}
                                 required
-                                style={{ width: "100%", padding: "0.5rem" }}
+                                className="form-input"
                             />
                         </div>
-                        <div style={{ flex: 1 }}>
-                            <label htmlFor="endAt">End Time *</label>
+                        <div className="form-group">
+                            <label htmlFor="endAt" className="form-label">End Time *</label>
                             <input
                                 type="datetime-local"
                                 id="endAt"
@@ -275,14 +280,14 @@ function Event() {
                                 value={formData.endAt}
                                 onChange={handleInputChange}
                                 required
-                                style={{ width: "100%", padding: "0.5rem" }}
+                                className="form-input"
                             />
                         </div>
                     </div>
 
-                    <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
-                        <div style={{ flex: 1 }}>
-                            <label htmlFor="tags">Tags</label>
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label htmlFor="tags" className="form-label">Tags</label>
                             <input
                                 type="text"
                                 id="tags"
@@ -290,11 +295,11 @@ function Event() {
                                 value={formData.tags}
                                 onChange={handleInputChange}
                                 placeholder="e.g., tech, webinar"
-                                style={{ width: "100%", padding: "0.5rem" }}
+                                className="form-input"
                             />
                         </div>
-                        <div style={{ flex: 1 }}>
-                            <label htmlFor="categories">Categories</label>
+                        <div className="form-group">
+                            <label htmlFor="categories" className="form-label">Categories</label>
                             <input
                                 type="text"
                                 id="categories"
@@ -302,59 +307,59 @@ function Event() {
                                 value={formData.categories}
                                 onChange={handleInputChange}
                                 placeholder="e.g., education, business"
-                                style={{ width: "100%", padding: "0.5rem" }}
+                                className="form-input"
                             />
                         </div>
                     </div>
 
-                    <div style={{ marginBottom: "1rem", display: "flex", gap: "2rem", flexWrap: "wrap" }}>
-                        <label>
+                    <div className="form-checkbox-group mb-3">
+                        <label className="form-checkbox-label">
                             <input
                                 type="checkbox"
                                 name="isPaid"
                                 checked={formData.isPaid}
                                 onChange={handleInputChange}
                             />
-                            {" "}Paid Event
+                            Paid Event
                         </label>
-                        <label>
+                        <label className="form-checkbox-label">
                             <input
                                 type="checkbox"
                                 name="isBroadcast"
                                 checked={formData.isBroadcast}
                                 onChange={handleInputChange}
                             />
-                            {" "}Broadcast
+                            Broadcast
                         </label>
-                        <label>
+                        <label className="form-checkbox-label">
                             <input
                                 type="checkbox"
                                 name="isInteractive"
                                 checked={formData.isInteractive}
                                 onChange={handleInputChange}
                             />
-                            {" "}Interactive
+                            Interactive
                         </label>
-                        <label>
+                        <label className="form-checkbox-label">
                             <input
                                 type="checkbox"
                                 name="isAnonymous"
                                 checked={formData.isAnonymous}
                                 onChange={handleInputChange}
                             />
-                            {" "}Allow Anonymous
+                            Allow Anonymous
                         </label>
                     </div>
 
                     {formData.isBroadcast && (
-                        <div style={{ marginBottom: "1rem" }}>
-                            <label htmlFor="broadcastType">Broadcast Type</label>
+                        <div className="form-group">
+                            <label htmlFor="broadcastType" className="form-label">Broadcast Type</label>
                             <select
                                 id="broadcastType"
                                 name="broadcastType"
                                 value={formData.broadcastType}
                                 onChange={handleInputChange}
-                                style={{ width: "100%", padding: "0.5rem" }}
+                                className="form-input"
                             >
                                 <option value="">Select type...</option>
                                 <option value="youtube">YouTube</option>
@@ -364,11 +369,11 @@ function Event() {
                         </div>
                     )}
 
-                    <div style={{ display: "flex", gap: "1rem" }}>
-                        <button type="submit" className="btn-primary">
+                    <div className="form-actions">
+                        <button type="submit" className="btn btn-primary">
                             {isEditing ? "Update Event" : "Create Event"}
                         </button>
-                        <button type="button" onClick={() => { setIsCreating(false); setIsEditing(false); resetForm(); }}>
+                        <button type="button" className="btn" onClick={() => { setIsCreating(false); setIsEditing(false); resetForm(); }}>
                             Cancel
                         </button>
                     </div>
@@ -377,7 +382,7 @@ function Event() {
 
             {/* Event Detail View */}
             {selectedEvent && !isEditing && (
-                <div className="event-detail" style={{ marginBottom: "2rem", padding: "1rem", border: "1px solid var(--color-gray-300)", borderRadius: "8px" }}>
+                <div className="detail-card">
                     <h3>{selectedEvent.title}</h3>
                     <p><strong>Description:</strong> {selectedEvent.description || "No description"}</p>
                     <p><strong>Online Location:</strong> {selectedEvent.onlineLocation || "N/A"}</p>
@@ -391,41 +396,34 @@ function Event() {
                         {selectedEvent.isInteractive && " [Interactive]"}
                         {selectedEvent.isAnonymous && " [Allows Anonymous]"}
                     </p>
-                    <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
-                        <button onClick={() => handleEditClick(selectedEvent)}>Edit</button>
-                        <button onClick={() => handleDeleteEvent(selectedEvent.id)} style={{ color: "var(--color-red)" }}>Delete</button>
-                        <button onClick={() => setSelectedEvent(null)}>Close</button>
+                    <div className="form-actions">
+                        <button className="btn" onClick={() => handleEditClick(selectedEvent)}>Edit</button>
+                        <button className="btn btn-danger" onClick={() => handleDeleteEvent(selectedEvent.id)}>Delete</button>
+                        <button className="btn" onClick={() => setSelectedEvent(null)}>Close</button>
                     </div>
                 </div>
             )}
 
             {/* Events List */}
-            <div className="events-list">
+            <div className="vflex">
                 <h3>Your Events ({events.length})</h3>
                 {events.length === 0 ? (
                     <p>No events found. Create your first event!</p>
                 ) : (
-                    <ul style={{ listStyle: "none", padding: 0 }}>
+                    <div className="vflex gap-2">
                         {events.map(event => (
-                            <li
+                            <div
                                 key={event.id}
-                                style={{
-                                    padding: "1rem",
-                                    marginBottom: "0.5rem",
-                                    border: "1px solid var(--color-gray-200)",
-                                    borderRadius: "4px",
-                                    cursor: "pointer",
-                                    backgroundColor: selectedEvent?.id === event.id ? "var(--color-gray-100)" : "transparent"
-                                }}
+                                className={`list-item ${selectedEvent?.id === event.id ? "list-item--selected" : ""}`}
                                 onClick={() => handleViewEvent(event.id)}
                             >
-                                <strong>{event.title}</strong>
-                                <div style={{ fontSize: "0.9rem", color: "var(--color-gray-500)" }}>
+                                <div className="list-item__title">{event.title}</div>
+                                <div className="list-item__meta">
                                     {formatDateTime(event.startAt)} - {formatDateTime(event.endAt)}
                                 </div>
-                            </li>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 )}
             </div>
         </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Home, User, UserCircle, Users, Calendar, Search, Bell, Settings, LogOut, ChevronDown } from "lucide-react";
 import { useSession } from "../hooks/useSession";
 import { Link } from "../components/Link.jsx";
 import { UserSettings } from "./UserSettings";
@@ -7,9 +8,10 @@ import { Notifications } from "./Notifications";
 import { fetchUnreadNotificationCount } from "../actions/notificationActions";
 
 function Menu() {
-    const { hasSession } = useSession();
+    const { hasSession, username } = useSession();
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
 
     useEffect(() => {
@@ -40,72 +42,153 @@ function Menu() {
         };
     }, [hasSession]);
 
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (isDropdownOpen && !event.target.closest(".user-menu-dropdown")) {
+                setIsDropdownOpen(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [isDropdownOpen]);
+
     return (
         <>
-            <nav className="flex">
+            <nav className="flex flex-1 sb">
+                {/* Left section - Main navigation */}
                 <ul className="flex">
                     <li>
-                        <Link to={"/"}>Home</Link>
+                        <Link to={"/"}>
+                            <span className="flex hac vac gap-1">
+                                <Home size={16} />
+                                <span>Home</span>
+                            </span>
+                        </Link>
                     </li>
                     {
                         hasSession && <>
                             <li>
-                                <Link to={"/account"}>account</Link>
+                                <Link to={"/groups"}>
+                                    <span className="flex hac vac gap-1">
+                                        <Users size={16} />
+                                        <span>Groups</span>
+                                    </span>
+                                </Link>
                             </li>
                             <li>
-                                <Link to={"/profile"}>profile</Link>
+                                <Link to={"/events"}>
+                                    <span className="flex hac vac gap-1">
+                                        <Calendar size={16} />
+                                        <span>Events</span>
+                                    </span>
+                                </Link>
                             </li>
-                            <li>
-                                <Link to={"/groups"}>groups</Link>
-                            </li>
-                            <li>
-                                <Link to={"/events"}>events</Link>
-                            </li>
-
                         </>
-
                     }
                 </ul>
 
+                {/* Center section - Search */}
+                {hasSession && (
+                    <ul className="flex">
+                        <li>
+                            <Link to={"/search"}>
+                                <span className="flex hac vac gap-1">
+                                    <Search size={16} />
+                                    <span>Search</span>
+                                </span>
+                            </Link>
+                        </li>
+                    </ul>
+                )}
+
+                {/* Right section - User actions */}
                 <ul className="flex">
                     {!hasSession && <>
                         <li>
-                            <Link to={"/login"}>login</Link>
+                            <Link to={"/login"}>
+                                <span className="flex hac vac gap-1">
+                                    <LogOut size={16} />
+                                    <span>Login</span>
+                                </span>
+                            </Link>
                         </li>
                         <li>
-                            <Link to={"/signup"}>signup</Link>
+                            <Link to={"/signup"}>
+                                <span className="flex hac vac gap-1">
+                                    <UserCircle size={16} />
+                                    <span>Signup</span>
+                                </span>
+                            </Link>
                         </li>
                     </>
                     }
                     {
-                        hasSession && <>
-                            <li>
+                        hasSession && (
+                            <li className="user-menu-dropdown" style={{ position: "relative" }}>
                                 <div
-                                    className="flex hac vac clickable"
-                                    onClick={() => setIsNotificationsOpen(true)}
-                                    aria-label="Open notifications"
+                                    className="flex hac vac clickable gap-1"
+                                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                    aria-label="User menu"
                                 >
-                                    <span className="notification-icon">🔔</span>
+                                    <UserCircle size={16} />
+                                    <span>{username()}</span>
                                     {unreadCount > 0 && (
                                         <span className="notification-badge">{unreadCount}</span>
                                     )}
-                                    <span>Notifications</span>
+                                    <ChevronDown size={14} />
                                 </div>
+
+                                {isDropdownOpen && (
+                                    <div className="user-dropdown-menu">
+                                        <Link to={"/profile"}>
+                                            <div className="user-dropdown-item" onClick={() => setIsDropdownOpen(false)}>
+                                                <UserCircle size={16} />
+                                                <span>Profile</span>
+                                            </div>
+                                        </Link>
+                                        <Link to={"/account"}>
+                                            <div className="user-dropdown-item" onClick={() => setIsDropdownOpen(false)}>
+                                                <User size={16} />
+                                                <span>Account</span>
+                                            </div>
+                                        </Link>
+                                        <div className="user-dropdown-divider"></div>
+                                        <div
+                                            className="user-dropdown-item"
+                                            onClick={() => {
+                                                setIsNotificationsOpen(true);
+                                                setIsDropdownOpen(false);
+                                            }}
+                                        >
+                                            <Bell size={16} />
+                                            <span>Notifications</span>
+                                            {unreadCount > 0 && (
+                                                <span className="notification-badge">{unreadCount}</span>
+                                            )}
+                                        </div>
+                                        <div
+                                            className="user-dropdown-item"
+                                            onClick={() => {
+                                                setIsSettingsOpen(true);
+                                                setIsDropdownOpen(false);
+                                            }}
+                                        >
+                                            <Settings size={16} />
+                                            <span>Settings</span>
+                                        </div>
+                                        <div className="user-dropdown-divider"></div>
+                                        <div
+                                            className="user-dropdown-item"
+                                            onClick={() => setIsDropdownOpen(false)}
+                                        >
+                                            <Logout />
+                                        </div>
+                                    </div>
+                                )}
                             </li>
-                            <li>
-                                <Logout />
-                            </li>
-                            <li>
-                                <div
-                                    className="flex hac vac clickable"
-                                    onClick={() => setIsSettingsOpen(true)}
-                                    aria-label="Open settings"
-                                >
-                                    <span className="settings-icon">⚙</span>
-                                    <span>Settings</span>
-                                </div>
-                            </li>
-                        </>
+                        )
                     }
                 </ul>
             </nav>
