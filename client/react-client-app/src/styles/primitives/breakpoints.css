@@ -1,0 +1,35 @@
+/* ============================================
+   PRIMITIVES: BREAKPOINTS
+   Responsive breakpoint definitions and max-widths
+   ============================================ */
+
+:root {
+    /* Breakpoint values (for reference) */
+    --bp-sm: 640px;
+    --bp-md: 768px;
+    --bp-lg: 1024px;
+    --bp-xl: 1280px;
+    --bp-2xl: 1536px;
+    --bp-4k: 2560px;
+
+    /* Container max-widths */
+    --max-w-xs: 20rem;
+    /* 320px */
+    --max-w-sm: 24rem;
+    /* 384px */
+    --max-w-md: 28rem;
+    /* 448px */
+    --max-w-lg: 32rem;
+    /* 512px */
+    --max-w-xl: 48rem;
+    /* 768px */
+    --max-w-2xl: 64rem;
+    /* 1024px */
+    --max-w-4xl: 80rem;
+    /* 1280px */
+    --max-w-full: 100%;
+
+    /* Component sizes */
+    --input-min-height: 2.5rem;
+    --button-min-width: 4rem;
+}

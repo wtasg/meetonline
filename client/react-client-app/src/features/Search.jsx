@@ -99,10 +99,10 @@ function Search() {
                         results.groups.length === 0 &&
                         !loading &&
                         !error && (
-                            <div className="text-center text-muted p-4">
-                                No results found for &quot;{searchTerm}&quot;
-                            </div>
-                        )}
+                        <div className="text-center text-muted p-4">
+                            No results found for &quot;{searchTerm}&quot;
+                        </div>
+                    )}
                 </div>
             )}
         </div>

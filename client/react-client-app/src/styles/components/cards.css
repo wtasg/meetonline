@@ -1,0 +1,56 @@
+/* ============================================
+   COMPONENTS: CARDS
+   Card, box, and detail card styles
+   ============================================ */
+
+.card {
+    padding: var(--space-3);
+    border: 1px solid var(--card-border);
+    border-radius: 0.5rem;
+    background: var(--card-background);
+}
+
+.detail-card {
+    padding: var(--space-3);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.5rem;
+    margin-bottom: var(--space-4);
+}
+
+.box {
+    border: 1px solid var(--border-secondary);
+    border-radius: 0.5rem;
+    padding: var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+.box.error {
+    border-color: var(--state-danger-border);
+}
+
+/* List items */
+.list-item {
+    padding: var(--space-3);
+    border: 1px solid var(--border-secondary);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.list-item:hover {
+    background-color: var(--background-secondary);
+}
+
+.list-item--selected {
+    background-color: var(--background-tertiary);
+}
+
+.list-item__title {
+    font-weight: 600;
+}
+
+.list-item__meta {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: var(--space-1);
+}

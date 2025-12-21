@@ -1,5 +1,5 @@
 import { createContext, useState, useCallback } from "react";
-import { hasUserSession as checkSession, username as getUsername } from "../utils/session";
+import { hasUserSession as checkSession, username as getUsername, displayName as getDisplayName } from "../utils/session";
 
 const SessionContext = createContext(null);
 
@@ -29,8 +29,12 @@ function SessionProvider({ children }) {
         return checkSession() ? getUsername() : null;
     }, []);
 
+    const displayName = useCallback(() => {
+        return checkSession() ? getDisplayName() : null;
+    }, []);
+
     return (
-        <SessionContext.Provider value={{ hasSession, setSession, refreshSession, login, logout, username }}>
+        <SessionContext.Provider value={{ hasSession, setSession, refreshSession, login, logout, username, displayName }}>
             {children}
         </SessionContext.Provider>
     );

@@ -26,4 +26,17 @@ function username() {
     return user_session.retrieve("username");
 }
 
-export { hasUserSession, destroySession, username };
+function getStoredDisplayName() {
+    return user_session.retrieve("displayName");
+}
+
+function setStoredDisplayName(name) {
+    user_session.store("displayName", name);
+}
+
+function displayName() {
+    const stored = getStoredDisplayName();
+    return isNonEmptyString(stored) ? stored : "User";
+}
+
+export { hasUserSession, destroySession, username, getStoredDisplayName, setStoredDisplayName, displayName };

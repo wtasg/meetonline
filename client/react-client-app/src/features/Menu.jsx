@@ -8,7 +8,7 @@ import { Notifications } from "./Notifications";
 import { fetchUnreadNotificationCount } from "../actions/notificationActions";
 
 function Menu() {
-    const { hasSession, username } = useSession();
+    const { hasSession, displayName } = useSession();
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -126,14 +126,14 @@ function Menu() {
                     }
                     {
                         hasSession && (
-                            <li className="user-menu-dropdown" style={{ position: "relative" }}>
+                            <li className="user-menu-dropdown">
                                 <div
                                     className="flex hac vac clickable gap-1"
                                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                                     aria-label="User menu"
                                 >
                                     <UserCircle size={16} />
-                                    <span>{username()}</span>
+                                    <span>{displayName()}</span>
                                     {unreadCount > 0 && (
                                         <span className="notification-badge">{unreadCount}</span>
                                     )}

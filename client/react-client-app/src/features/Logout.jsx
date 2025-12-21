@@ -25,10 +25,7 @@ function Logout() {
             <LogOut size={16} />
             <span
                 onClick={handleLogout}
-                style={{
-                    cursor: loggingOut ? 'wait' : 'pointer',
-                    color: 'var(--text-warning)'
-                }}
+                className={`logout-text ${loggingOut ? "" : "clickable"}`}
             >
                 {loggingOut ? "Logging out..." : "Logout"}
             </span>

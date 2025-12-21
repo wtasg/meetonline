@@ -1,0 +1,90 @@
+/* ============================================
+   COMPONENTS: BUTTONS
+   Button styles and variants
+   ============================================ */
+
+button,
+a.btn,
+*[role="button"] {
+    cursor: pointer;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &[disabled] {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    &.cta {
+        border: 2px solid currentColor;
+    }
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.25rem;
+    background-color: var(--button-secondary-background);
+    color: var(--button-secondary-text);
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.btn:hover {
+    background-color: var(--background-secondary);
+}
+
+.btn-primary {
+    background-color: var(--button-primary-background);
+    color: var(--button-primary-text);
+    border-color: var(--button-primary-border);
+}
+
+.btn-primary:hover {
+    background-color: var(--interactive-primary-hover);
+}
+
+.btn-small {
+    padding: var(--space-1) var(--space-2);
+    font-size: 0.85em;
+}
+
+.btn-danger {
+    background-color: var(--state-danger-background);
+    color: var(--state-danger-text);
+    border-color: var(--state-danger-border);
+}
+
+.btn-danger:hover {
+    background-color: var(--state-danger-border);
+    color: var(--surface-default);
+}
+
+/* Link styles */
+a.link,
+.link {
+    color: var(--text-primary);
+    padding-bottom: 2px;
+    border-bottom: 1px solid var(--text-tertiary);
+    transition: color 0.2s ease-in-out;
+
+    &:hover {
+        color: var(--color-primary-hover, var(--interactive-primary-hover));
+        border-bottom-color: var(--text-primary);
+    }
+
+    &:visited {
+        color: var(--text-secondary);
+    }
+}
+
+.nav-link {
+    color: var(--text-primary);
+    text-decoration: none;
+}

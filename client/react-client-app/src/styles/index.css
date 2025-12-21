@@ -1,0 +1,22 @@
+/* ============================================
+   STYLES - MAIN ENTRY POINT
+   Layered CSS Architecture
+   ============================================ */
+
+/* Layer 1: Primitives - Raw design tokens */
+@import url("./primitives/colors.css");
+@import url("./primitives/spacing.css");
+@import url("./primitives/typography.css");
+@import url("./primitives/breakpoints.css");
+
+/* Layer 2: Semantics - Theme-aware mappings */
+@import url("./semantics/themes.css");
+
+/* Layer 3: Components - UI-specific styles */
+@import url("./components/layout.css");
+@import url("./components/buttons.css");
+@import url("./components/forms.css");
+@import url("./components/cards.css");
+@import url("./components/navigation.css");
+@import url("./components/notifications.css");
+@import url("./components/settings.css");

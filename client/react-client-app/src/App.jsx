@@ -1,6 +1,4 @@
-import "./App.css";
-import "./features/UserSettings.css";
-import "./theme.css";
+import "./styles/index.css";
 
 import { useEffect } from "react";
 import { Menu } from "./features/Menu";

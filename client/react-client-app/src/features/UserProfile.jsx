@@ -1,9 +1,9 @@
-
 import { useState, useEffect } from "react";
 import { fetchUserProfile, updateAddress, updateDisplayName, updateEmail, updatePhoneNumber, updateProfileName, updateWebsiteUrl } from "../actions/userProfileActions.js";
 import { EditableValue } from "../components/EditableValue.jsx";
 import { ServiceError } from "../components/Error.jsx";
 import { resetLocation, resetUserSession } from "../session.js";
+import { setStoredDisplayName } from "../utils/session.js";
 
 function UserProfile() {
     const [serviceError, setServiceError] = useState({ hasError: false, message: "" });
@@ -35,6 +35,9 @@ function UserProfile() {
 
                 const { id, profileName, displayName, phoneNumber, email, address, websiteUrl, createdAt, modifiedAt } = profile.user_profile;
                 setProfile({ id, profileName, displayName, phoneNumber, email, address, websiteUrl, createdAt, modifiedAt });
+
+                // Save display name to session for navigation
+                setStoredDisplayName(displayName);
 
             } catch (error) {
                 console.log({ error });

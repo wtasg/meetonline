@@ -12,8 +12,7 @@ function Link({ to, children, klass }) {
         <a
             href={to}
             onClick={handleClick}
-            className={`${klass ? klass : ""} clickable link`}
-            style={{ color: "var(--text-primary)" }}>
+            className={`${klass ? klass : ""} clickable nav-link`}>
             {children}
         </a>
     );
