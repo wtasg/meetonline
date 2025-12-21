@@ -7,7 +7,7 @@ import { navigateTo } from "./hooks/useNavigate";
 import { applyFontSize, applyFontContrast, settingsStorage } from "./utils/settings";
 import { applyThemeConfig, getStoredThemeConfig } from "./utils/theme";
 
-function App() {
+function App(): React.JSX.Element {
     // Apply stored settings on app load
     useEffect(() => {
         const storedFontSize = settingsStorage.retrieve("fontSize");
