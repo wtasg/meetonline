@@ -1,0 +1,212 @@
+.attendance-marker {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.attendance-marker__title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Organizer section */
+.attendance-marker__organizer-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: 0.375rem;
+}
+
+.attendance-marker__init-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    background: var(--color-primary);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.attendance-marker__init-btn:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.attendance-marker__init-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.attendance-marker__tokens {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.attendance-marker__tokens-title {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.attendance-marker__token-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.attendance-marker__token-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+}
+
+.attendance-marker__token-label {
+    color: var(--text-secondary);
+    min-width: 3rem;
+}
+
+.attendance-marker__token-value {
+    font-family: monospace;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    background: var(--bg-primary);
+    border-radius: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+}
+
+/* Form */
+.attendance-marker__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.attendance-marker__phases {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.attendance-marker__phase-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.attendance-marker__phase-btn:hover {
+    border-color: var(--color-primary);
+}
+
+.attendance-marker__phase-btn--active {
+    border-color: var(--color-primary);
+    background: var(--color-primary-bg);
+}
+
+.attendance-marker__phase-emoji {
+    font-size: 1.25rem;
+}
+
+.attendance-marker__phase-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.attendance-marker__input-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.attendance-marker__input {
+    flex: 1;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.375rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+.attendance-marker__input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.attendance-marker__submit-btn {
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: 0.375rem;
+    background: var(--color-success);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.attendance-marker__submit-btn:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.attendance-marker__submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Messages */
+.attendance-marker__message {
+    padding: 0.625rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+}
+
+.attendance-marker__message--success {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.attendance-marker__message--error {
+    background: var(--color-danger-bg);
+    color: var(--color-danger);
+}
+
+/* Score display */
+.attendance-marker__score {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: 0.375rem;
+}
+
+.attendance-marker__score-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.attendance-marker__score-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
