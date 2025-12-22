@@ -608,3 +608,75 @@ alter table user_oauth_connections
 create index if not exists user_oauth_connections_user_id_index
     on user_oauth_connections (user_id);
 -- USER OAUTH CONNECTIONS : END
+
+-- SEED DATA : START
+
+-- 1. Insert User Account
+INSERT INTO user_account (username, salt, password, created_at)
+VALUES 
+('user0', '$2b$12$Wgvs800D/nh.eZfTZzJvF.', '$2b$12$Wgvs800D/nh.eZfTZzJvF./tThk6FRyUrV4pCWaRqentxG72PhwKy', CURRENT_TIMESTAMP),
+('user9', '$2b$12$My2xS1e.S9ZkoP1Od4m24.', '$2b$12$My2xS1e.S9ZkoP1Od4m24.I4xBjc6X2InEBVDG4fX3oE4JuFuZ.HO', CURRENT_TIMESTAMP)
+ON CONFLICT (username) DO NOTHING;
+
+-- 2. Insert User Profile
+INSERT INTO user_profile (user_id, display_name, profile_name, email, created_at)
+VALUES 
+(
+    (SELECT id FROM user_account WHERE username = 'user0'),
+    'User 0',
+    'user0',
+    'user0@meet.online',
+    CURRENT_TIMESTAMP
+),
+(
+    (SELECT id FROM user_account WHERE username = 'user9'),
+    'User 9',
+    'user9',
+    'user9@meet.online',
+    CURRENT_TIMESTAMP
+)
+ON CONFLICT DO NOTHING;
+
+-- 3. Insert Groups
+INSERT INTO "group" (user_profile_id, group_name, description, is_public, created_at)
+VALUES
+(
+    (SELECT id FROM user_profile WHERE display_name = 'User 0' LIMIT 1),
+    'Hiking Enthusiasts',
+    'A group for people who love hiking.',
+    true,
+    CURRENT_TIMESTAMP
+),
+(
+    (SELECT id FROM user_profile WHERE display_name = 'User 9' LIMIT 1),
+    'Tech Talk',
+    'Discussing latest tech trends.',
+    true,
+    CURRENT_TIMESTAMP
+);
+
+-- 4. Insert Events
+INSERT INTO event (organiser_id, title, description, start_at, end_at, is_paid, is_broadcast, created_at)
+VALUES
+(
+    (SELECT id FROM user_profile WHERE display_name = 'User 0' LIMIT 1),
+    'Morning Hike',
+    'Easy hike for beginners.',
+    CURRENT_TIMESTAMP + interval '1 day',
+    CURRENT_TIMESTAMP + interval '1 day 2 hours',
+    false,
+    false,
+    CURRENT_TIMESTAMP
+),
+(
+    (SELECT id FROM user_profile WHERE display_name = 'User 9' LIMIT 1),
+    'Tech Keynote',
+    'Live stream of tech event.',
+    CURRENT_TIMESTAMP + interval '5 days',
+    CURRENT_TIMESTAMP + interval '5 days 1 hour',
+    false,
+    true,
+    CURRENT_TIMESTAMP
+);
+
+-- SEED DATA : END

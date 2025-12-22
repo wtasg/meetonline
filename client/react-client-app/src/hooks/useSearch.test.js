@@ -115,6 +115,7 @@ describe("useSearch", () => {
     });
 
     it("handles network errors", async () => {
+        const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => { });
         searchAll.mockRejectedValue(new Error("Network error"));
 
         const { result } = renderHook(() => useSearch());
@@ -128,6 +129,8 @@ describe("useSearch", () => {
         });
 
         expect(result.current.error).toBe("An error occurred while searching");
+        expect(consoleSpy).toHaveBeenCalled();
+        consoleSpy.mockRestore();
     });
 
     it("trims search term before searching", async () => {
