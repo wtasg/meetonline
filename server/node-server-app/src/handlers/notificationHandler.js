@@ -12,8 +12,9 @@ import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
 import { apiRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 /**
- * Setup notification handlers
- * @param {Express} app
+ * Sets up notification-related route handlers.
+ * @param {import('express').Application} app - The Express application instance.
+ * @returns {void}
  */
 function setupNotificationHandler(app) {
     app.get("/notification/:id", apiRateLimiter, hybridAuthMiddleware, notificationGET);
@@ -25,7 +26,10 @@ function setupNotificationHandler(app) {
 }
 
 /**
- * Get a notification by ID
+ * GET /notification/:id - Get a notification by ID.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function notificationGET(req, res) {
     try {
@@ -83,7 +87,10 @@ async function notificationGET(req, res) {
 }
 
 /**
- * Get notifications for user
+ * GET /notifications - Get all notifications for the current user.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function notificationsGET(req, res) {
     try {
@@ -136,7 +143,10 @@ async function notificationsGET(req, res) {
 }
 
 /**
- * Get unread notification count
+ * GET /notifications/unread-count - Get count of unread notifications.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function notificationsUnreadCountGET(req, res) {
     try {
@@ -177,7 +187,10 @@ async function notificationsUnreadCountGET(req, res) {
 }
 
 /**
- * Mark notification as read
+ * PATCH /notification/:id/read - Mark a notification as read.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function notificationMarkAsReadPATCH(req, res) {
     try {
@@ -244,7 +257,10 @@ async function notificationMarkAsReadPATCH(req, res) {
 }
 
 /**
- * Mark all notifications as read
+ * PATCH /notifications/read-all - Mark all notifications as read.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function notificationsMarkAllAsReadPATCH(req, res) {
     try {
@@ -281,7 +297,10 @@ async function notificationsMarkAllAsReadPATCH(req, res) {
 }
 
 /**
- * Delete a notification
+ * DELETE /notification/:id - Delete a notification.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function notificationDELETE(req, res) {
     try {

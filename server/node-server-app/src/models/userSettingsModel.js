@@ -33,6 +33,9 @@ const userSettingsKeyMap = {
     "modified_at": "modifiedAt",
 };
 
+/**
+ * Model representing user settings/preferences.
+ */
 class UserSettingsModel {
     constructor() {
         this.id = null;
@@ -52,6 +55,12 @@ class UserSettingsModel {
         this.__isDefault = false;
     }
 
+    /**
+     * Creates a UserSettingsModel from a database row.
+     * @param {Object} row - Database row object.
+     * @returns {UserSettingsModel} The model instance.
+     * @throws {Error} If row is invalid.
+     */
     static fromDatabaseRow(row) {
         if (!row) {
             throw new Error("Invalid database row.");
@@ -75,10 +84,18 @@ class UserSettingsModel {
         return instance;
     }
 
+    /**
+     * Creates a null (empty) UserSettingsModel.
+     * @returns {UserSettingsModel} A null model instance.
+     */
     static null() {
         return new UserSettingsModel();
     }
 
+    /**
+     * Creates a default UserSettingsModel with sample data.
+     * @returns {UserSettingsModel} A default model instance.
+     */
     static default() {
         const instance = new UserSettingsModel();
         instance.id = 0;
@@ -99,6 +116,10 @@ class UserSettingsModel {
         return instance;
     }
 
+    /**
+     * Converts the model to a client-safe plain object.
+     * @returns {Object} Plain object without internal properties.
+     */
     toClient() {
         const obj = pojo(this);
         delete obj.__isDefault;

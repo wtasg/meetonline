@@ -16,20 +16,20 @@ const searchRateLimiter = rateLimit({
 });
 
 /**
- * Setup search handlers
- * @param {Express} app
+ * Sets up search-related route handlers.
+ * @param {import('express').Application} app - The Express application instance.
+ * @returns {void}
  */
 function setupSearchHandler(app) {
     app.get("/search", searchRateLimiter, hybridAuthMiddleware, searchGET);
 }
 
 /**
- * Unified search endpoint
- * Query parameters:
- * - q: search term (required)
- * - types: comma-separated list of types to search (users, events, groups) - optional
- * - limit: max results per type (optional, default 20)
- * - offset: pagination offset (optional, default 0)
+ * GET /search - Unified search endpoint.
+ * Searches across users, events, and groups.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function searchGET(req, res) {
     try {
@@ -75,9 +75,9 @@ async function searchGET(req, res) {
         };
 
         // Calculate total results count
-        const totalResults = clientResults.users.length + 
-                           clientResults.events.length + 
-                           clientResults.groups.length;
+        const totalResults = clientResults.users.length +
+            clientResults.events.length +
+            clientResults.groups.length;
 
         // Log search query (async, don't wait for completion)
         if (req.user?.userId) {

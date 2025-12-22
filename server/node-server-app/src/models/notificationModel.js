@@ -1,6 +1,13 @@
 import { pojo } from "@wtasnorg/node-lib";
 import { toISOStringOrEmpty } from "../utils/dateUtils.js";
 
+/**
+ * Updates a notification object with new values.
+ * @param {Object} notification - The existing notification object.
+ * @param {Object} updates - The updates to apply.
+ * @returns {Object} The updated notification object.
+ * @throws {Error} If notification is invalid.
+ */
 const updateNotification = (notification, updates) => {
     if (!notification || typeof notification !== "object" || Array.isArray(notification)) {
         throw new Error("Invalid notification object passed to updateNotification.");
@@ -30,6 +37,9 @@ const notificationKeyMap = {
     deleted_at: "deletedAt",
 };
 
+/**
+ * Model representing a notification.
+ */
 class NotificationModel {
     constructor() {
         this.id = null;
@@ -46,6 +56,12 @@ class NotificationModel {
         this.__isDefault = false;
     }
 
+    /**
+     * Creates a NotificationModel from a database row.
+     * @param {Object} row - Database row object.
+     * @returns {NotificationModel} The model instance.
+     * @throws {Error} If row is invalid.
+     */
     static fromDatabaseRow(row) {
         if (!row) {
             throw new Error("Invalid database row.");
@@ -67,10 +83,18 @@ class NotificationModel {
         return instance;
     }
 
+    /**
+     * Creates a null (empty) NotificationModel.
+     * @returns {NotificationModel} A null model instance.
+     */
     static null() {
         return new NotificationModel();
     }
 
+    /**
+     * Creates a default NotificationModel with sample data.
+     * @returns {NotificationModel} A default model instance.
+     */
     static default() {
         const instance = new NotificationModel();
         instance.id = 0;
@@ -88,6 +112,10 @@ class NotificationModel {
         return instance;
     }
 
+    /**
+     * Converts the model to a client-safe plain object.
+     * @returns {Object} Plain object without internal properties.
+     */
     toClient() {
         const obj = pojo(this);
         delete obj.__isDefault;

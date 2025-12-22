@@ -1,6 +1,13 @@
 import { pojo } from "@wtasnorg/node-lib";
 import { toISOStringOrEmpty } from "../utils/dateUtils.js";
 
+/**
+ * Updates a group object with new values.
+ * @param {Object} group - The existing group object.
+ * @param {Object} updates - The updates to apply.
+ * @returns {Object} The updated group object.
+ * @throws {Error} If group is invalid.
+ */
 const updateGroup = (group, updates) => {
     if (!group || typeof group !== "object" || Array.isArray(group)) {
         throw new Error("Invalid group object passed to updateGroup.");
@@ -38,6 +45,9 @@ const groupKeyMap = {
     is_archived: "isArchived",
 };
 
+/**
+ * Model representing a group.
+ */
 class GroupModel {
     constructor() {
         this.id = null;
@@ -58,6 +68,12 @@ class GroupModel {
         this.__isDefault = false;
     }
 
+    /**
+     * Creates a GroupModel from a database row.
+     * @param {Object} row - Database row object.
+     * @returns {GroupModel} The model instance.
+     * @throws {Error} If row is invalid.
+     */
     static fromDatabaseRow(row) {
         if (!row) {
             throw new Error("Invalid database row.");
@@ -83,10 +99,18 @@ class GroupModel {
         return instance;
     }
 
+    /**
+     * Creates a null (empty) GroupModel.
+     * @returns {GroupModel} A null model instance.
+     */
     static null() {
         return new GroupModel();
     }
 
+    /**
+     * Creates a default GroupModel with sample data.
+     * @returns {GroupModel} A default model instance.
+     */
     static default() {
         const instance = new GroupModel();
         instance.id = 0;
@@ -108,6 +132,10 @@ class GroupModel {
         return instance;
     }
 
+    /**
+     * Converts the model to a client-safe plain object.
+     * @returns {Object} Plain object without internal properties.
+     */
     toClient() {
         const obj = pojo(this);
         delete obj.__isDefault;

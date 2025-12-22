@@ -1,11 +1,12 @@
 import { jwtAuthMiddleware } from "./jwtMiddleware.js";
 
 /**
- * Hybrid authentication middleware that supports both JWT and cookie-based auth
- * Tries JWT first, then falls back to cookies
- * @param {Express.Request} req
- * @param {Express.Response} res
- * @param {Function} next
+ * Hybrid authentication middleware that supports JWT.
+ * Tries JWT first, returns 401 if no valid authentication.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @param {import('express').NextFunction} next - Express next function.
+ * @returns {Promise<void>}
  */
 async function hybridAuthMiddleware(req, res, next) {
     // Try JWT authentication first

@@ -1,0 +1,336 @@
+.
+├── AGENT.md
+├── client
+│   └── react-client-app
+│       ├── docker.env
+│       ├── Dockerfile
+│       ├── e2e-base.Dockerfile
+│       ├── e2e.Dockerfile
+│       ├── e2e.env
+│       ├── entrypoint.sh
+│       ├── eslint.config.js
+│       ├── images
+│       │   ├── favicon_128x128.png
+│       │   ├── favicon_167x167.png
+│       │   ├── favicon_180x180.png
+│       │   ├── favicon_192x192.png
+│       │   ├── favicon_256x256.png
+│       │   └── favicon_48x48.png
+│       ├── index.html
+│       ├── local.env
+│       ├── manual.Dockerfile
+│       ├── package.json
+│       ├── package-lock.json
+│       ├── playwright.config.js
+│       ├── playwright-report
+│       │   ├── data
+│       │   │   └── c8b47341894a1a14a23adad23a454b754c7ff991.md
+│       │   └── index.html
+│       ├── README.md
+│       ├── src
+│       │   ├── actions
+│       │   │   ├── authActions.ts
+│       │   │   ├── eventActions.ts
+│       │   │   ├── groupActions.ts
+│       │   │   ├── notificationActions.test.ts
+│       │   │   ├── notificationActions.ts
+│       │   │   ├── oauthActions.ts
+│       │   │   ├── searchActions.ts
+│       │   │   ├── userAccountActions.ts
+│       │   │   ├── userProfileActions.ts
+│       │   │   └── userSettingsActions.ts
+│       │   ├── App.css
+│       │   ├── App.tsx
+│       │   ├── components
+│       │   │   ├── EditableValue.jsx
+│       │   │   ├── Error.jsx
+│       │   │   ├── EventListItem.jsx
+│       │   │   ├── GroupListItem.jsx
+│       │   │   ├── Link.jsx
+│       │   │   ├── LoadingScreen.tsx
+│       │   │   ├── SocialLoginButtons.jsx
+│       │   │   └── Welcome.jsx
+│       │   ├── context
+│       │   │   └── SessionContext.jsx
+│       │   ├── features
+│       │   │   ├── ConnectedAccounts.jsx
+│       │   │   ├── Content.jsx
+│       │   │   ├── Event.jsx
+│       │   │   ├── Group.jsx
+│       │   │   ├── Login.jsx
+│       │   │   ├── Logout.jsx
+│       │   │   ├── Menu.jsx
+│       │   │   ├── Notifications.jsx
+│       │   │   ├── OAuthCallback.jsx
+│       │   │   ├── Search.jsx
+│       │   │   ├── Signup.jsx
+│       │   │   ├── ThemePlayground.jsx
+│       │   │   ├── UserAccount.jsx
+│       │   │   ├── UserProfile.jsx
+│       │   │   ├── UserSettings.css
+│       │   │   └── UserSettings.jsx
+│       │   ├── hooks
+│       │   │   ├── useNavigate.js
+│       │   │   ├── useRoute.js
+│       │   │   ├── useSearch.js
+│       │   │   ├── useSearch.test.js
+│       │   │   ├── useSession.js
+│       │   │   ├── useThrottle.js
+│       │   │   └── useThrottle.test.js
+│       │   ├── icons
+│       │   │   └── AuthIcons.jsx
+│       │   ├── index.css
+│       │   ├── main.tsx
+│       │   ├── net
+│       │   │   ├── authenticatedFetch.ts
+│       │   │   ├── auth.test.ts
+│       │   │   ├── auth.ts
+│       │   │   ├── csrf.test.ts
+│       │   │   ├── csrf.ts
+│       │   │   ├── event.ts
+│       │   │   ├── group.ts
+│       │   │   ├── net-conf.ts
+│       │   │   ├── notification.ts
+│       │   │   ├── oauth.ts
+│       │   │   ├── search.ts
+│       │   │   ├── userAccount.ts
+│       │   │   ├── userProfile.ts
+│       │   │   └── userSettings.ts
+│       │   ├── session.test.ts
+│       │   ├── session.ts
+│       │   ├── setupTests.ts
+│       │   ├── styles
+│       │   │   ├── components
+│       │   │   │   ├── buttons.css
+│       │   │   │   ├── cards.css
+│       │   │   │   ├── forms.css
+│       │   │   │   ├── layout.css
+│       │   │   │   ├── navigation.css
+│       │   │   │   ├── notifications.css
+│       │   │   │   └── settings.css
+│       │   │   ├── index.css
+│       │   │   ├── primitives
+│       │   │   │   ├── breakpoints.css
+│       │   │   │   ├── colors.css
+│       │   │   │   ├── spacing.css
+│       │   │   │   └── typography.css
+│       │   │   └── semantics
+│       │   │       └── themes.css
+│       │   ├── theme.css
+│       │   ├── utils
+│       │   │   ├── cookie.test.ts
+│       │   │   ├── cookie.ts
+│       │   │   ├── date.test.ts
+│       │   │   ├── date.ts
+│       │   │   ├── jwt.test.ts
+│       │   │   ├── jwt.ts
+│       │   │   ├── session.test.ts
+│       │   │   ├── session.ts
+│       │   │   ├── settings.test.ts
+│       │   │   ├── settings.ts
+│       │   │   ├── storage.test.ts
+│       │   │   ├── storage.ts
+│       │   │   ├── string.test.ts
+│       │   │   ├── string.ts
+│       │   │   ├── theme.test.ts
+│       │   │   └── theme.ts
+│       │   └── vite-env.d.ts
+│       ├── tests
+│       │   ├── account.spec.js
+│       │   ├── common.js
+│       │   ├── landing-page.spec.js
+│       │   └── login.spec.js
+│       ├── tsconfig.json
+│       ├── vite.config.js
+│       └── vitest.config.js
+├── compose.e2e.yml
+├── compose.yml
+├── database
+│   ├── docker.env
+│   ├── Dockerfile
+│   ├── Dockerfile.lint
+│   ├── init
+│   │   └── schema.sql
+│   ├── local.env
+│   ├── manual.Dockerfile
+│   ├── package.json
+│   └── README.md
+├── docs
+│   ├── architecture
+│   │   └── Authentication Architecture.md
+│   ├── architecture.md
+│   ├── arch.puml.md
+│   ├── batch-deletion-system.md
+│   ├── bug-report-template.md
+│   ├── checklists
+│   │   ├── dev-checklist.md
+│   │   └── review-checklist.md
+│   ├── css-architecture.md
+│   ├── Daily
+│   │   ├── 2025.11.04.md
+│   │   ├── 2025.11.28.md
+│   │   └── 2025.12.md
+│   ├── daily-sync.md
+│   ├── Excalidraw
+│   │   ├── database-events.excalidraw.md
+│   │   ├── git-branches.excalidraw.md
+│   │   ├── git-rebase.excalidraw.md
+│   │   ├── git-staging.excalidraw.md
+│   │   └── how-to-get-good-at-programming.excalidraw.md
+│   ├── Home.md
+│   ├── jwt-authentication.md
+│   ├── jwt-implementation-summary.md
+│   ├── jwt-security-summary.md
+│   ├── notifications.md
+│   ├── rules.md
+│   ├── search-feature.md
+│   ├── security
+│   │   └── token-storage.md
+│   ├── Security
+│   │   └── issue-cleartext-cookies-2025.11.30.md
+│   ├── Setup
+│   │   ├── docker.md
+│   │   ├── e2e-testing.md
+│   │   ├── setup-git-for-local-pr-review.md
+│   │   ├── setup-repo.md
+│   │   ├── setup-wsl-for-dev.md
+│   │   └── sql-linting.md
+│   ├── social-auth.md
+│   ├── tech
+│   │   ├── browser-processes.md
+│   │   ├── expressjs.md
+│   │   ├── git.md
+│   │   ├── http2.md
+│   │   ├── http.md
+│   │   ├── https.md
+│   │   ├── multipart-form-handling.md
+│   │   ├── nodejs.md
+│   │   ├── npm.md
+│   │   ├── tech-index.md
+│   │   └── web-apis.md
+│   └── theme-system.md
+├── LICENSE
+├── proxy
+│   └── nginx.conf
+├── README.md
+├── scripts
+│   ├── build.sh
+│   ├── changeset.sh
+│   ├── compose.sh
+│   ├── make.certs.sh
+│   ├── make.env.sh
+│   ├── make.tree.sh
+│   ├── manual-compose.sh
+│   ├── package.install.sh
+│   ├── package.update.sh
+│   ├── pre-commit.sh
+│   ├── README.md
+│   ├── run-e2e.sh
+│   ├── sql-lint-fix.sh
+│   ├── sql-lint.sh
+│   ├── test.sh
+│   └── watch-client.sh
+└── server
+    └── node-server-app
+        ├── certs
+        │   ├── server.crt
+        │   └── server.key
+        ├── docker.env
+        ├── Dockerfile
+        ├── entrypoint.sh
+        ├── eslint.config.js
+        ├── jest.config.js
+        ├── local.env
+        ├── manual.Dockerfile
+        ├── package.json
+        ├── package-lock.json
+        ├── README.md
+        ├── src
+        │   ├── config
+        │   │   └── passport.js
+        │   ├── database
+        │   │   ├── db.js
+        │   │   ├── event.js
+        │   │   ├── group.js
+        │   │   ├── jwt_tokens.js
+        │   │   ├── kv_store.js
+        │   │   ├── notification.js
+        │   │   ├── oauth_connections.js
+        │   │   ├── pending_deletions.js
+        │   │   ├── README.md
+        │   │   ├── search.js
+        │   │   ├── search_queries.js
+        │   │   ├── user_account.js
+        │   │   ├── user_profile.js
+        │   │   └── user_settings.js
+        │   ├── handlers
+        │   │   ├── authHandler.js
+        │   │   ├── eventHandler.js
+        │   │   ├── groupHandler.js
+        │   │   ├── notificationHandler.js
+        │   │   ├── oauthHandler.js
+        │   │   ├── rootHandler.js
+        │   │   ├── searchHandler.js
+        │   │   ├── uploadHandler.js
+        │   │   ├── userAccountHandler.js
+        │   │   ├── userOAuthHandler.js
+        │   │   ├── userProfileHandler.js
+        │   │   └── userSettingsHandler.js
+        │   ├── middlewares
+        │   │   ├── corsMiddleware.js
+        │   │   ├── csrfMiddleware.js
+        │   │   ├── hybridAuthMiddleware.js
+        │   │   ├── jwtMiddleware.js
+        │   │   ├── rateLimitMiddleware.js
+        │   │   └── uploadMiddleware.js
+        │   ├── models
+        │   │   ├── eventModel.js
+        │   │   ├── groupModel.js
+        │   │   ├── jwtTokenModel.js
+        │   │   ├── kvstoreModel.js
+        │   │   ├── notificationModel.js
+        │   │   ├── oauthConnectionModel.js
+        │   │   ├── userAccountModel.js
+        │   │   ├── userProfileModel.js
+        │   │   └── userSettingsModel.js
+        │   ├── server.js
+        │   └── utils
+        │       ├── authUtils.js
+        │       ├── batchDeletion.js
+        │       ├── cookieConfig.js
+        │       ├── date.js
+        │       ├── dateUtils.js
+        │       ├── env.js
+        │       ├── fs.js
+        │       ├── gracefulSetup.js
+        │       ├── hash.js
+        │       ├── jwt.js
+        │       ├── projectRoot.js
+        │       ├── sanitize.js
+        │       ├── session.js
+        │       └── store.js
+        ├── tests-jest
+        │   ├── database
+        │   │   ├── event.test.js
+        │   │   ├── latest.test.js
+        │   │   ├── search_queries.test.js
+        │   │   └── search.test.js
+        │   ├── middlewares
+        │   │   ├── csrfMiddleware.test.js
+        │   │   └── rateLimitMiddleware.test.js
+        │   ├── models
+        │   │   ├── groupModel.test.js
+        │   │   ├── notificationModel.test.js
+        │   │   └── userSettingsModel.test.js
+        │   ├── sanitize.test.js
+        │   └── utils
+        │       ├── cookieConfig.test.js
+        │       ├── date.test.js
+        │       ├── env.test.js
+        │       ├── fs.test.js
+        │       └── store.test.js
+        ├── tmp
+        │   └── tmp_file_store.txt.tmp
+        └── uploads
+
+50 directories, 284 files

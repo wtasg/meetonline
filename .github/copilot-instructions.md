@@ -4,7 +4,9 @@ This file provides context and guidelines for GitHub Copilot when working on the
 
 ## Project Context
 
-meetonline is a full-stack web application for building and finding online communities. The project emphasizes:
+meetonline is a full-stack web application designed for building and discovering online communities.
+
+The project emphasizes:
 
 - Clean, maintainable code
 - Security best practices (HTTPS, secure authentication)

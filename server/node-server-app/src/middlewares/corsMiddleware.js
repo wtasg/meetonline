@@ -1,5 +1,10 @@
 import cors from "cors";
 
+/**
+ * Sets up CORS middleware with configured allowed origins.
+ * @param {import('express').Application} app - The Express application instance.
+ * @returns {void}
+ */
 function setupCorsMiddleware(app) {
     const allowedOrigins = (process.env.ALLOWED_ORIGINS?.split(",")
         .map(s => s.trim().toLowerCase().replace(/\/$/, "")

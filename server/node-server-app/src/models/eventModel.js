@@ -1,6 +1,13 @@
 import { pojo } from "@wtasnorg/node-lib";
 import { toISOStringOrEmpty } from "../utils/dateUtils.js";
 
+/**
+ * Updates an event object with new values.
+ * @param {Object} event - The existing event object.
+ * @param {Object} updates - The updates to apply.
+ * @returns {Object} The updated event object.
+ * @throws {Error} If event is invalid.
+ */
 const updateEvent = (event, updates) => {
     if (!event || typeof event !== "object" || Array.isArray(event)) {
         throw new Error("Invalid event object passed to updateEvent.");
@@ -56,6 +63,9 @@ const eventKeyMap = {
     is_archived: "isArchived",
 };
 
+/**
+ * Model representing an event.
+ */
 class EventModel {
     constructor() {
         this.id = null;
@@ -86,6 +96,12 @@ class EventModel {
         this.__isDefault = false;
     }
 
+    /**
+     * Creates an EventModel from a database row.
+     * @param {Object} row - Database row object.
+     * @returns {EventModel} The model instance.
+     * @throws {Error} If row is invalid.
+     */
     static fromDatabaseRow(row) {
         if (!row) {
             throw new Error("Invalid database row.");
@@ -121,10 +137,18 @@ class EventModel {
         return instance;
     }
 
+    /**
+     * Creates a null (empty) EventModel.
+     * @returns {EventModel} A null model instance.
+     */
     static null() {
         return new EventModel();
     }
 
+    /**
+     * Creates a default EventModel with sample data.
+     * @returns {EventModel} A default model instance.
+     */
     static default() {
         const instance = new EventModel();
         instance.id = 0;
@@ -156,6 +180,10 @@ class EventModel {
         return instance;
     }
 
+    /**
+     * Converts the model to a client-safe plain object.
+     * @returns {Object} Plain object without internal properties.
+     */
     toClient() {
         const obj = pojo(this);
         delete obj.__isDefault;

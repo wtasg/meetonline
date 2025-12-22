@@ -1,3 +1,6 @@
+/**
+ * Model representing a JWT token pair for authentication.
+ */
 class JwtTokenModel {
     constructor() {
         this.id = null;
@@ -13,6 +16,12 @@ class JwtTokenModel {
         this.__isDefault = false;
     }
 
+    /**
+     * Creates a JwtTokenModel from a database row.
+     * @param {Object} row - Database row object.
+     * @returns {JwtTokenModel} The model instance.
+     * @throws {Error} If row is invalid.
+     */
     static fromDatabaseRow(row) {
         if (!row) {
             throw new Error("Invalid database row");
@@ -32,10 +41,18 @@ class JwtTokenModel {
         return instance;
     }
 
+    /**
+     * Creates a null (empty) JwtTokenModel.
+     * @returns {JwtTokenModel} A null model instance.
+     */
     static null() {
         return new JwtTokenModel();
     }
 
+    /**
+     * Creates a default JwtTokenModel with sample data.
+     * @returns {JwtTokenModel} A default model instance.
+     */
     static default() {
         const instance = new JwtTokenModel();
         instance.id = "default-jwt-token-id";
@@ -52,6 +69,10 @@ class JwtTokenModel {
         return instance;
     }
 
+    /**
+     * Converts the model to a client-safe plain object.
+     * @returns {Object} Object with tokens and expiration dates.
+     */
     toClient() {
         return {
             accessToken: this.accessToken,

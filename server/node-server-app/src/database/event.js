@@ -47,15 +47,18 @@ async function listEventsByOrganiserId(organiserId, options = {}) {
         const limit = Math.max(1, Math.min(100, Number(rawLimit) || 20));
         const offset = Math.max(0, Number(rawOffset) || 0);
 
-        const allowedOrderKeys = ["start_at", "end_at", "created_at"];
-        const safeOrderKey = allowedOrderKeys.includes(rawOrderKey)
-            ? rawOrderKey
-            : "start_at";
+        const sortKeyMap = {
+            "start_at": "start_at",
+            "end_at": "end_at",
+            "created_at": "created_at"
+        };
+        const safeOrderKey = sortKeyMap[rawOrderKey] || "start_at";
 
-        const allowedDirections = ["ASC", "DESC"];
-        const safeDirection = allowedDirections.includes(rawOrderBy.toUpperCase())
-            ? rawOrderBy.toUpperCase()
-            : "DESC";
+        const sortDirMap = {
+            "ASC": "ASC",
+            "DESC": "DESC"
+        };
+        const safeDirection = sortDirMap[String(rawOrderBy).toUpperCase()] || "DESC";
 
         const orderClause = `${safeOrderKey} ${safeDirection}`;
 

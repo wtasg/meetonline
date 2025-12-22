@@ -1,3 +1,6 @@
+/**
+ * Model representing an OAuth connection for a user.
+ */
 class OAuthConnectionModel {
     constructor() {
         this.id = null;
@@ -11,6 +14,11 @@ class OAuthConnectionModel {
         this.__isNull = true;
     }
 
+    /**
+     * Creates an OAuthConnectionModel from a database row.
+     * @param {Object} row - Database row object.
+     * @returns {OAuthConnectionModel} The model instance, or null model if row is invalid.
+     */
     static fromDatabaseRow(row) {
         if (!row) return OAuthConnectionModel.null();
         const instance = new OAuthConnectionModel();
@@ -26,6 +34,10 @@ class OAuthConnectionModel {
         return instance;
     }
 
+    /**
+     * Creates a null (empty) OAuthConnectionModel.
+     * @returns {OAuthConnectionModel} A null model instance.
+     */
     static null() {
         return new OAuthConnectionModel();
     }

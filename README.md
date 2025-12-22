@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/github/license/wtasg/meetonline) ![Issues](https://img.shields.io/github/issues/wtasg/meetonline) ![Pull Requests](https://img.shields.io/github/issues-pr/wtasg/meetonline)
 
-An app to let you build and find online communities.
+`meetonline` is a full-stack web application designed for building and discovering online communities.
 
 ## 🐛 Reporting bugs
 
@@ -84,7 +84,20 @@ docker compose --file compose.yml down
 
 Documentation is available in `docs/`. Visit **[Documentation Home](./docs/Home.md)**
 
-- [CSS Architecture](./docs/css-architecture.md) - Layered CSS design system
+### Component Documentation
+
+- [React Client](./client/react-client-app/README.md) - Frontend application
+- [Node.js Server](./server/node-server-app/README.md) - Backend API
+- [PostgreSQL Database](./database/README.md) - Database schema
+
+### Features
+
+- [System Architecture](./docs/architecture.md)
+- [JWT Authentication](./docs/jwt-authentication.md)
+- [Search Feature](./docs/search-feature.md)
+- [Notifications](./docs/notifications.md)
+- [Theme System](./docs/theme-system.md)
+- [CSS Architecture](./docs/css-architecture.md)
 
 ## 🌐 Social
 

@@ -1,5 +1,11 @@
 import { pojo } from "@wtasnorg/node-lib";
 
+/**
+ * Updates a user profile object with new values.
+ * @param {Object} userProfile - The existing user profile object.
+ * @param {Object} updates - The updates to apply.
+ * @returns {Object} The updated user profile object.
+ */
 const updateUserProfile = (userProfile, updates) => {
     return {
         ...userProfile,
@@ -31,6 +37,9 @@ const userProfileKeyMap = {
     "modified_at": "modifiedAt",
 };
 
+/**
+ * Model representing a user profile.
+ */
 class UserProfileModel {
     constructor() {
         this.id = null;
@@ -47,6 +56,12 @@ class UserProfileModel {
         this.__isDefault = false;
     }
 
+    /**
+     * Creates a UserProfileModel from a database row.
+     * @param {Object} row - Database row object.
+     * @returns {UserProfileModel} The model instance.
+     * @throws {Error} If row is invalid.
+     */
     static fromDatabaseRow(row) {
         if (!row) {
             throw new Error("Invalid database row.");
@@ -67,10 +82,18 @@ class UserProfileModel {
         return instance;
     }
 
+    /**
+     * Creates a null (empty) UserProfileModel.
+     * @returns {UserProfileModel} A null model instance.
+     */
     static null() {
         return new UserProfileModel();
     }
 
+    /**
+     * Creates a default UserProfileModel with sample data.
+     * @returns {UserProfileModel} A default model instance.
+     */
     static default() {
         const instance = new UserProfileModel();
         instance.id = 0;
@@ -88,6 +111,10 @@ class UserProfileModel {
         return instance;
     }
 
+    /**
+     * Converts the model to a client-safe plain object.
+     * @returns {Object} Plain object without internal properties.
+     */
     toClient() {
         const obj = pojo(this);
         delete obj.__isDefault;

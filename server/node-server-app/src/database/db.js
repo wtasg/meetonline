@@ -2,6 +2,10 @@ import { Pool } from "pg";
 
 let pool = null;
 
+/**
+ * Initializes the database connection pool.
+ * @returns {Promise<import('pg').Pool>} The PostgreSQL connection pool.
+ */
 async function dbStart() {
     const config = {
         user: process.env.DB_USER,
@@ -33,6 +37,10 @@ async function dbStart() {
     }
 }
 
+/**
+ * Closes the database connection pool.
+ * @returns {Promise<void>}
+ */
 async function dbClose() {
     try {
         if (pool && !pool.ended && !pool.ending) {

@@ -2,6 +2,11 @@ import { upload } from "../middlewares/uploadMiddleware.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
 import { uploadRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
+/**
+ * Sets up file upload route handlers.
+ * @param {import('express').Application} app - The Express application instance.
+ * @returns {void}
+ */
 function setupUploadHandler(app) {
     app.post("/upload", uploadRateLimiter, hybridAuthMiddleware, (req, res) => {
         upload.single("file")(req, res, (err) => {

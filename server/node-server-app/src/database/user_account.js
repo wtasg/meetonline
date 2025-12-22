@@ -2,9 +2,9 @@ import { UserAccountModel } from "../models/userAccountModel.js";
 import { pool } from "./db.js";
 
 /**
- *
- * @param username {string}  The username received from client
- * @returns UserAccount information
+ * Fetches a user account by username.
+ * @param {string} username - The username received from client.
+ * @returns {Promise<import('../models/userAccountModel.js').UserAccountModel>} User account information.
  */
 async function getUserAccountByUsername(username) {
     try {
@@ -19,6 +19,13 @@ async function getUserAccountByUsername(username) {
     }
 }
 
+/**
+ * Creates a new user account.
+ * @param {string} username - The username.
+ * @param {string} password - The hashed password.
+ * @param {string} salt - The password salt.
+ * @returns {Promise<import('../models/userAccountModel.js').UserAccountModel>} The created user account.
+ */
 async function createUserAccount(username, password, salt) {
     const query = `
         INSERT INTO user_account (username, password, salt, is_active, is_deleted, is_blocked, is_forgotten)
@@ -29,6 +36,12 @@ async function createUserAccount(username, password, salt) {
     return UserAccountModel.fromDatabaseRow(res.rows[0]);
 }
 
+/**
+ * Updates user account status fields.
+ * @param {string|number} userId - The user ID.
+ * @param {Object} updates - Object with fields to update.
+ * @returns {Promise<import('../models/userAccountModel.js').UserAccountModel>} The updated user account.
+ */
 async function updateUserAccountStatus(userId, updates) {
     const fields = [];
     const values = [];
@@ -51,30 +64,50 @@ async function updateUserAccountStatus(userId, updates) {
     return UserAccountModel.fromDatabaseRow(res.rows[0]);
 }
 
+/**
+ * Soft deletes a user account.
+ * @param {string|number} userId - The user ID.
+ * @returns {Promise<void>}
+ */
 async function deleteUserAccount(userId) {
     const query = `
-        UPDATE user_account 
-        SET is_deleted = true, 
-            deleted_at = CURRENT_TIMESTAMP, 
-            modified_at = CURRENT_TIMESTAMP 
+        UPDATE user_account
+        SET is_deleted = true,
+            deleted_at = CURRENT_TIMESTAMP,
+            modified_at = CURRENT_TIMESTAMP
         WHERE id = $1
     `;
     const values = [userId];
     await pool.query(query, values);
 }
 
+/**
+ * Permanently deletes a user account.
+ * @param {string|number} userId - The user ID.
+ * @returns {Promise<void>}
+ */
 async function hardDeleteUserAccount(userId) {
     const query = "DELETE FROM user_account WHERE id = $1";
     const values = [userId];
     await pool.query(query, values);
 }
 
+/**
+ * Blocks a user account.
+ * @param {string|number} userId - The user ID.
+ * @returns {Promise<void>}
+ */
 async function blockUserAccount(userId) {
     const query = "UPDATE user_account SET is_blocked = true, modified_at = CURRENT_TIMESTAMP WHERE id = $1";
     const values = [userId];
     await pool.query(query, values);
 }
 
+/**
+ * Unblocks a user account.
+ * @param {string|number} userId - The user ID.
+ * @returns {Promise<void>}
+ */
 async function unblockUserAccount(userId) {
     const query = "UPDATE user_account SET is_blocked = false, modified_at = CURRENT_TIMESTAMP WHERE id = $1";
     const values = [userId];

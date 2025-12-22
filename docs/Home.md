@@ -1,4 +1,5 @@
 # 🏠 Documentation Home
+
 Start here: **[Rules](./rules.md)**
 
 ---
@@ -30,7 +31,17 @@ Use these to help yourself in understanding the code structure.
 
 ### Architecture
 
+- [System Architecture](./architecture.md) - Full system overview
 - [Authentication Architecture](./architecture/Authentication%20Architecture.md)
+
+### Feature Documentation
+
+- [JWT Authentication](./jwt-authentication.md)
+- [Search Feature](./search-feature.md)
+- [Notifications](./notifications.md)
+- [Theme System](./theme-system.md)
+- [CSS Architecture](./css-architecture.md)
+- [Social Auth (OAuth)](./social-auth.md)
 
 ### 🎨 Drawings
 

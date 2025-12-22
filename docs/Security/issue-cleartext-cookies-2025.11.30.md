@@ -2,7 +2,7 @@
 
 #security #cookie #http
 
-Reported here: <https://github.com/wtasg/meetonline/security/code-scanning/1>
+Reported here: github.com/wtasg/meetonline/security/code-scanning/1
 
 Refer further:
 

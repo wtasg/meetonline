@@ -3,7 +3,9 @@ import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
 import { apiRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 /**
- * @param {Express.Application} app
+ * Sets up user OAuth connection management route handlers.
+ * @param {import('express').Application} app - The Express application instance.
+ * @returns {void}
  */
 function setupUserOAuthHandlers(app) {
     app.get("/user/oauth_connections", apiRateLimiter, hybridAuthMiddleware, async (req, res) => {

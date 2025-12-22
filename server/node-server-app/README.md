@@ -87,11 +87,16 @@ Each handler sets up routes for a specific domain and implements the business lo
 | File | Routes | Purpose |
 |------|--------|---------|
 | `authHandler.js` | `/signup`, `/auth_token`, `/auth_refresh`, `/logout` | Authentication and session management |
+| `eventHandler.js` | `/event`, `/events`, `/event/:id`, `/events/latest` | Event CRUD and listings |
 | `groupHandler.js` | `/group`, `/groups`, `/group/:id`, `/group/:id/join`, `/group/:id/leave`, `/group/search` | Group CRUD and membership |
+| `notificationHandler.js` | `/notification/:id`, `/notifications`, `/notifications/unread-count` | User notifications |
+| `oauthHandler.js` | `/oauth/:provider/callback` | OAuth authentication callbacks |
+| `searchHandler.js` | `/search` | Global search |
+| `uploadHandler.js` | `/upload` | File upload handling |
 | `userAccountHandler.js` | `/user_account` | Account management and deletion |
+| `userOAuthHandler.js` | `/user/oauth-connections` | User OAuth connection management |
 | `userProfileHandler.js` | `/user_profile` | User profile CRUD |
 | `userSettingsHandler.js` | `/user_settings` | User preferences and settings |
-| `uploadHandler.js` | `/upload` | File upload handling |
 | `rootHandler.js` | `/` | Health check and root routes |
 
 ---
@@ -198,6 +203,42 @@ Each handler sets up routes for a specific domain and implements the business lo
 |--------|----------|------|-------------|
 | `POST` | `/upload` | JWT/Cookie | Upload file |
 | `GET` | `/uploads/*` | None | Static file serving |
+
+### Events
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `POST` | `/event` | JWT/Cookie | Create new event |
+| `GET` | `/events` | JWT/Cookie | List user's events |
+| `GET` | `/event/:id` | JWT/Cookie | Get event details |
+| `PATCH` | `/event/:id` | JWT/Cookie | Update event |
+| `DELETE` | `/event/:id` | JWT/Cookie | Delete event |
+| `GET` | `/events/latest` | None | Get latest public events |
+
+### Notifications
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `GET` | `/notifications` | JWT/Cookie | List user notifications |
+| `GET` | `/notification/:id` | JWT/Cookie | Get notification details |
+| `PATCH` | `/notification/:id/read` | JWT/Cookie | Mark as read |
+| `PATCH` | `/notifications/read-all` | JWT/Cookie | Mark all as read |
+| `DELETE` | `/notification/:id` | JWT/Cookie | Delete notification |
+| `GET` | `/notifications/unread-count` | JWT/Cookie | Get unread count |
+
+### Search
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `GET` | `/search?q=` | JWT/Cookie | Search events, groups, users |
+
+### OAuth
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `GET` | `/oauth/:provider/callback` | None | OAuth provider callback |
+| `GET` | `/user/oauth-connections` | JWT/Cookie | List connected accounts |
+| `DELETE` | `/user/oauth-connections/:provider` | JWT/Cookie | Disconnect OAuth account |
 
 ---
 

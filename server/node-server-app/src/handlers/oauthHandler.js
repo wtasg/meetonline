@@ -4,7 +4,9 @@ import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
 import { authRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 /**
- * @param {Express.Application} app
+ * Sets up OAuth authentication route handlers for various providers.
+ * @param {import('express').Application} app - The Express application instance.
+ * @returns {void}
  */
 function setupOAuthHandlers(app) {
     // Initiation routes
@@ -76,7 +78,7 @@ function setupOAuthHandlers(app) {
                     // Success login - issue tokens
                     try {
                         const { userId } = result;
-                        // For login flow, we need to issue JWT tokens. 
+                        // For login flow, we need to issue JWT tokens.
                         // But we are in a redirect flow. We'll pass tokens in URL (fragment is safer)
                         // Or a one-time code. For simplicity here, we'll use fragment.
                         const tokens = await issueTokenPair({ id: userId, username: "social_user" }); // username fallback

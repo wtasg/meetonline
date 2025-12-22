@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "name": "meetonline",
+  "version": "1.0.0",
+  "description": "![License](https://img.shields.io/github/license/wtasg/meetonline) ![Issues](https://img.shields.io/github/issues/wtasg/meetonline) ![Pull Requests](https://img.shields.io/github/issues-pr/wtasg/meetonline)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wtasg/meetonline.git"
+  },
+  "keywords": [],
+  "author": "wtasg <5f87le8sh@mozmail.com>",
+  "license": "unlicensed",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/wtasg/meetonline/issues"
+  },
+  "homepage": "https://github.com/wtasg/meetonline#readme",
+  "devDependencies": {
+    "markdown-link-check": "^3.14.2"
+  }
+}

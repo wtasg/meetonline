@@ -21,10 +21,10 @@ import { COOKIE_CLEAR_OPTIONS } from "../utils/cookieConfig.js";
 import { authRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 /**
- *
- * @param {Express.Application} app
+ * Sets up authentication-related route handlers.
+ * @param {import('express').Application} app - The Express application instance.
+ * @returns {void}
  */
-
 function setupAuthHandlers(app) {
     app.get("/signup", authRateLimiter, signupHandlerGET);
     app.post("/signup", authRateLimiter, signupHandlerPOST);
@@ -34,9 +34,11 @@ function setupAuthHandlers(app) {
 }
 
 /**
- * GET /signup - Generate and return signup token
- * @param {Express.Request} req
- * @param {Express.Response} res
+ * GET /signup - Generate and return signup token.
+ * Creates a unique token and sets it in a secure cookie.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function signupHandlerGET(req, res) {
     const token = uuidv4();
@@ -53,6 +55,13 @@ async function signupHandlerGET(req, res) {
     res.status(200).json({ ok: true, token });
 }
 
+/**
+ * POST /signup - Create a new user account.
+ * Validates signup token and creates user with hashed password.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
+ */
 async function signupHandlerPOST(req, res) {
     const { token, username, password } = req.body;
     if (!token || !username || !password) {
@@ -78,6 +87,13 @@ async function signupHandlerPOST(req, res) {
         });
 }
 
+/**
+ * POST /logout - Logout the current user.
+ * Revokes JWT tokens and clears session cookies.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
+ */
 async function logoutHandlerPOST(req, res) {
     // Revoke JWT tokens if user is authenticated via JWT
     if (req.user && req.user.userId) {
@@ -91,6 +107,12 @@ async function logoutHandlerPOST(req, res) {
         .json({ ok: true, logout: true, message: "Logout successful!" });
 }
 
+/**
+ * Destroys session by clearing all authentication cookies.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
+ */
 async function destroySession(req, res) {
     // Basic cleanup of tokens from store if they exist, but no cookies
     // This is largely legacy cleanup now
@@ -104,10 +126,11 @@ async function destroySession(req, res) {
 }
 
 /**
- * POST /auth_token - JWT-based authentication
- * Authenticates user and returns JWT tokens
- * @param {Express.Request} req
- * @param {Express.Response} res
+ * POST /auth_token - JWT-based authentication.
+ * Authenticates user with username/password and returns JWT tokens.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function authTokenHandlerPOST(req, res) {
     const { username: candidateUsername, password: candidatePassword } = req.body;
@@ -197,10 +220,11 @@ async function authTokenHandlerPOST(req, res) {
 }
 
 /**
- * POST /auth_refresh - Refresh JWT access token
- * Uses refresh token to get new access token
- * @param {Express.Request} req
- * @param {Express.Response} res
+ * POST /auth_refresh - Refresh JWT access token.
+ * Uses refresh token to generate new access/refresh token pair.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function authRefreshHandlerPOST(req, res) {
     const { refreshToken } = req.body;

@@ -17,32 +17,38 @@ This document summarizes the implementation of JWT (JSON Web Token) authenticati
 ### Server (`server/node-server-app`)
 
 #### New Dependencies
+
 - `jsonwebtoken` (v9.0.3) - JWT token generation and verification
 
-#### New Files
+#### New Files ( Server )
+
 - `src/models/jwtTokenModel.js` - JWT token data model
 - `src/database/jwt_tokens.js` - Database operations for JWT tokens
 - `src/utils/jwt.js` - JWT utility functions (generate, verify, decode)
 - `src/middlewares/jwtMiddleware.js` - JWT authentication middleware
 - `src/middlewares/hybridAuthMiddleware.js` - Supports both JWT and cookie auth
 
-#### Modified Files
+#### Modified Files ( Server )
+
 - `src/handlers/authHandler.js` - Added `/auth_token` and `/auth_refresh` endpoints
 - `src/handlers/userAccountHandler.js` - Updated to use hybrid authentication
 - `src/handlers/userProfileHandler.js` - Updated to use hybrid authentication
 
 #### New API Endpoints
+
 - `POST /auth_token` - Authenticate and receive JWT tokens
 - `POST /auth_refresh` - Refresh access token using refresh token
 - `POST /logout` - Now supports JWT-based logout (also keeps cookie support)
 
 ### Client (`client/react-client-app`)
 
-#### New Files
+#### New Files ( Client )
+
 - `src/utils/jwt.js` - Client-side JWT utilities (store, retrieve, check expiry)
 - `src/net/authenticatedFetch.js` - Fetch wrapper with automatic token refresh
 
-#### Modified Files
+#### Modified Files ( Client )
+
 - `src/utils/session.js` - Updated to check for JWT tokens
 - `src/net/auth.js` - Added JWT authentication functions
 - `src/net/userAccount.js` - Updated to use authenticatedFetch
@@ -167,15 +173,18 @@ app.get("/protected", hybridAuthMiddleware, async (req, res) => {
 ## Migration Path
 
 ### For New Users
+
 - Automatically use JWT authentication
 - No changes needed
 
 ### For Existing Users
+
 - Continue using cookie-based auth until next login
 - Next login will use JWT authentication
 - Seamless transition
 
 ### For Developers
+
 1. **Phase 1** (Current): Both auth methods supported
 2. **Phase 2** (Future): Deprecate cookie-based auth
 3. **Phase 3** (Future): Remove cookie-based auth code
@@ -183,6 +192,7 @@ app.get("/protected", hybridAuthMiddleware, async (req, res) => {
 ## Testing
 
 ### Test Login
+
 ```bash
 curl -X POST https://localhost:8443/auth_token \
   -H "Content-Type: application/json" \
@@ -190,12 +200,14 @@ curl -X POST https://localhost:8443/auth_token \
 ```
 
 ### Test Protected Endpoint
+
 ```bash
 curl -X GET https://localhost:8443/user_profile \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
 ### Test Token Refresh
+
 ```bash
 curl -X POST https://localhost:8443/auth_refresh \
   -H "Content-Type: application/json" \
@@ -221,8 +233,8 @@ curl -X POST https://localhost:8443/auth_refresh \
 ## Documentation
 
 For detailed documentation, see:
+
 - [JWT Authentication Guide](./jwt-authentication.md)
-- [API Documentation](./api-documentation.md)
 
 ## Questions or Issues?
 

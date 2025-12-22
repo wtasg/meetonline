@@ -4,14 +4,21 @@ import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
 import { apiRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 /**
- *
- * @param {Express} app
+ * Sets up user profile route handlers.
+ * @param {import('express').Application} app - The Express application instance.
+ * @returns {void}
  */
 function setupUserProfileHandler(app) {
     app.get("/user_profile", apiRateLimiter, hybridAuthMiddleware, userProfileGET);
     app.patch("/user_profile", apiRateLimiter, hybridAuthMiddleware, userProfilePATCH);
 }
 
+/**
+ * GET /user_profile - Fetch the current user's profile.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
+ */
 async function userProfileGET(req, res) {
     try {
         // User info is in req.user from hybrid middleware (works for both JWT and cookies)
@@ -44,6 +51,12 @@ async function userProfileGET(req, res) {
     }
 }
 
+/**
+ * PATCH /user_profile - Update a field in the current user's profile.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
+ */
 async function userProfilePATCH(req, res) {
     try {
         const { key, value } = req.body;

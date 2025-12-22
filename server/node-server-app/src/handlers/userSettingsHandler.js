@@ -4,14 +4,21 @@ import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
 import { apiRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 /**
- * Setup user settings handler routes
- * @param {Express} app
+ * Sets up user settings route handlers.
+ * @param {import('express').Application} app - The Express application instance.
+ * @returns {void}
  */
 function setupUserSettingsHandler(app) {
     app.get("/user_settings", apiRateLimiter, hybridAuthMiddleware, userSettingsGET);
     app.patch("/user_settings", apiRateLimiter, hybridAuthMiddleware, userSettingsPATCH);
 }
 
+/**
+ * GET /user_settings - Fetch the current user's settings.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
+ */
 async function userSettingsGET(req, res) {
     try {
         // User is authenticated via hybrid middleware
@@ -41,6 +48,12 @@ async function userSettingsGET(req, res) {
     }
 }
 
+/**
+ * PATCH /user_settings - Update a setting for the current user.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
+ */
 async function userSettingsPATCH(req, res) {
     try {
         const { key, value } = req.body;

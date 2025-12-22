@@ -14,7 +14,8 @@ const DEFAULT_UPLOAD_WINDOW_MS = 1 * 60 * 1000; // 1 minute
 const DEFAULT_UPLOAD_MAX_REQUESTS = 10; // requests per window
 
 /**
- * Get rate limit configuration from environment or use defaults
+ * Get rate limit configuration from environment or use defaults.
+ * @returns {Object} Configuration object with auth, api, and upload limits.
  */
 function getRateLimitConfig() {
     const parseEnvInt = (envValue, defaultValue) => {
@@ -39,9 +40,11 @@ function getRateLimitConfig() {
 }
 
 /**
- * Standard error handler for rate limit exceeded
- * Returns JSON with retry-after header
- * Does not expose internal implementation details
+ * Standard error handler for rate limit exceeded.
+ * Returns JSON with retry-after header.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {void}
  */
 function rateLimitHandler(req, res) {
     res.status(429).json({
@@ -51,8 +54,9 @@ function rateLimitHandler(req, res) {
 }
 
 /**
- * Rate limiter for authentication endpoints (login, signup, token refresh)
- * Higher security with lower limits to prevent brute-force attacks
+ * Creates rate limiter for authentication endpoints.
+ * Higher security with lower limits to prevent brute-force attacks.
+ * @returns {import('express-rate-limit').RateLimitRequestHandler} Express rate limiter middleware.
  */
 function createAuthRateLimiter() {
     const config = getRateLimitConfig();
@@ -68,8 +72,9 @@ function createAuthRateLimiter() {
 }
 
 /**
- * Rate limiter for general API endpoints
- * More permissive for normal API usage
+ * Creates rate limiter for general API endpoints.
+ * More permissive for normal API usage.
+ * @returns {import('express-rate-limit').RateLimitRequestHandler} Express rate limiter middleware.
  */
 function createApiRateLimiter() {
     const config = getRateLimitConfig();
@@ -85,8 +90,9 @@ function createApiRateLimiter() {
 }
 
 /**
- * Rate limiter for upload endpoints
- * Stricter limits to prevent abuse of file upload
+ * Creates rate limiter for upload endpoints.
+ * Stricter limits to prevent abuse of file upload.
+ * @returns {import('express-rate-limit').RateLimitRequestHandler} Express rate limiter middleware.
  */
 function createUploadRateLimiter() {
     const config = getRateLimitConfig();

@@ -18,8 +18,9 @@ import { createPendingDeletion } from "../database/pending_deletions.js";
 import { createNotification } from "../database/notification.js";
 
 /**
- * Setup group handlers
- * @param {Express} app
+ * Sets up group-related route handlers.
+ * @param {import('express').Application} app - The Express application instance.
+ * @returns {void}
  */
 function setupGroupHandler(app) {
     app.post("/group", apiRateLimiter, hybridAuthMiddleware, groupPOST);
@@ -35,7 +36,10 @@ function setupGroupHandler(app) {
 }
 
 /**
- * Create a new group
+ * POST /group - Create a new group.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function groupPOST(req, res) {
     try {
@@ -94,7 +98,10 @@ async function groupPOST(req, res) {
 }
 
 /**
- * Get a group by ID
+ * GET /group/:id - Get a group by ID.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function groupGET(req, res) {
     try {
@@ -128,7 +135,10 @@ async function groupGET(req, res) {
 }
 
 /**
- * Get groups by user
+ * GET /groups - Get all groups for the current user.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function groupsGET(req, res) {
     try {
@@ -161,7 +171,10 @@ async function groupsGET(req, res) {
 }
 
 /**
- * Update a group
+ * PATCH /group/:id - Update a group.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function groupPATCH(req, res) {
     try {
@@ -231,7 +244,10 @@ async function groupPATCH(req, res) {
 }
 
 /**
- * Delete a group
+ * DELETE /group/:id - Delete a group (soft delete).
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function groupDELETE(req, res) {
     try {
@@ -308,7 +324,10 @@ async function groupDELETE(req, res) {
 }
 
 /**
- * Join a group
+ * POST /group/:id/join - Join a public group.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function groupJoinPOST(req, res) {
     try {
@@ -368,7 +387,10 @@ async function groupJoinPOST(req, res) {
 }
 
 /**
- * Leave a group
+ * POST /group/:id/leave - Leave a group.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function groupLeavePOST(req, res) {
     try {
@@ -410,7 +432,10 @@ async function groupLeavePOST(req, res) {
 }
 
 /**
- * Search groups
+ * GET /group/search - Search groups by name.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function groupSearchGET(req, res) {
     try {
@@ -444,13 +469,16 @@ async function groupSearchGET(req, res) {
 }
 
 /**
- * Get latest groups (public endpoint)
- * Returns minimal info: id, groupName, createdAt
+ * GET /new_groups - Get latest public groups (public endpoint).
+ * Returns minimal info: id, groupName, createdAt.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function newGroupsGET(req, res) {
     try {
         const groups = await getLatestGroups();
-        
+
         return res.status(200).json({
             ok: true,
             new_groups: groups,
@@ -467,13 +495,16 @@ async function newGroupsGET(req, res) {
 }
 
 /**
- * Get latest groups for authenticated user
- * Returns full group details
+ * GET /user_new_groups - Get latest groups for authenticated user.
+ * Returns full group details.
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>}
  */
 async function userNewGroupsGET(req, res) {
     try {
         const groups = await getLatestGroupsForUser();
-        
+
         return res.status(200).json({
             ok: true,
             user_new_groups: groups.map(g => g.toClient()),

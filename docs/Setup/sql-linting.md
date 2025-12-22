@@ -94,7 +94,7 @@ SQL linting is configured in `.sqlfluff` at the repository root.
 
 ### Customizing Configuration
 
-Edit `.sqlfluff` to adjust linting rules. See the [sqlfluff documentation](https://docs.sqlfluff.com/en/stable/configuration.html) for available options.
+Edit `.sqlfluff` to adjust linting rules. See the [sqlfluff documentation](https://docs.sqlfluff.com/en/stable/configuration/index.html) for available options.
 
 ## Pre-commit Integration
 
@@ -123,6 +123,7 @@ If the image fails to build:
 1. Check your internet connection (needs to download base image and packages)
 2. Ensure you have sufficient disk space
 3. Try building manually to see detailed errors:
+
    ```bash
    docker build -t meetonline-sql-lint:latest -f database/Dockerfile.lint database/
    ```

@@ -15,8 +15,9 @@ import { createPendingDeletion } from "../database/pending_deletions.js";
 import { createNotification } from "../database/notification.js";
 
 /**
- * Setup event handlers
- * @param {Express} app
+ * Sets up event-related route handlers.
+ * @param {import('express').Application} app - The Express application instance.
+ * @returns {void}
  */
 function setupEventHandler(app) {
     app.post("/event", apiRateLimiter, hybridAuthMiddleware, eventPOST);
@@ -30,6 +31,9 @@ function setupEventHandler(app) {
 
 /**
  * Create a new event
+ * @param {import('express').Request} req - The Express request object
+ * @param {import('express').Response} res - The Express response object
+ * @returns {Promise<import('express').Response>}
  */
 async function eventPOST(req, res) {
     try {
@@ -125,6 +129,9 @@ async function eventPOST(req, res) {
 
 /**
  * Get an event by ID
+ * @param {import('express').Request} req - The Express request object
+ * @param {import('express').Response} res - The Express response object
+ * @returns {Promise<import('express').Response>}
  */
 async function eventGET(req, res) {
     try {
@@ -156,6 +163,9 @@ async function eventGET(req, res) {
 
 /**
  * Get events by user (organiser)
+ * @param {import('express').Request} req - The Express request object
+ * @param {import('express').Response} res - The Express response object
+ * @returns {Promise<import('express').Response>}
  */
 async function eventsGET(req, res) {
     try {
@@ -204,6 +214,9 @@ async function eventsGET(req, res) {
 
 /**
  * Update an event
+ * @param {import('express').Request} req - The Express request object
+ * @param {import('express').Response} res - The Express response object
+ * @returns {Promise<import('express').Response>}
  */
 async function eventPATCH(req, res) {
     try {
@@ -290,6 +303,9 @@ async function eventPATCH(req, res) {
 
 /**
  * Delete an event
+ * @param {import('express').Request} req - The Express request object
+ * @param {import('express').Response} res - The Express response object
+ * @returns {Promise<import('express').Response>}
  */
 async function eventDELETE(req, res) {
     try {
@@ -375,11 +391,14 @@ async function eventDELETE(req, res) {
 /**
  * Get latest events (public endpoint)
  * Returns minimal info: id, title, createdAt
+ * @param {import('express').Request} req - The Express request object
+ * @param {import('express').Response} res - The Express response object
+ * @returns {Promise<import('express').Response>}
  */
 async function newEventsGET(req, res) {
     try {
         const events = await getLatestEvents();
-        
+
         return res.status(200).json({
             ok: true,
             new_events: events,
@@ -398,11 +417,14 @@ async function newEventsGET(req, res) {
 /**
  * Get latest events for authenticated user
  * Returns full event details
+ * @param {import('express').Request} req - The Express request object
+ * @param {import('express').Response} res - The Express response object
+ * @returns {Promise<import('express').Response>}
  */
 async function userNewEventsGET(req, res) {
     try {
         const events = await getLatestEventsForUser();
-        
+
         return res.status(200).json({
             ok: true,
             user_new_events: events.map(e => e.toClient()),
