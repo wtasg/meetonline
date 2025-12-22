@@ -1,11 +1,12 @@
 import { getOAuthConnectionsByUserId, deleteOAuthConnection } from "../database/oauth_connections.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
+import { apiRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 /**
  * @param {Express.Application} app
  */
 function setupUserOAuthHandlers(app) {
-    app.get("/user/oauth_connections", hybridAuthMiddleware, async (req, res) => {
+    app.get("/user/oauth_connections", apiRateLimiter, hybridAuthMiddleware, async (req, res) => {
         try {
             const connections = await getOAuthConnectionsByUserId(req.user.userId);
             res.json({ ok: true, connections: connections.map(c => ({ provider: c.provider, email: c.email })) });
@@ -15,7 +16,7 @@ function setupUserOAuthHandlers(app) {
         }
     });
 
-    app.delete("/user/oauth_connections/:provider", hybridAuthMiddleware, async (req, res) => {
+    app.delete("/user/oauth_connections/:provider", apiRateLimiter, hybridAuthMiddleware, async (req, res) => {
         try {
             await deleteOAuthConnection(req.user.userId, req.params.provider);
             res.json({ ok: true, message: "Disconnected successfully" });

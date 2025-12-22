@@ -1,14 +1,15 @@
 import { getUserProfileByUsername, updateUserProfile } from "../database/user_profile.js";
 import { UserProfileModel } from "../models/userProfileModel.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
+import { apiRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 /**
  *
  * @param {Express} app
  */
 function setupUserProfileHandler(app) {
-    app.get("/user_profile", hybridAuthMiddleware, userProfileGET);
-    app.patch("/user_profile", hybridAuthMiddleware, userProfilePATCH);
+    app.get("/user_profile", apiRateLimiter, hybridAuthMiddleware, userProfileGET);
+    app.patch("/user_profile", apiRateLimiter, hybridAuthMiddleware, userProfilePATCH);
 }
 
 async function userProfileGET(req, res) {
@@ -16,7 +17,7 @@ async function userProfileGET(req, res) {
         // User info is in req.user from hybrid middleware (works for both JWT and cookies)
         const username = req.user.username;
         const user_profile = await getUserProfileByUsername(username);
-        
+
         if (user_profile.__isDefault || user_profile.__isNull) {
             return res.status(500)
                 .json({
@@ -48,7 +49,7 @@ async function userProfilePATCH(req, res) {
         const { key, value } = req.body;
         // User info is in req.user from hybrid middleware (works for both JWT and cookies)
         const username = req.user.username;
-        
+
         const result = await updateUserProfile(username, key, value);
         if (!result) {
             return res.status(500)

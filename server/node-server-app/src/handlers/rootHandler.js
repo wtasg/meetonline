@@ -1,9 +1,11 @@
+import { apiRateLimiter } from "../middlewares/rateLimitMiddleware.js";
+
 /**
  *
  * @param {Express.Application} app
  */
 function setupRootHandlers(app) {
-    app.get("/", rootHandler);
+    app.get("/", apiRateLimiter, rootHandler);
 }
 
 /**

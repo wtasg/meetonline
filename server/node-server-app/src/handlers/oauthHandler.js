@@ -1,13 +1,14 @@
 import passport from "passport";
 import { issueTokenPair } from "../utils/authUtils.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
+import { authRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 /**
  * @param {Express.Application} app
  */
 function setupOAuthHandlers(app) {
     // Initiation routes
-    app.get("/oauth/google", (req, res, next) => {
+    app.get("/oauth/google", authRateLimiter, (req, res, next) => {
         const isConnect = req.query.mode === "connect";
         const middleware = isConnect ? hybridAuthMiddleware : (r, rs, n) => n();
         middleware(req, res, () => {
@@ -18,7 +19,7 @@ function setupOAuthHandlers(app) {
         });
     });
 
-    app.get("/oauth/microsoft", (req, res, next) => {
+    app.get("/oauth/microsoft", authRateLimiter, (req, res, next) => {
         const isConnect = req.query.mode === "connect";
         const middleware = isConnect ? hybridAuthMiddleware : (r, rs, n) => n();
         middleware(req, res, () => {
@@ -28,7 +29,7 @@ function setupOAuthHandlers(app) {
         });
     });
 
-    app.get("/oauth/facebook", (req, res, next) => {
+    app.get("/oauth/facebook", authRateLimiter, (req, res, next) => {
         const isConnect = req.query.mode === "connect";
         const middleware = isConnect ? hybridAuthMiddleware : (r, rs, n) => n();
         middleware(req, res, () => {
@@ -39,7 +40,7 @@ function setupOAuthHandlers(app) {
         });
     });
 
-    app.get("/oauth/apple", (req, res, next) => {
+    app.get("/oauth/apple", authRateLimiter, (req, res, next) => {
         const isConnect = req.query.mode === "connect";
         const middleware = isConnect ? hybridAuthMiddleware : (r, rs, n) => n();
         middleware(req, res, () => {

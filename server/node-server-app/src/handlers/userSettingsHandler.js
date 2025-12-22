@@ -1,14 +1,15 @@
 import { getUserSettingsByUsername, updateUserSettings } from "../database/user_settings.js";
 import { UserSettingsModel } from "../models/userSettingsModel.js";
 import { hybridAuthMiddleware } from "../middlewares/hybridAuthMiddleware.js";
+import { apiRateLimiter } from "../middlewares/rateLimitMiddleware.js";
 
 /**
  * Setup user settings handler routes
  * @param {Express} app
  */
 function setupUserSettingsHandler(app) {
-    app.get("/user_settings", hybridAuthMiddleware, userSettingsGET);
-    app.patch("/user_settings", hybridAuthMiddleware, userSettingsPATCH);
+    app.get("/user_settings", apiRateLimiter, hybridAuthMiddleware, userSettingsGET);
+    app.patch("/user_settings", apiRateLimiter, hybridAuthMiddleware, userSettingsPATCH);
 }
 
 async function userSettingsGET(req, res) {
