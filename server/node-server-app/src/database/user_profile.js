@@ -93,10 +93,10 @@ async function updateUserProfile(username, key, value) {
 async function deleteUserProfile(userProfileId) {
     try {
         const query = `
-            UPDATE public.user_profile 
-            SET is_deleted = true, 
-                deleted_at = CURRENT_TIMESTAMP, 
-                modified_at = CURRENT_TIMESTAMP 
+            UPDATE public.user_profile
+            SET is_deleted = true,
+                deleted_at = CURRENT_TIMESTAMP,
+                modified_at = CURRENT_TIMESTAMP
             WHERE id = $1
         `;
         const values = [userProfileId];
@@ -127,8 +127,50 @@ async function hardDeleteUserProfile(userProfileId) {
     }
 }
 
+/**
+ * Get user profile by user ID (user_account.id)
+ * @param {number} userId - The user account ID
+ * @returns {Promise<UserProfileModel>}
+ */
+async function getUserProfileByUserId(userId) {
+    try {
+        const query = "SELECT * FROM public.user_profile WHERE user_id = $1";
+        const result = await pool.query(query, [userId]);
+        if (result.rowCount === 0) {
+            return UserProfileModel.null();
+        }
+        return UserProfileModel.fromDatabaseRow(result.rows[0]);
+    } catch (err) {
+        console.error("ERROR: getUserProfileByUserId");
+        console.error(err);
+        return UserProfileModel.null();
+    }
+}
+
+/**
+ * Get user profile by profile ID (user_profile.id)
+ * @param {number} profileId - The user profile ID
+ * @returns {Promise<UserProfileModel>}
+ */
+async function getUserProfileById(profileId) {
+    try {
+        const query = "SELECT * FROM public.user_profile WHERE id = $1";
+        const result = await pool.query(query, [profileId]);
+        if (result.rowCount === 0) {
+            return UserProfileModel.null();
+        }
+        return UserProfileModel.fromDatabaseRow(result.rows[0]);
+    } catch (err) {
+        console.error("ERROR: getUserProfileById");
+        console.error(err);
+        return UserProfileModel.null();
+    }
+}
+
 export {
     getUserProfileByUsername,
+    getUserProfileByUserId,
+    getUserProfileById,
     updateUserProfile,
     deleteUserProfile,
     hardDeleteUserProfile,

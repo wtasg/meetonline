@@ -35,6 +35,8 @@ import { setupUserSettingsHandler } from "./handlers/userSettingsHandler.js";
 import { setupEventHandler } from "./handlers/eventHandler.js";
 import { setupSearchHandler } from "./handlers/searchHandler.js";
 import { setupNotificationHandler } from "./handlers/notificationHandler.js";
+import { setupAttendanceHandler } from "./handlers/attendanceHandler.js";
+import { setupRatingsHandler } from "./handlers/ratingsHandler.js";
 import { startBatchDeletionProcessor } from "./utils/batchDeletion.js";
 
 const app = express();
@@ -77,7 +79,7 @@ app.use((req, res, next) => {
     }
     doubleCsrfProtection(req, res, next);
 });
-// Error handler for CSRF to return JSON instead of HTML if preferred, 
+// Error handler for CSRF to return JSON instead of HTML if preferred,
 // strictly speaking double-csrf throws an error we might want to catch or let the default handler handle it.
 // server.js doesn't seem to have a specific error handler for this yet, assuming default express behaviour or we add one.
 // Let's add a simple one for CSRF errors if we want custom JSON response
@@ -107,6 +109,8 @@ setupUserSettingsHandler(app);
 setupEventHandler(app);
 setupSearchHandler(app);
 setupNotificationHandler(app);
+setupAttendanceHandler(app);
+setupRatingsHandler(app);
 
 // Start batch deletion processor (runs daily)
 // In production, you might want to use a dedicated cron job instead
