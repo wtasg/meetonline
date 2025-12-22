@@ -53,7 +53,7 @@ function setupOAuthHandlers(app) {
     // Callback routes
     const providers = ["google", "microsoft", "facebook", "apple"];
     providers.forEach(provider => {
-        app.get(`/oauth/${provider}/callback`, (req, res, next) => {
+        app.get(`/oauth/${provider}/callback`, authRateLimiter, (req, res, next) => {
             const authOptions = { session: false, failWithError: true };
 
             passport.authenticate(provider, authOptions, async (err, result, info) => {
