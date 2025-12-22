@@ -3,7 +3,7 @@ import { SessionContext } from "../context/SessionContext.jsx";
 
 /**
  * Hook to access session state and update functions
- * @returns {{ hasSession: boolean, setSession: function, refreshSession: function, login: function, logout: function }}
+ * @returns {{ hasSession: boolean, setSession: function, refreshSession: function, login: function, logout: function, loading: boolean }}
  */
 function useSession() {
     const context = useContext(SessionContext);

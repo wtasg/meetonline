@@ -1,0 +1,28 @@
+
+interface NetConf {
+    HTTP_SERVER: string;
+    HTTPS_SERVER: string;
+    URLS: Record<string, string>;
+}
+
+const CONF: NetConf = {
+    HTTP_SERVER: "http://meet.online:9006",
+    HTTPS_SERVER: import.meta.env.VITE_API_URL,
+    URLS: {
+        LOGIN: "login",
+        SIGNUP: "signup",
+        LOGOUT: "logout",
+        USER_ACCOUNT: "user_account",
+        USER_PROFILE: "user_profile",
+        GROUP: "group",
+        GROUPS: "groups",
+        GROUP_SEARCH: "group/search",
+        USER_SETTINGS: "user_settings",
+        EVENT: "event",
+        EVENTS: "events",
+        SEARCH: "search",
+        OAUTH_CONNECTIONS: "user/oauth_connections",
+    }
+};
+
+export { CONF };
