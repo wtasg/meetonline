@@ -20,6 +20,6 @@ jobs:
     steps:
       - uses: actions/first-interaction@v3
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ secrets.MEETONLINE_PAT }}
           issue_message: Welcome! Thank you for your contribution.
           pr_message: Welcome! Thank you for your contribution.
