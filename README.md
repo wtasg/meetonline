@@ -44,37 +44,38 @@ git push origin --delete old-name
 - [Review Checklist](https://github.com/wtasg/meetonline/discussions/298)
 - [Dev Checklist](https://github.com/wtasg/meetonline/discussions/211)
 
-### 🐳 Docker Compose
-
-```bash
-# run services
-docker compose --file compose.yml build
-docker compose --file compose.yml up
-
-## +watch client changes
-cd client/react-client-app && npm run build -- --watch
-
-# cleanup
-docker compose --file compose.yml down
-# docker volume list | grep meetonline | awk '{print $2}' | xargs -n1 docker volume rm
-```
-
 ### ⌨️ Manual Compose
 
 ```bash
 ## make certificates
-./scripts/make.certs.sh 
+./scripts/make.certs.sh
+
+## make environment
+./scripts/make.env.sh
+
+## install pacakges
+./scripts/package.install.sh
+
+## update pacakges
+./scripts/package.update.sh
+
+## run tests
+## e2e takes time; be patient
+./scripts/test.sh
 
 # docker compose --file compose.yml down
 # docker volume list | sed '1d' | awk '{print $2}' | xargs -n1 docker volume rm
 
-# run db, server, and client
-./scripts/manual-compose.sh --all
-# OR
 # run database and server
 ./scripts/manual-compose.sh --all --no-client
 ## +watch client changes
 ./scripts/watch-client.sh
+
+## accept certs
+## add meet.online in /etc/hosts
+echo "127.0.0.1 meet.online" | sudo tee -a /etc/hosts
+# visit https://meet.online:9443/ and accept certs
+# visit https://meet.online:5173/ and accept certs
 
 # cleanup
 /scripts/manual-compose.sh --clean --no-client
