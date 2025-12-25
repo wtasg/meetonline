@@ -117,6 +117,38 @@ describe("Session Security", () => {
             expect(settingsStorage.retrieve("fontSize")).toBeNull();
             expect(settingsStorage.retrieve("fontContrast")).toBeNull();
         });
+
+        it("should be safe to call clearUserData multiple times (idempotency)", () => {
+            // Store some user data
+            settings.store("userSettings", JSON.stringify({ theme: "gray" }));
+            themeStorage.store("theme", "teal");
+            themeStorage.store("scheme", "dark");
+            
+            // Call clearUserData twice
+            expect(() => clearUserData()).not.toThrow();
+            expect(() => clearUserData()).not.toThrow();
+            
+            // Verify all data is still cleared after multiple calls
+            expect(settings.retrieve("userSettings")).toBeNull();
+            expect(themeStorage.retrieve("theme")).toBeNull();
+            expect(themeStorage.retrieve("scheme")).toBeNull();
+            expect(themeStorage.retrieve("filter")).toBeNull();
+            expect(settingsStorage.retrieve("fontSize")).toBeNull();
+            expect(settingsStorage.retrieve("fontContrast")).toBeNull();
+        });
+
+        it("should not throw when clearing already-empty storage", () => {
+            // Call clearUserData on fresh/empty storage
+            expect(() => clearUserData()).not.toThrow();
+            
+            // Verify all relevant keys are null
+            expect(settings.retrieve("userSettings")).toBeNull();
+            expect(themeStorage.retrieve("theme")).toBeNull();
+            expect(themeStorage.retrieve("scheme")).toBeNull();
+            expect(themeStorage.retrieve("filter")).toBeNull();
+            expect(settingsStorage.retrieve("fontSize")).toBeNull();
+            expect(settingsStorage.retrieve("fontContrast")).toBeNull();
+        });
     });
 
     describe("location storage configuration", () => {
