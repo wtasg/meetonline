@@ -38,6 +38,7 @@ import { setupNotificationHandler } from "./handlers/notificationHandler.js";
 import { setupAttendanceHandler } from "./handlers/attendanceHandler.js";
 import { setupRatingsHandler } from "./handlers/ratingsHandler.js";
 import { startBatchDeletionProcessor } from "./utils/batchDeletion.js";
+import { setupDevTools } from "./utils/devtools-integration.js";
 
 const app = express();
 const cookieParser = cookieParserPkg.default;
@@ -48,6 +49,9 @@ loadEnv(process.env.NODE_ENV);
 
 /* setup database connection */
 await dbStart();
+
+// Import pool for DevTools
+import { pool } from "./database/db.js";
 
 setupDirectories({ exists: existsSync, mkdir: mkdirSync });
 
@@ -111,6 +115,9 @@ setupSearchHandler(app);
 setupNotificationHandler(app);
 setupAttendanceHandler(app);
 setupRatingsHandler(app);
+
+// Setup DevTools (development mode only)
+await setupDevTools(app, pool);
 
 // Start batch deletion processor (runs daily)
 // In production, you might want to use a dedicated cron job instead

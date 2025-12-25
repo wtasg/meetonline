@@ -8,6 +8,7 @@ import { applyFontSize, applyFontContrast, settingsStorage } from "./utils/setti
 import { applyThemeConfig, getStoredThemeConfig } from "./utils/theme";
 import { useSession } from "./hooks/useSession";
 import { LoadingScreen } from "./components/LoadingScreen";
+import { DevTools } from "./components/DevTools";
 
 function App(): React.JSX.Element {
     const { loading } = useSession();
@@ -38,6 +39,7 @@ function App(): React.JSX.Element {
             <main className="flex-1">
                 <Content />
             </main>
+            <DevTools />
         </div>
     );
 }

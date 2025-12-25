@@ -44,6 +44,26 @@ git push origin --delete old-name
 - [Review Checklist](https://github.com/wtasg/meetonline/discussions/298)
 - [Dev Checklist](https://github.com/wtasg/meetonline/discussions/211)
 
+### 🔧 DevTools (Development)
+
+For enhanced developer experience, we provide an internal DevTools system with CRUD operations for features:
+
+```bash
+# Install DevTools (one-time setup)
+cd devtool
+./install.sh
+
+# Start development with DevTools
+cd server/node-server-app
+NODE_ENV=development npm run dev
+
+# In another terminal
+cd client/react-client-app
+npm run dev
+```
+
+DevTools provides a floating UI panel for managing users, events, groups, and profiles. See [DevTools Usage Guide](./devtool/USAGE.md) for details.
+
 ### ⌨️ Manual Compose
 
 ```bash
