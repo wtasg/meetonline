@@ -1,6 +1,7 @@
 import type { Router } from 'express';
 import type { Pool } from 'pg';
 import type { FeatureMetadata } from '../types.js';
+import rateLimit from 'express-rate-limit';
 
 /**
  * Feature definitions for CRUD operations
@@ -58,8 +59,20 @@ export function createFeatureCrudRoutes(
 ): void {
     const { name, tableName, idColumn, columns } = feature;
 
+    // Rate limiting for this feature's CRUD routes
+    const featureRateLimiter = rateLimit({
+        windowMs: 60 * 1000, // 1 minute
+        max: 60, // max 60 requests per IP per window for this feature
+        standardHeaders: true,
+        legacyHeaders: false,
+        message: {
+            ok: false,
+            message: 'Too many requests, please try again later.'
+        }
+    });
+
     // List all items
-    router.get(`/${name}`, async (req, res) => {
+    router.get(`/${name}`, featureRateLimiter, async (req, res) => {
         try {
             const limit = parseInt(req.query.limit as string) || 50;
             const offset = parseInt(req.query.offset as string) || 0;
@@ -85,7 +98,7 @@ export function createFeatureCrudRoutes(
     });
 
     // Get single item
-    router.get(`/${name}/:id`, async (req, res) => {
+    router.get(`/${name}/:id`, featureRateLimiter, async (req, res) => {
         try {
             const { id } = req.params;
             const query = `SELECT * FROM ${tableName} WHERE ${idColumn} = $1`;
