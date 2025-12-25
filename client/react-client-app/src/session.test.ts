@@ -1,5 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { user_session, location, resetUserSession, resetLocation } from "./session";
+import { user_session, location, resetUserSession, resetLocation, clearUserData, settings } from "./session";
+import { themeStorage } from "./utils/theme";
+import { settingsStorage } from "./utils/settings";
 
 // Define simpler Storage type for testing since we just need to inspect internal structure
 interface StorageLike {
@@ -69,11 +71,83 @@ describe("Session Security", () => {
         it("should reset user session correctly", () => {
             user_session.store("username", "testuser");
             user_session.store("session", "test-session");
+            user_session.store("displayName", "Test User");
 
             resetUserSession();
 
             expect(user_session.retrieve("username")).toBeNull();
             expect(user_session.retrieve("session")).toBeNull();
+            expect(user_session.retrieve("displayName")).toBeNull();
+        });
+    });
+
+    describe("clearUserData functionality", () => {
+        let mockLocalStorage: Record<string, string>;
+
+        beforeEach(() => {
+            // Mock localStorage
+            mockLocalStorage = {};
+            vi.spyOn(window, "localStorage", "get").mockImplementation(() => ({
+                setItem: vi.fn((key: string, value: string) => { mockLocalStorage[key] = value; }),
+                getItem: vi.fn((key: string) => mockLocalStorage[key] || null),
+                removeItem: vi.fn((key: string) => { delete mockLocalStorage[key]; }),
+                clear: vi.fn(),
+                key: vi.fn(),
+                length: 0
+            }));
+        });
+
+        it("should clear all user settings from localStorage", () => {
+            // Store some user data
+            settings.store("userSettings", JSON.stringify({ theme: "gray" }));
+            themeStorage.store("theme", "teal");
+            themeStorage.store("scheme", "dark");
+            themeStorage.store("filter", "vivid");
+            settingsStorage.store("fontSize", "large");
+            settingsStorage.store("fontContrast", "high");
+
+            // Clear all user data
+            clearUserData();
+
+            // Verify all data is cleared
+            expect(settings.retrieve("userSettings")).toBeNull();
+            expect(themeStorage.retrieve("theme")).toBeNull();
+            expect(themeStorage.retrieve("scheme")).toBeNull();
+            expect(themeStorage.retrieve("filter")).toBeNull();
+            expect(settingsStorage.retrieve("fontSize")).toBeNull();
+            expect(settingsStorage.retrieve("fontContrast")).toBeNull();
+        });
+
+        it("should be safe to call clearUserData multiple times (idempotency)", () => {
+            // Store some user data
+            settings.store("userSettings", JSON.stringify({ theme: "gray" }));
+            themeStorage.store("theme", "teal");
+            themeStorage.store("scheme", "dark");
+            
+            // Call clearUserData twice
+            expect(() => clearUserData()).not.toThrow();
+            expect(() => clearUserData()).not.toThrow();
+            
+            // Verify all data is still cleared after multiple calls
+            expect(settings.retrieve("userSettings")).toBeNull();
+            expect(themeStorage.retrieve("theme")).toBeNull();
+            expect(themeStorage.retrieve("scheme")).toBeNull();
+            expect(themeStorage.retrieve("filter")).toBeNull();
+            expect(settingsStorage.retrieve("fontSize")).toBeNull();
+            expect(settingsStorage.retrieve("fontContrast")).toBeNull();
+        });
+
+        it("should not throw when clearing already-empty storage", () => {
+            // Call clearUserData on fresh/empty storage
+            expect(() => clearUserData()).not.toThrow();
+            
+            // Verify all relevant keys are null
+            expect(settings.retrieve("userSettings")).toBeNull();
+            expect(themeStorage.retrieve("theme")).toBeNull();
+            expect(themeStorage.retrieve("scheme")).toBeNull();
+            expect(themeStorage.retrieve("filter")).toBeNull();
+            expect(settingsStorage.retrieve("fontSize")).toBeNull();
+            expect(settingsStorage.retrieve("fontContrast")).toBeNull();
         });
     });
 
