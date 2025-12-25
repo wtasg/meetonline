@@ -1,5 +1,5 @@
 import { signup, logout, presignup, authToken, logoutJwt } from "../net/auth";
-import { resetLocation, resetUserSession, user_session } from "../session";
+import { resetLocation, resetUserSession, user_session, clearUserData } from "../session";
 import { storeTokens, clearTokens, getAccessToken, hasValidTokens, getUsername } from "../utils/jwt.js";
 import { fetchUserSettings } from "./userSettingsActions.js";
 
@@ -128,6 +128,7 @@ async function logoutAction(): Promise<ActionResponse> {
             clearTokens();
             resetUserSession();
             resetLocation();
+            clearUserData();
 
             if (!result.ok) {
                 console.error(result.message);
@@ -140,6 +141,7 @@ async function logoutAction(): Promise<ActionResponse> {
             clearTokens();
             resetUserSession();
             resetLocation();
+            clearUserData();
             return { ok: false, logout: false, message: (error as Error).message };
         }
     } else {
@@ -150,6 +152,7 @@ async function logoutAction(): Promise<ActionResponse> {
         }
         resetUserSession();
         resetLocation();
+        clearUserData();
         // server session destruction
         const result = await logout({ username: usernameInSession });
         if (!result.ok) {

@@ -1,4 +1,6 @@
 import { Storage } from "./utils/storage";
+import { themeStorage } from "./utils/theme";
+import { settingsStorage } from "./utils/settings";
 
 /**
  * Session storage instance for user session data (username, session token).
@@ -32,6 +34,25 @@ const resetLocation = (): void => {
 const resetUserSession = (): void => {
     user_session.eject("username");
     user_session.eject("session");
+    user_session.eject("displayName");
 };
 
-export { user_session, location, resetLocation, resetUserSession, settings };
+/**
+ * Clears all user-specific data from localStorage on logout.
+ * This includes user settings, theme preferences, and font settings.
+ */
+const clearUserData = (): void => {
+    // Clear user settings
+    settings.eject("userSettings");
+    
+    // Clear theme settings
+    themeStorage.eject("theme");
+    themeStorage.eject("scheme");
+    themeStorage.eject("filter");
+    
+    // Clear font settings
+    settingsStorage.eject("fontSize");
+    settingsStorage.eject("fontContrast");
+};
+
+export { user_session, location, resetLocation, resetUserSession, settings, clearUserData };
