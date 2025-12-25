@@ -20,8 +20,8 @@
   "author": "wtasg",
   "license": "UNLICENSED",
   "peerDependencies": {
-    "express": "^5.0.0",
-    "pg": "^8.0.0"
+    "express": "^5.2.1",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

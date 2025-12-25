@@ -34,6 +34,7 @@ docker run \
     --network manual-meetonline-network \
     --env-file "$CLIENT_DIR/local.env" \
     --volume "$(pwd)/$CLIENT_DIR:/app" \
+    --volume "$(pwd)/devtool:/devtool" \
     --workdir /app \
     --publish $PORT:$PORT \
     --detach node:25-bullseye \

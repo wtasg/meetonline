@@ -12,7 +12,12 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
-  "keywords": ["devtools", "development", "react", "meetonline"],
+  "keywords": [
+    "devtools",
+    "development",
+    "react",
+    "meetonline"
+  ],
   "author": "wtasg",
   "license": "UNLICENSED",
   "peerDependencies": {
@@ -20,12 +25,12 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@types/node": "^24.10.4",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@types/node": "^24.10.4",
-    "typescript": "^5.9.3",
     "eslint": "^9.39.2",
     "react": "^19.2.3",
-    "react-dom": "^19.2.3"
+    "react-dom": "^19.2.3",
+    "typescript": "^5.9.3"
   }
 }

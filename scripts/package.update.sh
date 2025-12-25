@@ -17,7 +17,7 @@ cd "$REPO_ROOT" || exit
 echo -e "${BLUE}--------------------------------------------------${NC}"
 echo -e "${BLUE}${INFO}Processing Server (server/node-server-app)...${NC}"
 echo -e "${BLUE}--------------------------------------------------${NC}"
-cd server/node-server-app || exit
+cd server/node-server-app || true
 echo -e "${BLUE}${INFO}Updating packages...${NC}"
 npm update --save
 echo -e "${BLUE}${INFO}Auditing packages...${NC}"
@@ -28,7 +28,7 @@ SERVER_EXIT_CODE=$?
 echo -e "${BLUE}--------------------------------------------------${NC}"
 echo -e "${BLUE}${INFO}Processing Client (client/react-client-app)...${NC}"
 echo -e "${BLUE}--------------------------------------------------${NC}"
-cd ../../client/react-client-app || exit
+cd ../../client/react-client-app || true
 echo -e "${BLUE}${INFO}Updating packages...${NC}"
 npm update --save
 echo -e "${BLUE}${INFO}Auditing packages...${NC}"

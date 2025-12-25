@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import type { DevToolsClientConfig } from '../types';
 import { FEATURE_DEFINITIONS } from '../utils/feature-definitions';
 import { FeatureCrud } from './FeatureCrud';
-import '../styles/devtools.css';
+// Import styles from dist location (CSS is built to dist/styles.css)
+import '../styles.css';
 
 interface DevToolsPanelProps {
     config?: Partial<DevToolsClientConfig>;
