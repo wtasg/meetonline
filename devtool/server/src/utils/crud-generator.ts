@@ -4,6 +4,7 @@ import type { FeatureMetadata } from '../types.js';
 
 /**
  * Feature definitions for CRUD operations
+ * SECURITY: These are hardcoded whitelisted values, not user input
  */
 export const FEATURES: Record<string, FeatureMetadata> = {
     users: {
@@ -37,7 +38,18 @@ export const FEATURES: Record<string, FeatureMetadata> = {
 };
 
 /**
+ * Validates that column names are in the whitelist
+ * SECURITY: Prevents SQL injection by ensuring only whitelisted columns are used
+ */
+function validateColumns(columns: string[], whitelist: string[]): boolean {
+    return columns.every(col => whitelist.includes(col));
+}
+
+/**
  * Create CRUD routes for a feature
+ * SECURITY NOTE: All table and column names come from the hardcoded FEATURES whitelist above.
+ * User input (req.body data) is always passed as parameterized query values ($1, $2, etc.),
+ * never interpolated into SQL strings, which prevents SQL injection.
  */
 export function createFeatureCrudRoutes(
     router: Router,
@@ -105,6 +117,7 @@ export function createFeatureCrudRoutes(
     router.post(`/${name}`, async (req, res) => {
         try {
             const data = req.body;
+            // SECURITY: Only allow columns from the whitelist
             const dataColumns = Object.keys(data).filter(col => 
                 columns.includes(col) && col !== idColumn
             );
@@ -112,13 +125,23 @@ export function createFeatureCrudRoutes(
             if (dataColumns.length === 0) {
                 res.status(400).json({
                     ok: false,
-                    message: 'No valid columns provided'
+                    message: "No valid columns provided"
                 });
                 return;
             }
             
-            const placeholders = dataColumns.map((_, i) => `$${i + 1}`).join(', ');
-            const columnList = dataColumns.join(', ');
+            // Validate all columns are in whitelist
+            if (!validateColumns(dataColumns, columns)) {
+                res.status(400).json({
+                    ok: false,
+                    message: "Invalid column names"
+                });
+                return;
+            }
+            
+            // User data goes into parameterized values, not SQL string
+            const placeholders = dataColumns.map((_, i) => `$${i + 1}`).join(", ");
+            const columnList = dataColumns.join(", ");
             const values = dataColumns.map(col => data[col]);
             
             const query = `INSERT INTO ${tableName} (${columnList}) VALUES (${placeholders}) RETURNING *`;
@@ -144,6 +167,7 @@ export function createFeatureCrudRoutes(
         try {
             const { id } = req.params;
             const data = req.body;
+            // SECURITY: Only allow columns from the whitelist
             const dataColumns = Object.keys(data).filter(col => 
                 columns.includes(col) && col !== idColumn
             );
@@ -151,12 +175,22 @@ export function createFeatureCrudRoutes(
             if (dataColumns.length === 0) {
                 res.status(400).json({
                     ok: false,
-                    message: 'No valid columns to update'
+                    message: "No valid columns to update"
                 });
                 return;
             }
             
-            const setClause = dataColumns.map((col, i) => `${col} = $${i + 1}`).join(', ');
+            // Validate all columns are in whitelist
+            if (!validateColumns(dataColumns, columns)) {
+                res.status(400).json({
+                    ok: false,
+                    message: "Invalid column names"
+                });
+                return;
+            }
+            
+            // User data goes into parameterized values, not SQL string
+            const setClause = dataColumns.map((col, i) => `${col} = $${i + 1}`).join(", ");
             const values = [...dataColumns.map(col => data[col]), id];
             
             const query = `UPDATE ${tableName} SET ${setClause}, updated_at = NOW() WHERE ${idColumn} = $${values.length} RETURNING *`;

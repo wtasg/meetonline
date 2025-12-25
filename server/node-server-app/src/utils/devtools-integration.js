@@ -5,7 +5,6 @@
  * It's designed to be imported and called only in development mode.
  */
 
-import { existsSync } from "fs";
 import { resolve } from "path";
 import { projectRoot } from "./projectRoot.js";
 
@@ -24,16 +23,8 @@ export async function setupDevTools(app, database) {
     }
 
     try {
-        // Try to import devtools (it may not be linked yet)
-        const devtoolsPath = resolve(projectRoot, "node_modules/@meetonline/devtools-server/dist/index.js");
-        
-        if (!existsSync(devtoolsPath)) {
-            console.log("[DevTools] Package not found. To use DevTools:");
-            console.log("  1. cd ../../devtool/server && npm install && npm run build && npm link");
-            console.log("  2. cd ../../server/node-server-app && npm link @meetonline/devtools-server");
-            return;
-        }
-
+        // Try to dynamically import devtools
+        // This will use Node's module resolution to find the package
         const { registerDevToolsPlugins } = await import("@meetonline/devtools-server");
         
         const configPath = resolve(projectRoot, "devtool.config.json");
@@ -45,7 +36,15 @@ export async function setupDevTools(app, database) {
         
         console.log("[DevTools] Successfully registered");
     } catch (error) {
-        console.warn("[DevTools] Failed to register:", error.message);
-        console.log("[DevTools] To install: cd ../../devtool/server && npm link");
+        // Graceful failure if devtools not installed
+        if (error.code === "ERR_MODULE_NOT_FOUND" || error.code === "MODULE_NOT_FOUND") {
+            console.log("[DevTools] Package not found. To use DevTools:");
+            console.log("  1. cd devtool && ./install.sh");
+            console.log("  Or manually:");
+            console.log("  2. cd devtool/server && npm install && npm run build && npm link");
+            console.log("  3. cd server/node-server-app && npm link @meetonline/devtools-server");
+        } else {
+            console.warn("[DevTools] Failed to register:", error.message);
+        }
     }
 }
