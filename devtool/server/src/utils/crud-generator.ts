@@ -22,7 +22,7 @@ export const FEATURES: Record<string, FeatureMetadata> = {
     },
     groups: {
         name: 'groups',
-        tableName: 'user_group',
+        tableName: '"group"',
         idColumn: 'id',
         columns: ['id', 'group_name', 'description', 'creator_id', 'created_at', 'updated_at'],
         displayName: 'Groups'

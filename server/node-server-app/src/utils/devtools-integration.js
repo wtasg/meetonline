@@ -5,9 +5,9 @@
  * It's designed to be imported and called only in development mode.
  */
 
-import { existsSync } from 'fs';
-import { resolve } from 'path';
-import { projectRoot } from './projectRoot.js';
+import { existsSync } from "fs";
+import { resolve } from "path";
+import { projectRoot } from "./projectRoot.js";
 
 /**
  * Register DevTools plugins with the application
@@ -18,34 +18,34 @@ import { projectRoot } from './projectRoot.js';
  */
 export async function setupDevTools(app, database) {
     // Only register in development mode
-    if (process.env.NODE_ENV !== 'development') {
-        console.log('[DevTools] Not in development mode, skipping registration');
+    if (process.env.NODE_ENV !== "development") {
+        console.log("[DevTools] Not in development mode, skipping registration");
         return;
     }
 
     try {
         // Try to import devtools (it may not be linked yet)
-        const devtoolsPath = resolve(projectRoot, 'node_modules/@meetonline/devtools-server/dist/index.js');
+        const devtoolsPath = resolve(projectRoot, "node_modules/@meetonline/devtools-server/dist/index.js");
         
         if (!existsSync(devtoolsPath)) {
-            console.log('[DevTools] Package not found. To use DevTools:');
-            console.log('  1. cd ../../devtool/server && npm install && npm run build && npm link');
-            console.log('  2. cd ../../server/node-server-app && npm link @meetonline/devtools-server');
+            console.log("[DevTools] Package not found. To use DevTools:");
+            console.log("  1. cd ../../devtool/server && npm install && npm run build && npm link");
+            console.log("  2. cd ../../server/node-server-app && npm link @meetonline/devtools-server");
             return;
         }
 
-        const { registerDevToolsPlugins } = await import('@meetonline/devtools-server');
+        const { registerDevToolsPlugins } = await import("@meetonline/devtools-server");
         
-        const configPath = resolve(projectRoot, 'devtool.config.json');
+        const configPath = resolve(projectRoot, "devtool.config.json");
         
         await registerDevToolsPlugins(app, {
             database,
             config: configPath
         });
         
-        console.log('[DevTools] Successfully registered');
+        console.log("[DevTools] Successfully registered");
     } catch (error) {
-        console.warn('[DevTools] Failed to register:', error.message);
-        console.log('[DevTools] To install: cd ../../devtool/server && npm link');
+        console.warn("[DevTools] Failed to register:", error.message);
+        console.log("[DevTools] To install: cd ../../devtool/server && npm link");
     }
 }
