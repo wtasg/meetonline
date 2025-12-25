@@ -1,0 +1,11 @@
+{
+    "enabled": true,
+    "position": "bottom-right",
+    "features": {
+        "users": true,
+        "events": true,
+        "groups": true,
+        "profiles": true
+    },
+    "apiUrl": "/devtools"
+}

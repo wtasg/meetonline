@@ -1,0 +1,28 @@
+{
+  "name": "@meetonline/devtools-server",
+  "version": "1.0.0",
+  "description": "Server-side devtools plugin system for MeetOnline",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "keywords": ["devtools", "development", "crud", "meetonline"],
+  "author": "wtasg",
+  "license": "UNLICENSED",
+  "peerDependencies": {
+    "express": "^5.0.0",
+    "pg": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.10.4",
+    "@types/pg": "^8.16.0",
+    "typescript": "^5.9.3",
+    "eslint": "^9.39.2"
+  }
+}

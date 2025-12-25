@@ -1,0 +1,10 @@
+{
+    "enabled": true,
+    "features": {
+        "users": true,
+        "events": true,
+        "groups": true,
+        "profiles": true
+    },
+    "apiPrefix": "/devtools"
+}

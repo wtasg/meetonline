@@ -1,0 +1,285 @@
+/* DevTools Panel Styles */
+.devtools-container {
+    position: fixed;
+    z-index: 9999;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.devtools-container.position-bottom-right {
+    bottom: 20px;
+    right: 20px;
+}
+
+.devtools-container.position-bottom-left {
+    bottom: 20px;
+    left: 20px;
+}
+
+.devtools-container.position-top-right {
+    top: 20px;
+    right: 20px;
+}
+
+.devtools-container.position-top-left {
+    top: 20px;
+    left: 20px;
+}
+
+.devtools-toggle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.devtools-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.devtools-toggle:active {
+    transform: scale(0.95);
+}
+
+.devtools-panel {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 420px;
+    max-height: 600px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.devtools-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.devtools-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.devtools-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: background 0.2s;
+}
+
+.devtools-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.devtools-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.devtools-tabs {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 0 16px;
+    background: #f5f5f5;
+}
+
+.devtools-tab {
+    padding: 12px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.devtools-tab:hover {
+    color: #333;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.devtools-tab.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    font-weight: 600;
+}
+
+.devtools-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.devtools-list-item {
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.devtools-list-item:hover {
+    background: #f9f9f9;
+}
+
+.devtools-list-item-main {
+    flex: 1;
+}
+
+.devtools-list-item-title {
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: #333;
+}
+
+.devtools-list-item-meta {
+    font-size: 12px;
+    color: #999;
+}
+
+.devtools-list-item-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.devtools-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.devtools-btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.devtools-btn-primary:hover {
+    background: #5568d3;
+}
+
+.devtools-btn-danger {
+    background: #ef4444;
+    color: white;
+}
+
+.devtools-btn-danger:hover {
+    background: #dc2626;
+}
+
+.devtools-btn-secondary {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.devtools-btn-secondary:hover {
+    background: #d0d0d0;
+}
+
+.devtools-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.devtools-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.devtools-form-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+}
+
+.devtools-form-input,
+.devtools-form-textarea {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.devtools-form-input:focus,
+.devtools-form-textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.devtools-form-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.devtools-form-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 8px;
+}
+
+.devtools-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    color: #999;
+}
+
+.devtools-error {
+    padding: 12px;
+    background: #fee;
+    color: #c33;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.devtools-empty {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+.devtools-back-btn {
+    margin-bottom: 12px;
+}

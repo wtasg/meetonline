@@ -1,0 +1,31 @@
+{
+  "name": "@meetonline/devtools-client",
+  "version": "1.0.0",
+  "description": "Client-side devtools UI components for MeetOnline",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && npm run build:css",
+    "build:css": "cat src/styles/*.css > dist/styles.css",
+    "dev": "tsc --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "keywords": ["devtools", "development", "react", "meetonline"],
+  "author": "wtasg",
+  "license": "UNLICENSED",
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@types/node": "^24.10.4",
+    "typescript": "^5.9.3",
+    "eslint": "^9.39.2",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  }
+}
