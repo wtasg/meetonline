@@ -7,6 +7,7 @@ The Senior Software Engineer (SWE) agent is a specialized AI assistant focused o
 ## Role
 
 Senior software developer responsible for:
+
 - Implementing new features following established architectural patterns
 - Making surgical, minimal changes to achieve objectives
 - Ensuring code quality and maintainability
@@ -95,6 +96,7 @@ Senior software developer responsible for:
 ### Architecture Adherence
 
 **Frontend:**
+
 - Place simple UI components in `client/react-client-app/src/components/`
 - Place feature components with business logic in `client/react-client-app/src/features/`
 - Put network fetch calls in `client/react-client-app/src/net/`
@@ -102,6 +104,7 @@ Senior software developer responsible for:
 - Use hooks from `client/react-client-app/src/hooks/`
 
 **Backend:**
+
 - Place route handlers in `server/node-server-app/src/handlers/`
 - Put middleware in `server/node-server-app/src/middlewares/`
 - Define database queries in `server/node-server-app/src/database/`
@@ -109,6 +112,7 @@ Senior software developer responsible for:
 - Store utilities in `server/node-server-app/src/utils/`
 
 **Database:**
+
 - Use `bigserial` for ID columns
 - Treat IDs as strings in server code
 - Follow snake_case naming for tables and columns
@@ -132,6 +136,7 @@ Senior software developer responsible for:
 **Prompt:** "Add a new API endpoint to retrieve user notifications"
 
 **Expected Approach:**
+
 1. Create database query in `server/node-server-app/src/database/notifications.js`
 2. Create model in `server/node-server-app/src/models/NotificationModel.js` with:
    - `fromDatabaseRow()` to parse DB results
@@ -151,6 +156,7 @@ Senior software developer responsible for:
 **Prompt:** "Create a user profile card component"
 
 **Expected Approach:**
+
 1. Determine if it's a simple UI component or a feature with business logic
 2. For simple UI: Create in `client/react-client-app/src/components/UserProfileCard.jsx`
 3. For feature: Create in `client/react-client-app/src/features/UserProfile/ProfileCard.jsx`
@@ -166,9 +172,11 @@ Senior software developer responsible for:
 **Prompt:** "Fix SQL injection vulnerability in user search"
 
 **Expected Approach:**
+
 1. Identify the vulnerable query
 2. Replace string concatenation with parameterized query
 3. Example fix:
+
    ```javascript
    // Before (vulnerable)
    const query = `SELECT * FROM users WHERE username = '${username}'`;
@@ -178,6 +186,7 @@ Senior software developer responsible for:
    const values = [username];
    const result = await pool.query(query, values);
    ```
+
 4. Validate user input before database query
 5. Add input sanitization if needed
 6. Test with various inputs including SQL injection attempts
@@ -189,6 +198,7 @@ Senior software developer responsible for:
 **Prompt:** "Refactor the authentication middleware to be more maintainable"
 
 **Expected Approach:**
+
 1. Understand current implementation completely
 2. Identify code smells and areas for improvement
 3. Make incremental changes, testing after each
@@ -201,6 +211,7 @@ Senior software developer responsible for:
 ## Best Practices
 
 ### Code Style
+
 - Use `const` over `let`, avoid `var`
 - Use template literals for string interpolation
 - Use arrow functions for callbacks and short functions
@@ -208,6 +219,7 @@ Senior software developer responsible for:
 - Use destructuring for object and array access
 
 ### Error Handling
+
 ```javascript
 try {
     const result = await performOperation();
@@ -227,6 +239,7 @@ try {
 ```
 
 ### Database Queries
+
 ```javascript
 // Always use parameterized queries
 const query = "SELECT * FROM table_name WHERE column = $1 AND other = $2";
@@ -242,6 +255,7 @@ return ModelName.fromDatabaseRow(result.rows[0]);
 ```
 
 ### API Response Format
+
 ```javascript
 // Success case
 res.status(200).json({

@@ -7,6 +7,7 @@ The Senior Test Engineer agent is a specialized AI assistant focused on designin
 ## Role
 
 Senior test engineer responsible for:
+
 - Designing robust, repeatable test strategies
 - Ensuring comprehensive test coverage across backend, frontend, and integration points
 - Implementing automated testing at multiple levels
@@ -78,6 +79,7 @@ Senior test engineer responsible for:
 ### Test Implementation
 
 **Unit Tests:**
+
 - Test individual functions and methods in isolation
 - Mock external dependencies (database, network calls, file system)
 - Test all code paths including error handling
@@ -85,6 +87,7 @@ Senior test engineer responsible for:
 - Test edge cases: null, undefined, empty string, NaN, empty arrays/objects
 
 **Integration Tests:**
+
 - Test API endpoints with real or test database
 - Verify request/response formats
 - Test authentication and authorization
@@ -92,6 +95,7 @@ Senior test engineer responsible for:
 - Test database transactions and rollbacks
 
 **E2E Tests:**
+
 - Test complete user workflows (signup, login, profile management)
 - Verify UI interactions and state changes
 - Test form submissions and validations
@@ -99,6 +103,7 @@ Senior test engineer responsible for:
 - Test error messages and user feedback
 
 **Security Tests:**
+
 - Test SQL injection prevention (parameterized queries)
 - Test XSS prevention (output escaping)
 - Test CSRF protection
@@ -128,6 +133,7 @@ Senior test engineer responsible for:
 ### Test File Organization
 
 **Server Tests (Jest):**
+
 ```text
 server/node-server-app/
 └── tests-jest/
@@ -142,6 +148,7 @@ server/node-server-app/
 ```
 
 **Client Tests (Vitest):**
+
 ```text
 client/react-client-app/
 ├── src/
@@ -155,6 +162,7 @@ client/react-client-app/
 ```
 
 **E2E Tests (Playwright):**
+
 ```text
 client/react-client-app/
 └── tests/
@@ -221,6 +229,7 @@ it('should return user profile for authenticated user', async () => {
 **Prompt:** "Write comprehensive tests for the GET /api/notifications endpoint"
 
 **Expected Approach:**
+
 1. Create test file: `tests-jest/integration/api/notifications.test.js`
 2. Test success case with authenticated user
 3. Test error case with unauthenticated user (401)
@@ -233,6 +242,7 @@ it('should return user profile for authenticated user', async () => {
 10. Test edge cases (empty notifications list, null values)
 
 **Example Test:**
+
 ```javascript
 describe('GET /api/notifications', () => {
     it('should return notifications for authenticated user', async () => {
@@ -269,6 +279,7 @@ describe('GET /api/notifications', () => {
 **Prompt:** "Write tests for the UserProfileCard component"
 
 **Expected Approach:**
+
 1. Create test file: `src/components/UserProfileCard.test.jsx`
 2. Test component renders with valid props
 3. Test component handles missing or null props gracefully
@@ -279,6 +290,7 @@ describe('GET /api/notifications', () => {
 8. Use React Testing Library patterns (query by role, text, label)
 
 **Example Test:**
+
 ```javascript
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -321,6 +333,7 @@ describe('UserProfileCard', () => {
 **Prompt:** "Write tests for the getUserByUsername database query"
 
 **Expected Approach:**
+
 1. Create test file: `tests-jest/unit/database/users.test.js`
 2. Mock the PostgreSQL pool
 3. Test successful query with existing user
@@ -331,6 +344,7 @@ describe('UserProfileCard', () => {
 8. Test that correct data is returned and transformed
 
 **Example Test:**
+
 ```javascript
 import { getUserByUsername } from '../../../src/database/users.js';
 import pool from '../../../src/database/pool.js';
@@ -382,6 +396,7 @@ describe('getUserByUsername', () => {
 **Prompt:** "Write E2E tests for the user signup and login flow"
 
 **Expected Approach:**
+
 1. Create test file: `tests/e2e/auth.spec.js`
 2. Test complete signup workflow
 3. Test complete login workflow
@@ -392,6 +407,7 @@ describe('getUserByUsername', () => {
 8. Handle timing issues with proper waits
 
 **Example Test:**
+
 ```javascript
 import { test, expect } from '@playwright/test';
 
@@ -504,30 +520,35 @@ npm run e2e:debug            # Debug mode
 ## Best Practices
 
 ### Test Independence
+
 - Each test should be able to run independently
 - Use `beforeEach` and `afterEach` for setup and cleanup
 - Don't rely on test execution order
 - Clean up any test data created
 
 ### Mocking Strategy
+
 - Mock external dependencies (network, file system, third-party APIs)
 - Use real database for integration tests or test database
 - Don't mock what you're testing
 - Keep mocks simple and focused
 
 ### Test Data Management
+
 - Use factories or fixtures for test data
 - Make test data realistic but simple
 - Use descriptive names for test data
 - Don't hardcode production data in tests
 
 ### Performance
+
 - Keep unit tests fast (<100ms per test)
 - Group slow integration tests separately
 - Use parallel execution when possible
 - Identify and optimize slow tests
 
 ### Test Documentation
+
 - Write clear test descriptions
 - Document complex test setups
 - Explain why tests exist, not just what they do
@@ -538,10 +559,10 @@ npm run e2e:debug            # Debug mode
 - **Dev Checklist**: [docs/checklists/dev-checklist.md](/docs/checklists/dev-checklist.md)
 - **Review Checklist**: [docs/checklists/review-checklist.md](/docs/checklists/review-checklist.md)
 - **Testing Documentation**: Check individual README files in server and client directories
-- **Jest Documentation**: https://jestjs.io/
-- **Vitest Documentation**: https://vitest.dev/
-- **Playwright Documentation**: https://playwright.dev/
-- **React Testing Library**: https://testing-library.com/react
+- **Jest Documentation**: <https://jestjs.io/>
+- **Vitest Documentation**: <https://vitest.dev/>
+- **Playwright Documentation**: <https://playwright.dev/>
+- **React Testing Library**: <https://testing-library.com/react>
 
 ## Version
 

@@ -5,14 +5,18 @@ This directory contains documentation for specialized AI agents that assist with
 ## Available Agents
 
 ### 1. [Senior Software Engineer Agent](./swe-agent.md)
+
 A senior-level software developer focused on implementing complex features and maintaining architectural integrity. This agent provides guidance on:
+
 - Full-stack web development (React, Node.js, PostgreSQL)
 - Architectural patterns and best practices
 - Security implementation
 - Code quality and maintainability
 
 ### 2. [Senior Test Engineer Agent](./tester-agent.md)
+
 A senior-level QA engineer specialized in comprehensive testing strategies. This agent provides guidance on:
+
 - Unit testing (Jest, Vitest)
 - Integration testing
 - End-to-end testing (Playwright)
@@ -20,7 +24,9 @@ A senior-level QA engineer specialized in comprehensive testing strategies. This
 - Quality assurance best practices
 
 ### 3. [Senior Code Reviewer Agent](./reviewer-agent.md)
+
 A senior-level engineer focused on code review and quality assurance. This agent provides guidance on:
+
 - Code quality assessment
 - Security review
 - Architectural consistency
@@ -30,6 +36,7 @@ A senior-level engineer focused on code review and quality assurance. This agent
 ## Purpose
 
 These agent documentation files serve as:
+
 - **Reference guides** for AI assistants working on the project
 - **Standards documentation** for expected quality and practices
 - **Training materials** for understanding project conventions
@@ -38,6 +45,7 @@ These agent documentation files serve as:
 ## Usage
 
 When working with AI assistants on the meetonline project:
+
 1. Reference the appropriate agent documentation based on the task
 2. Follow the guidelines and best practices outlined in each agent file
 3. Use the sample prompts and expectations as templates
