@@ -1,5 +1,6 @@
 export { DevToolsPanel } from './components/DevToolsPanel';
 export { FeatureCrud } from './components/FeatureCrud';
+export { RandomDataGenerator } from './components/RandomDataGenerator';
 
 export type {
     DevToolsClientConfig,

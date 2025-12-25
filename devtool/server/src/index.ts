@@ -3,12 +3,14 @@ import type { Pool } from 'pg';
 import type { DevToolsPlugin, DevToolsConfig } from './types.js';
 import { loadConfig } from './utils/config-loader.js';
 import { CrudPlugin } from './plugins/crud-plugin.js';
+import { RandomDataPlugin } from './plugins/random-data-plugin.js';
 
 /**
  * Registry of available plugins
  */
 const plugins: DevToolsPlugin[] = [
-    new CrudPlugin()
+    new CrudPlugin(),
+    new RandomDataPlugin()
 ];
 
 /**
@@ -21,14 +23,14 @@ export interface RegisterOptions {
 
 /**
  * Register DevTools plugins with the Express application
- * 
+ *
  * @param app - Express application instance
  * @param options - Configuration options
- * 
+ *
  * @example
  * ```typescript
  * import { registerDevToolsPlugins } from '@meetonline/devtools-server';
- * 
+ *
  * if (process.env.NODE_ENV === 'development') {
  *     registerDevToolsPlugins(app, {
  *         database: pool,
@@ -48,7 +50,7 @@ export async function registerDevToolsPlugins(
     }
 
     // Load configuration
-    const config = typeof options.config === 'string' 
+    const config = typeof options.config === 'string'
         ? loadConfig(options.config)
         : options.config || loadConfig();
 
@@ -78,13 +80,13 @@ export async function registerDevToolsPlugins(
 
 /**
  * Register a custom plugin
- * 
+ *
  * @param plugin - Custom plugin to register
- * 
+ *
  * @example
  * ```typescript
  * import { registerCustomPlugin } from '@meetonline/devtools-server';
- * 
+ *
  * registerCustomPlugin({
  *     name: 'my-plugin',
  *     version: '1.0.0',

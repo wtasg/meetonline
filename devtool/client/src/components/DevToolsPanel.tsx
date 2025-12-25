@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { DevToolsClientConfig } from '../types';
 import { FEATURE_DEFINITIONS } from '../utils/feature-definitions';
 import { FeatureCrud } from './FeatureCrud';
+import { RandomDataGenerator } from './RandomDataGenerator';
 // Import styles from dist location (CSS is built to dist/styles.css)
 import '../styles.css';
 
@@ -46,7 +47,7 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({ config = {} }) => 
         if (selectedFeature) {
             const feature = FEATURE_DEFINITIONS[selectedFeature];
             if (!feature) return null;
-            
+
             return (
                 <FeatureCrud
                     feature={feature}
@@ -58,6 +59,10 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({ config = {} }) => 
 
         return (
             <div>
+                <RandomDataGenerator />
+
+                <div style={{ margin: '24px 0', borderTop: '1px solid #ddd' }}></div>
+
                 <h4 style={{ marginTop: 0, marginBottom: '16px', fontSize: '14px', color: '#666' }}>
                     Select a feature to manage:
                 </h4>
@@ -103,7 +108,7 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({ config = {} }) => 
                     </div>
                 </div>
             )}
-            
+
             <button
                 className="devtools-toggle"
                 onClick={() => setIsOpen(!isOpen)}

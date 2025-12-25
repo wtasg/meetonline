@@ -25,7 +25,7 @@ export function loadConfig(configPath?: string): DevToolsConfig {
     }
 
     const resolvedPath = resolve(configPath);
-    
+
     if (!existsSync(resolvedPath)) {
         console.warn(`DevTools config file not found at ${resolvedPath}, using defaults`);
         return defaultConfig;
@@ -34,15 +34,16 @@ export function loadConfig(configPath?: string): DevToolsConfig {
     try {
         const fileContent = readFileSync(resolvedPath, 'utf-8');
         const userConfig = JSON.parse(fileContent) as Partial<DevToolsConfig>;
-        
-        return {
+
+        const merged: DevToolsConfig = {
             ...defaultConfig,
             ...userConfig,
             features: {
                 ...defaultConfig.features,
                 ...userConfig.features
             }
-        };
+        } as DevToolsConfig;
+        return merged;
     } catch (error) {
         console.error(`Error loading DevTools config from ${resolvedPath}:`, error);
         return defaultConfig;

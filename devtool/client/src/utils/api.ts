@@ -32,8 +32,34 @@ async function fetchApi(
             }
         });
 
-        const data = await response.json();
-        return data;
+        // Check if response has content before parsing
+        const contentType = response.headers.get('content-type');
+        const text = await response.text();
+
+        if (!text || text.trim() === '') {
+            return {
+                ok: false,
+                message: 'Empty response from server'
+            };
+        }
+
+        if (contentType?.includes('application/json')) {
+            try {
+                const data = JSON.parse(text);
+                return data;
+            } catch (parseError) {
+                console.error('JSON Parse Error:', parseError);
+                return {
+                    ok: false,
+                    message: `Invalid JSON response: ${text.substring(0, 100)}`
+                };
+            }
+        }
+
+        return {
+            ok: false,
+            message: `Unexpected response type: ${contentType || 'unknown'}`
+        };
     } catch (error) {
         console.error('DevTools API Error:', error);
         return {

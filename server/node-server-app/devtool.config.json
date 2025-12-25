@@ -6,5 +6,55 @@
         "groups": true,
         "profiles": true
     },
-    "apiPrefix": "/devtools"
+    "apiPrefix": "/devtools",
+    "randomData": {
+        "defaults": {
+            "users": 10,
+            "profiles": 10,
+            "events": 20,
+            "groups": 5
+        },
+        "tables": {
+            "userAccount": {
+                "table": "user_account",
+                "id": "id",
+                "username": "username",
+                "salt": "salt",
+                "password": "password"
+            },
+            "userProfile": {
+                "table": "user_profile",
+                "id": "id",
+                "userId": "user_id",
+                "profileName": "profile_name",
+                "displayName": "display_name",
+                "phoneNumber": "phone_number",
+                "email": "email",
+                "address": "address",
+                "websiteUrl": "website_url"
+            },
+            "event": {
+                "table": "event",
+                "organiserProfileId": "organiser_id",
+                "title": "title",
+                "description": "description",
+                "onlineLocation": "online_location",
+                "startAt": "start_at",
+                "endAt": "end_at",
+                "isPaid": "is_paid",
+                "isBroadcast": "is_broadcast",
+                "tags": "tags",
+                "categories": "categories",
+                "isInteractive": "is_interactive",
+                "isAnonymous": "is_anonymous"
+            },
+            "group": {
+                "table": "\"group\"",
+                "userProfileId": "user_profile_id",
+                "groupName": "group_name",
+                "description": "description",
+                "isPublic": "is_public"
+            }
+        }
+    }
 }

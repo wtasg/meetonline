@@ -20,17 +20,25 @@
   "author": "wtasg",
   "license": "UNLICENSED",
   "peerDependencies": {
+    "bcrypt": "^5.0.0",
     "express": "^5.2.1",
     "pg": "^8.16.3"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^24.10.4",
     "@types/pg": "^8.16.0",
+<<<<<<< HEAD
     "typescript": "^5.9.3",
     "eslint": "^9.39.2"
   },
   "dependencies": {
     "express-rate-limit": "^8.2.1"
+=======
+    "eslint": "^9.39.2",
+    "typescript": "^5.9.3",
+    "bcrypt": "^5.1.1"
+>>>>>>> 462baae (ai slop garbage - doesn't work)
   }
 }
