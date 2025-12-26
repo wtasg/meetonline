@@ -36,7 +36,6 @@ import { setupEventHandler } from "./handlers/eventHandler.js";
 import { setupSearchHandler } from "./handlers/searchHandler.js";
 import { setupNotificationHandler } from "./handlers/notificationHandler.js";
 import { setupAttendanceHandler } from "./handlers/attendanceHandler.js";
-import { setupRatingsHandler } from "./handlers/ratingsHandler.js";
 import { startBatchDeletionProcessor } from "./utils/batchDeletion.js";
 
 const app = express();
@@ -110,7 +109,6 @@ setupEventHandler(app);
 setupSearchHandler(app);
 setupNotificationHandler(app);
 setupAttendanceHandler(app);
-setupRatingsHandler(app);
 
 // Start batch deletion processor (runs daily)
 // In production, you might want to use a dedicated cron job instead
